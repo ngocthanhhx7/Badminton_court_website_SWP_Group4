@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page import="models.AdminDTO, models.UserDTO" %>
 <!doctype html>
 <html class="no-js" lang="zxx">
 
@@ -40,76 +41,33 @@
             <![endif]-->
 
         <!-- header-start -->
-        <header>
-            <div class="header-area ">
-                <div id="sticky-header" class="main-header-area">
-                    <div class="container-fluid p-0">
-                        <div class="row align-items-center no-gutters">
-                            <div class="col-xl-5 col-lg-6">
-                                <div class="main-menu  d-none d-lg-block">
-                                    <nav>
-                                        <ul id="navigation">
-                                            <li><a href="homepage.jsp">home</a></li>
-                                            <li><a class="active" href="courts.jsp">courts</a></li>
-                                            <li><a href="about.jsp">About</a></li>
-                                            <li><a href="#">blog <i class="ti-angle-down"></i></a>
-                                                <ul class="submenu">
-                                                    <li><a href="blog.jsp">blog</a></li>
-                                                    <li><a href="single-blog.jsp">single-blog</a></li>
-                                                </ul>
-                                            </li>
-                                            <li><a href="#">pages <i class="ti-angle-down"></i></a>
-                                                <ul class="submenu">
-                                                    <li><a href="elements.jsp">elements</a></li>
-                                                </ul>
-                                            </li>
-                                            <li><a href="contact.jsp">Contact</a></li>
-                                        </ul>
-                                    </nav>
-                                </div>
-                            </div>
-                            <div class="col-xl-2 col-lg-2">
-                                <div class="logo-img">
-                                    <a href="homepage.jsp">
-                                        <img src="img/logo.png" alt="" width="200" height="92">
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="col-xl-5 col-lg-4 d-none d-lg-block">
-                                <div class="book_court">
-                                    <div class="socail_links">
-                                        <ul>
-                                            <li>
-                                                <a href="#">
-                                                    <i class="fa fa-facebook-square"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i class="fa fa-twitter"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i class="fa fa-instagram"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="book_btn d-none d-lg-block">
-                                        <a href="./login" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">Login</a>
-                                        <a href="./register" class="block px-3 py-2 rounded-md text-base font-medium text-white bg-secondary hover:bg-red-600">Register</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="mobile_menu d-block d-lg-none"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </header>
+        <%
+    Object acc = session.getAttribute("acc");
+    if (acc == null) {
+        // Nếu chưa đăng nhập, hiển thị header mặc định
+        %>
+        <jsp:include page="header.jsp" />
+        <%
+            } else {
+                int type = 0;
+                if (acc instanceof AdminDTO) {
+                    type = 1;
+                } else if (acc instanceof UserDTO) {
+                    type = 2;
+                }
+
+                if (type == 1) {
+        %>
+        <jsp:include page="header-auth.jsp" />
+        <%
+                } else if (type == 2) {
+        %>
+        <jsp:include page="header-user.jsp" />
+        <%
+                }
+            }
+        %>
+
         <!-- header-end -->
 
         <!-- bradcam_area_start -->
@@ -482,19 +440,19 @@
 
         <script src="js/main.js"></script>
         <script>
-        $('#datepicker').datepicker({
-            iconsLibrary: 'fontawesome',
-            icons: {
-                rightIcon: '<span class="fa fa-caret-down"></span>'
-            }
-        });
-        $('#datepicker2').datepicker({
-            iconsLibrary: 'fontawesome',
-            icons: {
-                rightIcon: '<span class="fa fa-caret-down"></span>'
-            }
+                                    $('#datepicker').datepicker({
+                                        iconsLibrary: 'fontawesome',
+                                        icons: {
+                                            rightIcon: '<span class="fa fa-caret-down"></span>'
+                                        }
+                                    });
+                                    $('#datepicker2').datepicker({
+                                        iconsLibrary: 'fontawesome',
+                                        icons: {
+                                            rightIcon: '<span class="fa fa-caret-down"></span>'
+                                        }
 
-        });
+                                    });
         </script>
 
 
