@@ -1,16 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package models;
 
 import java.sql.Timestamp;
 import java.util.Date;
 
-/**
- *
- * @author PC - ACER
- */
 public class UserDTO {
     private int UserID;
     private String Username;
@@ -31,7 +23,9 @@ public class UserDTO {
     public UserDTO() {
     }
 
-    public UserDTO(int UserID, String Username, String Password, String Email, String FullName, Date Dob, String Gender, String Phone, String Address, String SportLevel, String Role, String Status, int CreatedBy, Timestamp CreatedAt, Timestamp UpdatedAt) {
+    public UserDTO(int UserID, String Username, String Password, String Email, String FullName, Date Dob,
+                 String Gender, String Phone, String Address, String SportLevel, String Role, String Status,
+                 int CreatedBy, Timestamp CreatedAt, Timestamp UpdatedAt) {
         this.UserID = UserID;
         this.Username = Username;
         this.Password = Password;
@@ -49,129 +43,147 @@ public class UserDTO {
         this.UpdatedAt = UpdatedAt;
     }
 
-    
-    
+    // Getters and Setters
+
     public int getUserID() {
         return UserID;
     }
 
-    public void setUserID(int UserID) {
-        this.UserID = UserID;
+    public void setUserID(int userID) {
+        this.UserID = userID;
     }
 
     public String getUsername() {
         return Username;
     }
 
-    public void setUsername(String Username) {
-        this.Username = Username;
+    public void setUsername(String username) {
+        this.Username = username;
     }
 
     public String getPassword() {
         return Password;
     }
 
-    public void setPassword(String Password) {
-        this.Password = Password;
+    public void setPassword(String password) {
+        this.Password = password;
     }
 
     public String getEmail() {
         return Email;
     }
 
-    public void setEmail(String Email) {
-        this.Email = Email;
+    public void setEmail(String email) {
+        this.Email = email;
     }
 
     public String getFullName() {
         return FullName;
     }
 
-    public void setFullName(String FullName) {
-        this.FullName = FullName;
+    public void setFullName(String fullName) {
+        this.FullName = fullName;
     }
 
     public Date getDob() {
         return Dob;
     }
 
-    public void setDob(Date Dob) {
-        this.Dob = Dob;
+    public void setDob(Date dob) {
+        this.Dob = dob;
     }
 
-    public String getGendert() {
+    public String getGender() {
         return Gender;
     }
 
-    public void setGender(String Gendert) {
-        this.Gender = Gendert;
+    public void setGender(String gender) {
+        this.Gender = gender;
     }
 
     public String getPhone() {
         return Phone;
     }
 
-    public void setPhone(String Phone) {
-        this.Phone = Phone;
+    public void setPhone(String phone) {
+        this.Phone = phone;
     }
 
     public String getAddress() {
         return Address;
     }
 
-    public void setAddress(String Address) {
-        this.Address = Address;
+    public void setAddress(String address) {
+        this.Address = address;
     }
 
     public String getSportLevel() {
         return SportLevel;
     }
 
-    public void setSportLevel(String SportLevel) {
-        this.SportLevel = SportLevel;
+    public void setSportLevel(String sportLevel) {
+        this.SportLevel = sportLevel;
     }
 
     public String getRole() {
         return Role;
     }
 
-    public void setRole(String Role) {
-        this.Role = Role;
+    public void setRole(String role) {
+        this.Role = role;
     }
 
     public String getStatus() {
         return Status;
     }
 
-    public void setStatus(String Status) {
-        this.Status = Status;
+    public void setStatus(String status) {
+        this.Status = status;
     }
 
     public int getCreatedBy() {
         return CreatedBy;
     }
 
-    public void setCreatedBy(int CreatedBy) {
-        this.CreatedBy = CreatedBy;
+    public void setCreatedBy(int createdBy) {
+        this.CreatedBy = createdBy;
     }
 
     public Timestamp getCreatedAt() {
         return CreatedAt;
     }
 
-    public void setCreatedAt(Timestamp CreatedAt) {
-        this.CreatedAt = CreatedAt;
+    public void setCreatedAt(Timestamp createdAt) {
+        this.CreatedAt = createdAt;
     }
 
     public Timestamp getUpdatedAt() {
         return UpdatedAt;
     }
 
-    public void setUpdatedAt(Timestamp UpdatedAt) {
-        this.UpdatedAt = UpdatedAt;
+    public void setUpdatedAt(Timestamp updatedAt) {
+        this.UpdatedAt = updatedAt;
     }
     
-    
-    
-}
 
+    @Override
+    public String toString() {
+        return "UserDTO{" +
+                "UserID=" + UserID +
+                ", Username='" + Username + '\'' +
+                ", Password='" + Password + '\'' +
+                ", Email='" + Email + '\'' +
+                ", FullName='" + FullName + '\'' +
+                ", Dob=" + Dob +
+                ", Gender='" + Gender + '\'' +
+                ", Phone='" + Phone + '\'' +
+                ", Address='" + Address + '\'' +
+                ", SportLevel='" + SportLevel + '\'' +
+                ", Role='" + Role + '\'' +
+                ", Status='" + Status + '\'' +
+                ", CreatedBy=" + CreatedBy +
+                ", CreatedAt=" + CreatedAt +
+                ", UpdatedAt=" + UpdatedAt +
+                '}';
+    }
+}

@@ -98,7 +98,7 @@
                                         </ul>
                                     </div>
                                     <div class="book_btn d-none d-lg-block">
-                                        <a href="./login" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">Login</a>
+                                        <a href="./Login" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">Login</a>
                                         <a href="./register" class="block px-3 py-2 rounded-md text-base font-medium text-white bg-secondary hover:bg-red-600">Register</a>
                                     </div>
                                 </div>
