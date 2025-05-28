@@ -1,5 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ page import="models.UserDTO, models.AdminDTO, models.GoogleAccount" %>
 
 <head>
     <meta charset="utf-8">

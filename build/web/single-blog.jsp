@@ -5,7 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="models.AdminDTO, models.UserDTO" %>
+<%@ page import="models.UserDTO, models.AdminDTO, models.GoogleAccount" %>
 <!doctype html>
 <html class="no-js" lang="zxx">
 

@@ -1,5 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ page import="models.UserDTO, models.AdminDTO, models.GoogleAccount" %>
 
 <head>
     <meta charset="utf-8">
@@ -70,11 +71,24 @@
                             </div>
 
                             <!-- Welcome and Account -->
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <div>
-                                    <span class="text-dark">Welcome,</span>
-                                    <a href="account.jsp" class="text-primary fw-bold">${sessionScope.acc.username}</a>
-                                </div>
+                            <!-- Welcome + Avatar + Username -->
+                            <div class="d-flex align-items-center gap-3 mb-2">
+                                <c:choose>
+                                    <c:when test="${sessionScope.accType == 'google'}">
+                                        <img src="${sessionScope.acc.picture}" alt="Avatar" class="rounded-circle" width="40" height="40">
+                                        <div>
+                                            <span class="text-dark">Welcome,</span>
+                                            <a href="account.jsp" class="text-primary fw-bold">${sessionScope.acc.name}</a>
+                                        </div>
+                                    </c:when>
+
+                                    <c:otherwise>
+                                        <div>
+                                            <span class="text-dark">Welcome,</span>
+                                            <a href="account.jsp" class="text-primary fw-bold">${sessionScope.acc.username}</a>
+                                        </div>
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
 
                             <!-- Logout Button -->
@@ -85,15 +99,6 @@
                         </div>
                     </div>
 
-                    <!--                        <div class="book_court d-flex align-items-center justify-content-end">
-                                                <div class="text-right mr-4">
-                                                    <span class="text-dark">Welcome,</span>
-                                                    <a href="account.jsp" class="text-primary font-weight-bold">${sessionScope.acc.username}</a>
-                                                </div>
-                                                <div class="book_btn d-none d-lg-block">
-                                                    <a href="./logout" class="btn btn-danger">Logout</a>
-                                                </div>
-                                            </div>-->
                 </div>
                 <div class="col-12">
                     <div class="mobile_menu d-block d-lg-none"></div>

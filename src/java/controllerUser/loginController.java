@@ -115,6 +115,7 @@ public class loginController extends HttpServlet {
         if (admin != null) {
             HttpSession session = request.getSession();
             session.setAttribute("acc", admin);
+            session.setAttribute("accType", "admin");
 
             handleRememberMe(request, response, emailOrUsername, password);
 
@@ -125,12 +126,14 @@ public class loginController extends HttpServlet {
         if (user != null) {
             HttpSession session = request.getSession();
             session.setAttribute("acc", user);
+            session.setAttribute("accType", "user");
 
             handleRememberMe(request, response, emailOrUsername, password);
 
-            response.sendRedirect("homepage.jsp");
+            response.sendRedirect("./home");
             return;
         }
+        
 
         // Sai thông tin đăng nhập
         request.setAttribute("error", "Sai email/username hoặc mật khẩu.");
