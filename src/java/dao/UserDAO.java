@@ -133,14 +133,17 @@ public class UserDAO {
     }
 
     public void updateUserProfile(UserDTO user) throws SQLException {
-        String sql = "UPDATE users SET full_name = ?, dob = ?, gender = ?, phone = ?, address = ? WHERE id = ?";
+        String sql = "UPDATE users SET full_name = ?, password = ?, dob = ?, gender = ?, phone = ?, address = ?, sport_level = ?, role = ? WHERE id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, user.getFullName());
-            ps.setDate(2, new java.sql.Date(user.getDob().getTime()));
-            ps.setString(3, user.getGender());
-            ps.setString(4, user.getPhone());
-            ps.setString(5, user.getAddress());
-            ps.setInt(6, user.getUserID());
+            ps.setString(2, user.getPassword());
+            ps.setDate(3, new java.sql.Date(user.getDob().getTime()));
+            ps.setString(4, user.getGender());
+            ps.setString(5, user.getPhone());
+            ps.setString(6, user.getAddress());
+            ps.setString(7, user.getSportLevel());
+            ps.setString(8, user.getRole());
+            ps.setInt(9, user.getUserID());
             ps.executeUpdate();
         }
     }
@@ -242,5 +245,48 @@ public class UserDAO {
         user.setCreatedBy(rs.getInt("created_by"));
         user.setUpdatedAt(rs.getTimestamp("updated_at"));
         return user;
+    }
+
+    public void updateUser(UserDTO user) {
+        String selectSql = "SELECT UpdatedAt FROM Users WHERE Email = ?";
+        String updateSql = "UPDATE Users SET FullName = ?, Dob = ?, Gender = ?, Phone = ?, Address = ?, SportLevel = ?, CreatedAt = ?, UpdatedAt = ? WHERE Email = ?";
+
+        try (Connection conn = DBUtils.getConnection(); PreparedStatement selectPs = conn.prepareStatement(selectSql); PreparedStatement updatePs = conn.prepareStatement(updateSql)) {
+
+            // 1. Lấy UpdatedAt hiện tại từ DB (dùng làm CreatedAt mới)
+            Timestamp prevUpdatedAt = null;
+            selectPs.setString(1, user.getEmail());
+            try (ResultSet rs = selectPs.executeQuery()) {
+                if (rs.next()) {
+                    prevUpdatedAt = rs.getTimestamp("UpdatedAt");
+                }
+            }
+
+            // 2. Nếu không có user thì thoát
+            if (prevUpdatedAt == null) {
+                System.out.println("User không tồn tại.");
+                return;
+            }
+
+            // 3. Thời gian mới
+            Timestamp now = new Timestamp(System.currentTimeMillis());
+
+            // 4. Update thông tin + thời gian
+            updatePs.setString(1, user.getFullName());
+            updatePs.setString(2, user.getGender());
+            updatePs.setDate(3, new java.sql.Date(user.getDob().getTime()));
+            updatePs.setString(4, user.getPhone());
+            updatePs.setString(5, user.getAddress());
+            updatePs.setString(6, user.getSportLevel());
+            updatePs.setTimestamp(7, prevUpdatedAt); // CreatedAt = UpdatedAt cũ
+            updatePs.setTimestamp(8, now);           // UpdatedAt = hiện tại
+            updatePs.setString(9, user.getEmail());
+
+            updatePs.executeUpdate();
+
+            System.out.println("Cập nhật thành công. CreatedAt: " + prevUpdatedAt + ", UpdatedAt: " + now);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

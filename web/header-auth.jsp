@@ -78,14 +78,14 @@
                                         <img src="${sessionScope.acc.picture}" alt="Avatar" class="rounded-circle" width="40" height="40">
                                         <div>
                                             <span class="text-dark">Welcome,</span>
-                                            <a href="account.jsp" class="text-primary fw-bold">${sessionScope.acc.name}</a>
+                                            <a href="view-profile.jsp" class="text-primary fw-bold">${sessionScope.acc.name}</a>
                                         </div>
                                     </c:when>
 
                                     <c:otherwise>
                                         <div>
                                             <span class="text-dark">Welcome,</span>
-                                            <a href="account.jsp" class="text-primary fw-bold">${sessionScope.acc.username}</a>
+                                            <a href="view-profile.jsp" class="text-primary fw-bold">${sessionScope.acc.username}</a>
                                         </div>
                                     </c:otherwise>
                                 </c:choose>
