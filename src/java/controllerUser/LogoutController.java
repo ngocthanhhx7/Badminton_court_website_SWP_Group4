@@ -18,7 +18,7 @@ import jakarta.servlet.http.HttpSession;
  *
  * @author PC - ACER
  */
-@WebServlet(name = "LogoutController", urlPatterns = {"/Logout"})
+@WebServlet(name = "LogoutController", urlPatterns = {"/logout"})
 public class LogoutController extends HttpServlet {
    
     /** 

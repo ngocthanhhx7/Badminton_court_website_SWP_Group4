@@ -3,37 +3,70 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/img/banner/banner2.png</file>
+            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/src/java/models/ServiceDTO.java</file>
+            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/src/java/models/AdminDTO.java</file>
+            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/src/java/dao/LoginGoogleDAO.java</file>
+            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/css/theme-default.css</file>
+            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/header-auth.jsp</file>
+            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/img/favicon.png</file>
+            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/css/style.css</file>
+            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/css/bootstrap-reboot.css</file>
+            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/css/bootstrap.min_1.css</file>
+            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/Success.jsp</file>
+            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/scss/_blog_part.scss</file>
+            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/css/bootstrap.css</file>
+            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/src/java/models/BookingDTO.java</file>
+            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/css/bootstrap.min.css</file>
+            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/scss/_btn.scss</file>
+            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/header.jsp</file>
+            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/css/animate.css</file>
+            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/css/themify-icons.css</file>
+            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/css/nice-select.css</file>
+            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/css/slicknav.css</file>
+            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/src/java/controllerUser/HomepageController.java</file>
+            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/src/java/models/UserDTO.java</file>
+            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/img/banner/bradcam3.png</file>
+            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/css/gijgo.css</file>
+            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/scss/_bradcam.scss</file>
+            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/src/java/models/BookingNoteDTO.java</file>
+            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/src/java/controllerUser/LogoutController.java</file>
+            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/img/banner/bradcam.png</file>
+            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/img/banner/bradcam2.png</file>
             <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/single-blog.jsp</file>
             <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/src/java/controllerUser/Iconstant.java</file>
-            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/src/java/models/ServiceDTO.java</file>
+            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/css/flaticon.css</file>
             <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/src/java/dao/AdminDAO.java</file>
             <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/src/java/dao/UserDAO.java</file>
             <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/src/java/models/GoogleAccount.java</file>
-            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/src/java/models/AdminDTO.java</file>
-            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/src/java/dao/LoginGoogleDAO.java</file>
             <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/src/java/models/CourtDTO.java</file>
-            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/header-auth.jsp</file>
             <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/src/java/controllerUser/loginController.java</file>
             <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/elements.jsp</file>
+            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/courts.jsp</file>
             <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/homepage.jsp</file>
-            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/Success.jsp</file>
-            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/src/java/models/BookingDTO.java</file>
+            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/css/owl.carousel.min.css</file>
+            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/scss/_about.scss</file>
             <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/login.jsp</file>
             <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/src/java/models/InvoiceDetailDTO.java</file>
             <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/about.jsp</file>
-            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/header.jsp</file>
+            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/img/banner/banner.png</file>
             <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/WEB-INF/web.xml</file>
-            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/src/java/controllerUser/HomepageController.java</file>
-            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/src/java/models/UserDTO.java</file>
+            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/css/bootstrap-grid.css</file>
+            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/contact.jsp</file>
+            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/img/footer-logo.png</file>
+            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/css/bootstrap-reboot.min.css</file>
             <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/header-user.jsp</file>
+            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/css/magnific-popup.css</file>
             <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/blog.jsp</file>
-            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/src/java/models/BookingNoteDTO.java</file>
+            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/css/font-awesome.min.css</file>
             <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/src/java/models/CourtScheduleDTO.java</file>
-            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/src/java/controllerUser/LogoutController.java</file>
             <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/src/java/utils/DBUtils.java</file>
+            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/img/banner/about_banner.png</file>
             <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/src/java/dao/CourtDAO.java</file>
             <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/src/java/controllerUser/LoginGoogleContro.java</file>
             <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/src/java/models/InvoiceDTO.java</file>
+            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/img/logo.png</file>
+            <file>file:/C:/Users/nguye/OneDrive%20-%20Đại%20học%20FPT-%20FPT%20University/SWP_Project/Badminton_court_website_SWP_Group4/web/css/bootstrap-grid.min.css</file>
         </group>
     </open-files>
 </project-private>
