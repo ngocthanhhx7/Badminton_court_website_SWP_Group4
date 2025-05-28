@@ -515,7 +515,7 @@
         <!--                 instragram_area_end -->
 
         <!-- footer -->
-        <footer class="footer">
+        <footer class="footer" >
             <div class="footer_top">
                 <div class="container">
                     <div class="row">
@@ -524,8 +524,8 @@
                                 <h3 class="footer_title">
                                     address
                                 </h3>
-                                <p class="footer_text"> 200, Green road, Mongla, <br>
-                                    New Yor City USA</p>
+                                <p class="footer_text" >  Khu công nghệ cao <br>
+                                    Hòa Lạc, Hà Nội</p>
                                 <a href="#" class="line-button">Get Direction</a>
                             </div>
                         </div>
@@ -534,8 +534,8 @@
                                 <h3 class="footer_title">
                                     Reservation
                                 </h3>
-                                <p class="footer_text">+10 367 267 2678 <br>
-                                    reservation@montana.com</p>
+                                <p class="footer_text" >+10 367 267 2678 <br>
+                                    thanhnnhe186491@fpt.edu.vn</p>
                             </div>
                         </div>
                         <div class="col-xl-2 col-md-6 col-lg-2">
@@ -544,10 +544,10 @@
                                     Navigation
                                 </h3>
                                 <ul>
-                                    <li><a href="#">Home</a></li>
-                                    <li><a href="#">Courts</a></li>
-                                    <li><a href="#">About</a></li>
-                                    <li><a href="#">News</a></li>
+                                    <li><a href="./home">Home</a></li>
+                                    <li><a href="./court">Courts</a></li>
+                                    <li><a href="about.jsp">About</a></li>
+                                    <li><a href="blog.jsp">News</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -558,7 +558,7 @@
                                 </h3>
                                 <form action="#" class="newsletter_form">
                                     <input type="text" placeholder="Enter your mail">
-                                    <button type="submit">Sign Up</button>
+                                    <button type="submit" >Sign Up</button>
                                 </form>
                                 <p class="newsletter_text">Subscribe newsletter to get updates</p>
                             </div>
@@ -573,8 +573,9 @@
                         <div class="col-xl-8 col-md-7 col-lg-9">
                             <p class="copy_right">
                                 <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                                Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved 
+                                Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved
                                 <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                            </p>
                         </div>
                         <div class="col-xl-4 col-md-5 col-lg-3">
                             <div class="socail_links">
@@ -601,6 +602,7 @@
                 </div>
             </div>
         </footer>
+        <!-- footer_end -->
 
         <!-- link that opens popup -->
 
@@ -681,19 +683,19 @@
 
         <script src="js/main.js"></script>
         <script>
-                                    $('#datepicker').datepicker({
-                                        iconsLibrary: 'fontawesome',
-                                        icons: {
-                                            rightIcon: '<span class="fa fa-caret-down"></span>'
-                                        }
-                                    });
-                                    $('#datepicker2').datepicker({
-                                        iconsLibrary: 'fontawesome',
-                                        icons: {
-                                            rightIcon: '<span class="fa fa-caret-down"></span>'
-                                        }
+                            $('#datepicker').datepicker({
+                                iconsLibrary: 'fontawesome',
+                                icons: {
+                                    rightIcon: '<span class="fa fa-caret-down"></span>'
+                                }
+                            });
+                            $('#datepicker2').datepicker({
+                                iconsLibrary: 'fontawesome',
+                                icons: {
+                                    rightIcon: '<span class="fa fa-caret-down"></span>'
+                                }
 
-                                    });
+                            });
         </script>
 
 

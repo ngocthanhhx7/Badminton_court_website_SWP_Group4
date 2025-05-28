@@ -207,8 +207,8 @@
                                 <h3 class="footer_title">
                                     address
                                 </h3>
-                                <p class="footer_text" >  200, Green road, Mongla, <br>
-                                    New Yor City USA</p>
+                                <p class="footer_text" >  Khu công nghệ cao <br>
+                                    Hòa Lạc, Hà Nội</p>
                                 <a href="#" class="line-button">Get Direction</a>
                             </div>
                         </div>
@@ -218,7 +218,7 @@
                                     Reservation
                                 </h3>
                                 <p class="footer_text" >+10 367 267 2678 <br>
-                                    reservation@montana.com</p>
+                                    thanhnnhe186491@fpt.edu.vn</p>
                             </div>
                         </div>
                         <div class="col-xl-2 col-md-6 col-lg-2">
@@ -227,10 +227,10 @@
                                     Navigation
                                 </h3>
                                 <ul>
-                                    <li><a href="#">Home</a></li>
-                                    <li><a href="#">Courts</a></li>
-                                    <li><a href="#">About</a></li>
-                                    <li><a href="#">News</a></li>
+                                    <li><a href="./home">Home</a></li>
+                                    <li><a href="./court">Courts</a></li>
+                                    <li><a href="about.jsp">About</a></li>
+                                    <li><a href="blog.jsp">News</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -365,19 +365,19 @@
 
         <script src="js/main.js"></script>
         <script>
-                                    $('#datepicker').datepicker({
-                                        iconsLibrary: 'fontawesome',
-                                        icons: {
-                                            rightIcon: '<span class="fa fa-caret-down"></span>'
-                                        }
-                                    });
-                                    $('#datepicker2').datepicker({
-                                        iconsLibrary: 'fontawesome',
-                                        icons: {
-                                            rightIcon: '<span class="fa fa-caret-down"></span>'
-                                        }
+                            $('#datepicker').datepicker({
+                                iconsLibrary: 'fontawesome',
+                                icons: {
+                                    rightIcon: '<span class="fa fa-caret-down"></span>'
+                                }
+                            });
+                            $('#datepicker2').datepicker({
+                                iconsLibrary: 'fontawesome',
+                                icons: {
+                                    rightIcon: '<span class="fa fa-caret-down"></span>'
+                                }
 
-                                    });
+                            });
         </script>
 
 

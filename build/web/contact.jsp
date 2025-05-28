@@ -117,21 +117,21 @@
                 <div class="media contact-info">
                     <span class="contact-info__icon"><i class="ti-home"></i></span>
                     <div class="media-body">
-                        <h3>Buttonwood, California.</h3>
-                        <p>Rosemead, CA 91770</p>
+                        <h3>Hà Nội, Hòa Lạc.</h3>
+                        <p>Khu công nghệ cao, Đại học FPT</p>
                     </div>
                 </div>
                 <div class="media contact-info">
                     <span class="contact-info__icon"><i class="ti-tablet"></i></span>
                     <div class="media-body">
-                        <h3>+1 253 565 2365</h3>
-                        <p>Mon to Fri 9am to 6pm</p>
+                        <h3>+84981944060</h3>
+                        <p>Thứ 2 Đến Thứ 6, 6h đến 18h </p>
                     </div>
                 </div>
                 <div class="media contact-info">
                     <span class="contact-info__icon"><i class="ti-email"></i></span>
                     <div class="media-body">
-                        <h3>support@colorlib.com</h3>
+                        <h3>thanhnnhe186491@fpt.edu.vn</h3>
                         <p>Send us your query anytime!</p>
                     </div>
                 </div>
@@ -151,8 +151,8 @@
                         <h3 class="footer_title">
                             address
                         </h3>
-                        <p class="footer_text" >  200, Green road, Mongla, <br>
-                            New Yor City USA</p>
+                        <p class="footer_text" >  Khu công nghệ cao <br>
+                            Hòa Lạc, Hà Nội</p>
                         <a href="#" class="line-button">Get Direction</a>
                     </div>
                 </div>
@@ -162,7 +162,7 @@
                             Reservation
                         </h3>
                         <p class="footer_text" >+10 367 267 2678 <br>
-                            reservation@montana.com</p>
+                            thanhnnhe186491@fpt.edu.vn</p>
                     </div>
                 </div>
                 <div class="col-xl-2 col-md-6 col-lg-2">
@@ -171,10 +171,10 @@
                             Navigation
                         </h3>
                         <ul>
-                            <li><a href="#">Home</a></li>
-                            <li><a href="#">Courts</a></li>
-                            <li><a href="#">About</a></li>
-                            <li><a href="#">News</a></li>
+                            <li><a href="./home">Home</a></li>
+                            <li><a href="./court">Courts</a></li>
+                            <li><a href="about.jsp">About</a></li>
+                            <li><a href="blog.jsp">News</a></li>
                         </ul>
                     </div>
                 </div>
