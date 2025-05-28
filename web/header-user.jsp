@@ -53,20 +53,53 @@
                     </div>
                     <div class="col-xl-5 col-lg-4 d-none d-lg-block">
                         <div class="book_court d-flex align-items-center justify-content-end">
-                            <div class="text-right mr-4">
-                                <span class="text-dark">Welcome,</span>
-                                <a href="account.jsp" class="text-primary font-weight-bold">${sessionScope.acc.username}</a>
+
+                            <!-- Social links -->
+                            <div class="socail_links mb-3">
+                                <ul class="list-inline mb-0 d-flex gap-3 justify-content-end">
+                                    <li class="list-inline-item">
+                                        <a href="https://www.facebook.com/ngocthanh552004/" class="text-primary fs-4"><i class="fa fa-facebook-square"></i></a>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <a href="https://www.facebook.com/ngocthanh552004/" class="text-info fs-4"><i class="fa fa-twitter"></i></a>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <a href="https://www.facebook.com/ngocthanh552004/" class="text-danger fs-4"><i class="fa fa-instagram"></i></a>
+                                    </li>
+                                </ul>
                             </div>
-                            <div class="book_btn d-none d-lg-block">
-                                <a href="./logout" class="btn btn-danger">Logout</a>
+
+                            <!-- Welcome and Account -->
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div>
+                                    <span class="text-dark">Welcome,</span>
+                                    <a href="account.jsp" class="text-primary fw-bold">${sessionScope.acc.username}</a>
+                                </div>
                             </div>
+
+                            <!-- Logout Button -->
+                            <div class="text-end">
+                                <a href="./logout" class="btn btn-danger px-4">Logout</a>
+                            </div>
+
                         </div>
                     </div>
-                    <div class="col-12">
-                        <div class="mobile_menu d-block d-lg-none"></div>
-                    </div>
+
+                    <!--                        <div class="book_court d-flex align-items-center justify-content-end">
+                                                <div class="text-right mr-4">
+                                                    <span class="text-dark">Welcome,</span>
+                                                    <a href="account.jsp" class="text-primary font-weight-bold">${sessionScope.acc.username}</a>
+                                                </div>
+                                                <div class="book_btn d-none d-lg-block">
+                                                    <a href="./logout" class="btn btn-danger">Logout</a>
+                                                </div>
+                                            </div>-->
+                </div>
+                <div class="col-12">
+                    <div class="mobile_menu d-block d-lg-none"></div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </header>

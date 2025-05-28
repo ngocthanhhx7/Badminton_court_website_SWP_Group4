@@ -66,17 +66,17 @@
                             <div class="socail_links">
                                 <ul>
                                     <li>
-                                        <a href="#">
+                                        <a href="https://www.facebook.com/ngocthanh552004/">
                                             <i class="fa fa-facebook-square"></i>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#">
+                                        <a href="https://www.facebook.com/ngocthanh552004/">
                                             <i class="fa fa-twitter"></i>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#">
+                                        <a href="https://www.facebook.com/ngocthanh552004/">
                                             <i class="fa fa-instagram"></i>
                                         </a>
                                     </li>
