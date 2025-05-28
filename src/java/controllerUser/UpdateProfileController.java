@@ -50,7 +50,7 @@ public class UpdateProfileController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        request.setCharacterEncoding("UTF-8"); // Hỗ trợ tiếng Việt
+        request.setCharacterEncoding("UTF-8"); 
         response.setCharacterEncoding("UTF-8");
 
         HttpSession session = request.getSession();
@@ -68,7 +68,6 @@ public class UpdateProfileController extends HttpServlet {
         String address = request.getParameter("address");
         String sportLevel = request.getParameter("sportLevel");
 
-        // Validate phone number
         String phoneRegex = "^(09|03)\\d{8}$";
         if (!phone.matches(phoneRegex)) {
             request.setAttribute("error", "Số điện thoại không hợp lệ! Phải bắt đầu bằng 09 hoặc 03 và có đúng 10 chữ số.");
@@ -86,7 +85,6 @@ public class UpdateProfileController extends HttpServlet {
             return;
         }
 
-        // Cập nhật thông tin người dùng
         user.setFullName(fullName);
         user.setDob(dob);
         user.setGender(gender);

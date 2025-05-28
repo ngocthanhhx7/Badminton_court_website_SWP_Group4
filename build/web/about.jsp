@@ -56,7 +56,7 @@
 
         <!-- bradcam_area_start -->
         <div class="bradcam_area breadcam_bg">
-            <h3>About Montana</h3>
+            <h3>About BadmintonHub</h3>
         </div>
         <!-- bradcam_area_end -->
 
@@ -68,10 +68,11 @@
                         <div class="about_info">
                             <div class="section_title mb-20px">
                                 <span>About Us</span>
-                                <h3>A Luxuries Hotel <br>
-                                    with Nature</h3>
+                                <h3>Trải Nghiệm Thể Thao Chuẩn <br>
+                                    Chuyên Nghiệp
+                                </h3>
                             </div>
-                            <p>Suscipit libero pretium nullam potenti. Interdum, blandit phasellus consectetuer dolor ornare dapibus enim ut tincidunt rhoncus tellus sollicitudin pede nam maecenas, dolor sem. Neque sollicitudin enim. Dapibus lorem feugiat facilisi faucibus et. Rhoncus.</p>
+                            <p>Mang đến trải nghiệm thể thao năng động và tiện nghi. Không gian rộng rãi, hệ thống sân chuẩn thi đấu cùng dịch vụ đặt sân trực tuyến tiện lợi giúp bạn dễ dàng chủ động thời gian. Chúng tôi tạo ra môi trường luyện tập thoải mái, thân thiện, phù hợp mọi lứa tuổi và trình độ.</p>
                             <a href="#" class="line-button">Learn More</a>
                         </div>
                     </div>
@@ -107,17 +108,17 @@
                 <div class="row">
                     <div class="col-xl-6 col-md-6">
                         <div class="single_about_info">
-                            <h3>We Serve Fresh and <br>
-                                Delicious Food</h3>
-                            <p>Suscipit libero pretium nullam potenti. Interdum, blandit <br> phasellus consectetuer dolor ornare dapibus enim ut tincidunt <br> rhoncus tellus sollicitudin pede nam maecenas, dolor sem. <br> Neque sollicitudin enim. Dapibus lorem feugiat facilisi <br> faucibus et. Rhoncus.
+                            <h3>Dụng Cụ Thi Đấu <br>
+                                Tiêu Chuẩn</h3>
+                            <p>Chúng tôi cung cấp đầy đủ dụng cụ cầu lông chất lượng cao, phù hợp với mọi đối tượng từ người chơi phong trào đến vận động viên chuyên nghiệp.<br> Tại sân, bạn có thể thuê hoặc mua các loại vợt, cầu lông, giày thể thao và phụ kiện đạt chuẩn thi đấu. <br> Tất cả dụng cụ đều được bảo quản kỹ lưỡng, đảm bảo độ bền và hiệu suất khi sử dụng. <br> Bạn chỉ cần đến sân, còn lại chúng tôi đã chuẩn bị sẵn sàng cho một trận cầu trọn vẹn!
                             </p>
                         </div>
                     </div>
                     <div class="col-xl-6 col-md-6">
                         <div class="single_about_info">
-                            <h3>We Serve Fresh and <br>
-                                Delicious Food</h3>
-                            <p>Suscipit libero pretium nullam potenti. Interdum, blandit <br> phasellus consectetuer dolor ornare dapibus enim ut tincidunt <br> rhoncus tellus sollicitudin pede nam maecenas, dolor sem. <br> Neque sollicitudin enim. Dapibus lorem feugiat facilisi <br> faucibus et. Rhoncus.
+                            <h3>Dịch Vụ Nước Uống & <br>
+                                Thức Ăn Nhẹ</h3>
+                            <p>Chúng tôi hiểu rằng thể thao cần đi kèm với chế độ nghỉ ngơi và bổ sung năng lượng hợp lý.<br> Khu vực nghỉ ngơi tại sân luôn sẵn sàng phục vụ các loại nước uống thể thao, nước suối mát lạnh cùng các <br> món ăn nhẹ lành mạnh như bánh năng lượng, trái cây hoặc sữa chua. <br> Bạn có thể dễ dàng nạp lại năng lượng sau mỗi trận đấu để tiếp tục luyện tập hiệu quả và an toàn.<br>
                             </p>
                         </div>
                     </div>
@@ -140,7 +141,7 @@
                                 </div>
                                 <div class="col-xl-6 col-md-6">
                                     <div class="phone_num">
-                                        <a href="#" class="mobile_no">+10 576 377 4789</a>
+                                        <a href="#" class="mobile_no">+84981944060</a>
                                     </div>
                                 </div>
                             </div>
@@ -255,7 +256,7 @@
                         <div class="col-xl-8 col-md-7 col-lg-9">
                             <p class="copy_right">
                                 <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                                Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                                Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved
                                 <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                             </p>
                         </div>
@@ -364,19 +365,19 @@
 
         <script src="js/main.js"></script>
         <script>
-        $('#datepicker').datepicker({
-            iconsLibrary: 'fontawesome',
-            icons: {
-                rightIcon: '<span class="fa fa-caret-down"></span>'
-            }
-        });
-        $('#datepicker2').datepicker({
-            iconsLibrary: 'fontawesome',
-            icons: {
-                rightIcon: '<span class="fa fa-caret-down"></span>'
-            }
+                                    $('#datepicker').datepicker({
+                                        iconsLibrary: 'fontawesome',
+                                        icons: {
+                                            rightIcon: '<span class="fa fa-caret-down"></span>'
+                                        }
+                                    });
+                                    $('#datepicker2').datepicker({
+                                        iconsLibrary: 'fontawesome',
+                                        icons: {
+                                            rightIcon: '<span class="fa fa-caret-down"></span>'
+                                        }
 
-        });
+                                    });
         </script>
 
 

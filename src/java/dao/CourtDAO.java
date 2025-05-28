@@ -145,6 +145,53 @@ public class CourtDAO {
             return null;
         }
     }
+    
+    public List<CourtDTO> filterCourts(String search, String status, String courtType) {
+    List<CourtDTO> filteredCourts = new ArrayList<>();
+    String sql = "SELECT * FROM Courts WHERE 1=1";
+
+    if (search != null && !search.isEmpty()) {
+        sql += " AND (courtName LIKE ? OR description LIKE ?)";
+    }
+    if (status != null && !status.isEmpty()) {
+        sql += " AND status = ?";
+    }
+    if (courtType != null && !courtType.isEmpty()) {
+        sql += " AND courtType = ?";
+    }
+
+    try (Connection connection = DBUtils.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        int index = 1;
+        if (search != null && !search.isEmpty()) {
+            preparedStatement.setString(index++, "%" + search + "%");
+            preparedStatement.setString(index++, "%" + search + "%");
+        }
+        if (status != null && !status.isEmpty()) {
+            preparedStatement.setString(index++, status);
+        }
+        if (courtType != null && !courtType.isEmpty()) {
+            preparedStatement.setString(index++, courtType);
+        }
+
+        ResultSet rs = preparedStatement.executeQuery();
+        while (rs.next()) {
+            CourtDTO court = new CourtDTO();
+            court.setCourtId(rs.getLong("courtId"));
+            court.setCourtName(rs.getString("courtName"));
+            court.setDescription(rs.getString("description"));
+            court.setCourtType(rs.getString("courtType"));
+            court.setStatus(rs.getString("status"));
+            court.setCourtImage(rs.getString("courtImage"));
+            filteredCourts.add(court);
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    return filteredCourts;
+}
+
 
     public static void main(String[] args) {
         CourtDAO dao = new CourtDAO();
