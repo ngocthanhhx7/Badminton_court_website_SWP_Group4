@@ -1,4 +1,5 @@
 package controllerUser;
+
 import dao.AdminDAO;
 import dao.UserDAO;
 import java.io.IOException;
@@ -16,7 +17,7 @@ import models.UserDTO;
  *
  * @author PC - ACER
  */
-@WebServlet(name="loginController", urlPatterns={"/Login"})
+@WebServlet(name = "loginController", urlPatterns = {"/Login"})
 public class loginController extends HttpServlet {
 
     /**
@@ -69,36 +70,47 @@ public class loginController extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String Username = request.getParameter("Username");
-        String Password = request.getParameter("Password");
+protected void doPost(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
 
-        AdminDAO adminDao = new AdminDAO();   // gọi constructor đúng cách
-        UserDAO userDao = new UserDAO();
+    String emailOrUsername = request.getParameter("emailOrUsername");
+    String password = request.getParameter("password");
 
-        // Giả sử login trả về AdminDTO hoặc UserDTO tương ứng, hoặc null nếu không hợp lệ
-        AdminDTO admin = adminDao.login(Username, Password);
-        UserDTO user = userDao.login1(Username, Password);
-
-        if (admin != null) {
-            HttpSession session = request.getSession();
-            session.setAttribute("acc", admin);
-            response.sendRedirect("Success.jsp");
-            return;
-        }
-
-        if (user != null) {
-            HttpSession session = request.getSession();
-            session.setAttribute("acc", user);
-            response.sendRedirect("Success.jsp");
-            return;
-        }
-
-        // Nếu không phải admin cũng không phải user:
-        request.getSession().setAttribute("mess", "Wrong user or password");
-        response.sendRedirect("login.jsp");
+    // Kiểm tra đầu vào
+    if (emailOrUsername == null || emailOrUsername.trim().isEmpty() ||
+        password == null || password.trim().isEmpty()) {
+        request.setAttribute("error", "Email/Username và mật khẩu là bắt buộc.");
+        request.getRequestDispatcher("login.jsp").forward(request, response);
+        return;
     }
+
+    // Khởi tạo DAO
+    AdminDAO adminDao = new AdminDAO();
+    UserDAO userDao = new UserDAO();
+
+    // Thử đăng nhập với email hoặc username
+    AdminDTO admin = adminDao.loginWithEmailOrUsername(emailOrUsername, password);
+    UserDTO user = userDao.loginWithEmailOrUsername(emailOrUsername, password);
+
+    if (admin != null) {
+        HttpSession session = request.getSession();
+        session.setAttribute("acc", admin);
+        response.sendRedirect("Success.jsp");
+        return;
+    }
+
+    if (user != null) {
+        HttpSession session = request.getSession();
+        session.setAttribute("acc", user);
+        response.sendRedirect("Success.jsp");
+        return;
+    }
+
+    // Sai thông tin đăng nhập
+    request.setAttribute("error", "Sai email/username hoặc mật khẩu.");
+    request.getRequestDispatcher("login.jsp").forward(request, response);
+}
+
 
     /**
      * Returns a short description of the servlet.

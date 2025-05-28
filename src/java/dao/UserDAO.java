@@ -14,31 +14,30 @@ public class UserDAO {
     public UserDAO() {
         this.conn = DBUtils.getConnection();
     }
-    
-    public UserDTO login1(String username, String password) {
+
+    public UserDTO login(String username, String password) {
         String query = "SELECT * FROM Users WHERE Username = ? AND Password = ?";
-        try (Connection conn = DBUtils.getConnection();
-            PreparedStatement ps = conn.prepareStatement(query)) {
+        try (Connection conn = DBUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setString(1, username);
             ps.setString(2, password);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     return new UserDTO(
-                        rs.getInt("UserID"),
-                        rs.getString("Username"),
-                        rs.getString("Password"),
-                        rs.getString("Email"),
-                        rs.getString("FullName"),
-                        rs.getDate("Dob"),
-                        rs.getString("Gender"),
-                        rs.getString("Phone"),
-                        rs.getString("Address"),
-                        rs.getString("SportLevel"),
-                        rs.getString("Role"),
-                        rs.getString("Status"),
-                        rs.getInt("CreatedBy"),
-                        rs.getTimestamp("CreatedAt"),
-                        rs.getTimestamp("UpdatedAt")
+                            rs.getInt("UserID"),
+                            rs.getString("Username"),
+                            rs.getString("Password"),
+                            rs.getString("Email"),
+                            rs.getString("FullName"),
+                            rs.getDate("Dob"),
+                            rs.getString("Gender"),
+                            rs.getString("Phone"),
+                            rs.getString("Address"),
+                            rs.getString("SportLevel"),
+                            rs.getString("Role"),
+                            rs.getString("Status"),
+                            rs.getInt("CreatedBy"),
+                            rs.getTimestamp("CreatedAt"),
+                            rs.getTimestamp("UpdatedAt")
                     );
                 }
             }
@@ -59,6 +58,39 @@ public class UserDAO {
             }
         }
         return false;
+    }
+
+    public UserDTO loginWithEmailOrUsername(String input, String password) {
+        String query = "SELECT * FROM Users WHERE (Username = ? OR Email = ?) AND Password = ?";
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, input);
+            ps.setString(2, input);
+            ps.setString(3, password);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new UserDTO(
+                            rs.getInt("UserID"),
+                            rs.getString("Username"),
+                            rs.getString("Password"),
+                            rs.getString("Email"),
+                            rs.getString("FullName"),
+                            rs.getDate("Dob"),
+                            rs.getString("Gender"),
+                            rs.getString("Phone"),
+                            rs.getString("Address"),
+                            rs.getString("SportLevel"),
+                            rs.getString("Role"),
+                            rs.getString("Status"),
+                            rs.getInt("CreatedBy"),
+                            rs.getTimestamp("CreatedAt"),
+                            rs.getTimestamp("UpdatedAt")
+                    );
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public boolean isPhoneExists(String phone) throws SQLException {

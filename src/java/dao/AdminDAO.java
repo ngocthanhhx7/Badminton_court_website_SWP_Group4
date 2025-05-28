@@ -8,16 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AdminDAO {
-    private final DBContext dbContext;
+
+    private Connection conn;
 
     public AdminDAO() {
-        this.dbContext = DBContext.getInstance();
+        this.conn = DBUtils.getConnection();
     }
 
     public AdminDTO login(String username, String password) {
         String query = "SELECT * FROM Admins WHERE Username = ? AND Password = ?";
-        try (Connection conn = dbContext.getConnection();
-             PreparedStatement ps = conn.prepareStatement(query)) {
+        try (Connection conn = new DBUtils().getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setString(1, username);
             ps.setString(2, password);
             try (ResultSet rs = ps.executeQuery()) {
@@ -42,14 +42,39 @@ public class AdminDAO {
 
     public boolean isEmailOrUsernameExists(String email, String username) throws SQLException {
         String sql = "SELECT COUNT(*) FROM Admins WHERE email = ? OR username = ?";
-        try (Connection conn = dbContext.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = new DBUtils().getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, email);
             stmt.setString(2, username);
             try (ResultSet rs = stmt.executeQuery()) {
                 return rs.next() && rs.getInt(1) > 0;
             }
         }
+    }
+
+    public AdminDTO loginWithEmailOrUsername(String input, String password) {
+        String query = "SELECT * FROM Admins WHERE (Username = ? OR Email = ?) AND Password = ?";
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, input);
+            ps.setString(2, input);
+            ps.setString(3, password);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new AdminDTO(
+                            rs.getInt("AdminID"),
+                            rs.getString("Username"),
+                            rs.getString("Password"),
+                            rs.getString("FullName"),
+                            rs.getString("Email"),
+                            rs.getString("Status"),
+                            rs.getTimestamp("CreatedAt"),
+                            rs.getTimestamp("UpdatedAt")
+                    );
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private void validateEmail(String email) throws SQLException {
@@ -70,8 +95,7 @@ public class AdminDAO {
         validatePassword(admin.getPassword());
 
         String sql = "INSERT INTO Admins (Username, Password, FullName, Email, Status, CreatedAt) VALUES (?, ?, ?, ?, ?, GETDATE())";
-        try (Connection conn = dbContext.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = new DBUtils().getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, admin.getUsername());
             stmt.setString(2, admin.getPassword());
             stmt.setString(3, admin.getFullName());
@@ -85,8 +109,7 @@ public class AdminDAO {
         validateEmail(email);
         validatePassword(newPassword);
         String sql = "UPDATE Admins SET Password = ?, UpdatedAt = GETDATE() WHERE Email = ?";
-        try (Connection conn = dbContext.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = new DBUtils().getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, newPassword);
             stmt.setString(2, email);
             return stmt.executeUpdate() > 0;
@@ -95,8 +118,7 @@ public class AdminDAO {
 
     public AdminDTO getAdminByID(int adminID) throws SQLException {
         String sql = "SELECT * FROM Admins WHERE AdminID = ?";
-        try (Connection conn = dbContext.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = new DBUtils().getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, adminID);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
@@ -119,9 +141,7 @@ public class AdminDAO {
     public List<AdminDTO> getAllAdmins() throws SQLException {
         List<AdminDTO> admins = new ArrayList<>();
         String sql = "SELECT * FROM Admins";
-        try (Connection conn = dbContext.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+        try (Connection conn = new DBUtils().getConnection(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 admins.add(new AdminDTO(
                         rs.getInt("AdminID"),
