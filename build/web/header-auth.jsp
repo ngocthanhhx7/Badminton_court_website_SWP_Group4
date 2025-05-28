@@ -28,28 +28,18 @@
     <!-- <link rel="stylesheet" href="css/responsive.css"> -->
 </head>
 <header>
-    <div class="header-area ">
+    <div class="header-area">
         <div id="sticky-header" class="main-header-area">
             <div class="container-fluid p-0">
                 <div class="row align-items-center no-gutters">
                     <div class="col-xl-5 col-lg-6">
-                        <div class="main-menu  d-none d-lg-block">
+                        <div class="main-menu d-none d-lg-block">
                             <nav>
                                 <ul id="navigation">
-                                    <li><a class="active" href="homepage.jsp">home</a></li>
+                                    <li><a class="active" href="./home">Home</a></li>
                                     <li><a href="courts.jsp">Courts</a></li>
+                                    <li><a href="my-bookings.jsp?accountId=${sessionScope.account.id}">My Bookings</a></li>
                                     <li><a href="about.jsp">About</a></li>
-                                    <li><a href="#">blog <i class="ti-angle-down"></i></a>
-                                        <ul class="submenu">
-                                            <li><a href="blog.jsp">blog</a></li>
-                                            <li><a href="single-blog.jsp">single-blog</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a href="#">pages <i class="ti-angle-down"></i></a>
-                                        <ul class="submenu">
-                                            <li><a href="elements.jsp">elements</a></li>
-                                        </ul>
-                                    </li>
                                     <li><a href="contact.jsp">Contact</a></li>
                                 </ul>
                             </nav>
@@ -58,42 +48,63 @@
                     <div class="col-xl-2 col-lg-2">
                         <div class="logo-img">
                             <a href="homepage.jsp">
-                                <img src="img/logo.png" alt="" width="200" height="92">
+                                <img src="img/logo.png" alt="Logo" width="200" height="92">
                             </a>
                         </div>
                     </div>
                     <div class="col-xl-5 col-lg-4 d-none d-lg-block">
-                        <div class="book_court">
-                            <div class="socail_links">
-                                <ul>
-                                    <li>
-                                        <a href="#">
-                                            <i class="fa fa-facebook-square"></i>
-                                        </a>
+                        <div class="book_court d-flex align-items-center justify-content-end">
+
+                            <!-- Social links -->
+                            <div class="socail_links mb-3">
+                                <ul class="list-inline mb-0 d-flex gap-3 justify-content-end">
+                                    <li class="list-inline-item">
+                                        <a href="https://www.facebook.com/ngocthanh552004/" class="text-primary fs-4"><i class="fa fa-facebook-square"></i></a>
                                     </li>
-                                    <li>
-                                        <a href="#">
-                                            <i class="fa fa-twitter"></i>
-                                        </a>
+                                    <li class="list-inline-item">
+                                        <a href="https://www.facebook.com/ngocthanh552004/" class="text-info fs-4"><i class="fa fa-twitter"></i></a>
                                     </li>
-                                    <li>
-                                        <a href="#">
-                                            <i class="fa fa-instagram"></i>
-                                        </a>
+                                    <li class="list-inline-item">
+                                        <a href="https://www.facebook.com/ngocthanh552004/" class="text-danger fs-4"><i class="fa fa-instagram"></i></a>
                                     </li>
                                 </ul>
                             </div>
-                            <div class="book_btn d-none d-lg-block">
-                                <a href="./Login" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">Login</a>
-                                <a href="./register" class="block px-3 py-2 rounded-md text-base font-medium text-white bg-secondary hover:bg-red-600">Register</a>
+
+                            <!-- Welcome and Account -->
+                            <!-- Welcome + Avatar + Username -->
+                            <div class="d-flex align-items-center gap-3 mb-2">
+                                <c:choose>
+                                    <c:when test="${sessionScope.accType == 'google'}">
+                                        <img src="${sessionScope.acc.picture}" alt="Avatar" class="rounded-circle" width="40" height="40">
+                                        <div>
+                                            <span class="text-dark">Welcome,</span>
+                                            <a href="account.jsp" class="text-primary fw-bold">${sessionScope.acc.name}</a>
+                                        </div>
+                                    </c:when>
+
+                                    <c:otherwise>
+                                        <div>
+                                            <span class="text-dark">Welcome,</span>
+                                            <a href="account.jsp" class="text-primary fw-bold">${sessionScope.acc.username}</a>
+                                        </div>
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
+
+                            <!-- Logout Button -->
+                            <div class="text-end">
+                                <a href="./logout" class="btn btn-danger px-4">Logout</a>
+                            </div>
+
                         </div>
                     </div>
-                    <div class="col-12">
-                        <div class="mobile_menu d-block d-lg-none"></div>
-                    </div>
+
+                </div>
+                <div class="col-12">
+                    <div class="mobile_menu d-block d-lg-none"></div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </header>

@@ -35,32 +35,8 @@
                 <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
         <![endif]-->
 
-        <%
-Object acc = session.getAttribute("acc");
-if (acc == null) {
-// Nếu chưa đăng nhập, hiển thị header mặc định
-        %>
         <jsp:include page="header.jsp" />
-        <%
-            } else {
-                int type = 0;
-                if (acc instanceof AdminDTO) {
-                    type = 1;
-                } else if (acc instanceof UserDTO) {
-                    type = 2;
-                }
 
-                if (type == 1) {
-        %>
-        <jsp:include page="header-auth.jsp" />
-        <%
-                } else if (type == 2) {
-        %>
-        <jsp:include page="header-user.jsp" />
-        <%
-                }
-            }
-        %>
 
         <div class="bradcam_area breadcam_bg">
             <h3>About Montana</h3>

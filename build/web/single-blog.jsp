@@ -42,29 +42,19 @@
 
         <!-- header-start -->
         <%
-    Object acc = session.getAttribute("acc");
-    if (acc == null) {
-        // Nếu chưa đăng nhập, hiển thị header mặc định
+            String accType = (String) session.getAttribute("accType");
+            if (accType == null) {
         %>
         <jsp:include page="header.jsp" />
         <%
-            } else {
-                int type = 0;
-                if (acc instanceof AdminDTO) {
-                    type = 1;
-                } else if (acc instanceof UserDTO) {
-                    type = 2;
-                }
-
-                if (type == 1) {
+            } else if ("admin".equals(accType)) {
         %>
         <jsp:include page="header-auth.jsp" />
         <%
-                } else if (type == 2) {
+            } else if ("user".equals(accType) || "google".equals(accType)) {
         %>
         <jsp:include page="header-user.jsp" />
         <%
-                }
             }
         %>
 
