@@ -5,7 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="models.AdminDTO, models.UserDTO" %>
+<%@ page import="models.UserDTO, models.AdminDTO, models.GoogleAccount" %>
 <!doctype html>
 <html class="no-js" lang="zxx">
 
@@ -42,29 +42,19 @@
 
         <!-- header-start -->
         <%
-    Object acc = session.getAttribute("acc");
-    if (acc == null) {
-        // Nếu chưa đăng nhập, hiển thị header mặc định
+            String accType = (String) session.getAttribute("accType");
+            if (accType == null) {
         %>
         <jsp:include page="header.jsp" />
         <%
-            } else {
-                int type = 0;
-                if (acc instanceof AdminDTO) {
-                    type = 1;
-                } else if (acc instanceof UserDTO) {
-                    type = 2;
-                }
-
-                if (type == 1) {
+            } else if ("admin".equals(accType)) {
         %>
         <jsp:include page="header-auth.jsp" />
         <%
-                } else if (type == 2) {
+            } else if ("user".equals(accType) || "google".equals(accType)) {
         %>
         <jsp:include page="header-user.jsp" />
         <%
-                }
             }
         %>
 
@@ -496,8 +486,8 @@
                                 <h3 class="footer_title">
                                     address
                                 </h3>
-                                <p class="footer_text" >  200, Green road, Mongla, <br>
-                                    New Yor City USA</p>
+                                <p class="footer_text" >  Khu công nghệ cao <br>
+                                    Hòa Lạc, Hà Nội</p>
                                 <a href="#" class="line-button">Get Direction</a>
                             </div>
                         </div>
@@ -507,7 +497,7 @@
                                     Reservation
                                 </h3>
                                 <p class="footer_text" >+10 367 267 2678 <br>
-                                    reservation@montana.com</p>
+                                    thanhnnhe186491@fpt.edu.vn</p>
                             </div>
                         </div>
                         <div class="col-xl-2 col-md-6 col-lg-2">
@@ -516,10 +506,10 @@
                                     Navigation
                                 </h3>
                                 <ul>
-                                    <li><a href="#">Home</a></li>
-                                    <li><a href="#">Courts</a></li>
-                                    <li><a href="#">About</a></li>
-                                    <li><a href="#">News</a></li>
+                                    <li><a href="./home">Home</a></li>
+                                    <li><a href="./court">Courts</a></li>
+                                    <li><a href="about.jsp">About</a></li>
+                                    <li><a href="blog.jsp">News</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -545,7 +535,7 @@
                         <div class="col-xl-8 col-md-7 col-lg-9">
                             <p class="copy_right">
                                 <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                                Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                                Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved
                                 <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                             </p>
                         </div>
@@ -654,19 +644,19 @@
 
         <script src="js/main.js"></script>
         <script>
-         $('#datepicker').datepicker({
-             iconsLibrary: 'fontawesome',
-             icons: {
-                 rightIcon: '<span class="fa fa-caret-down"></span>'
-             }
-         });
-         $('#datepicker2').datepicker({
-             iconsLibrary: 'fontawesome',
-             icons: {
-                 rightIcon: '<span class="fa fa-caret-down"></span>'
-             }
+                            $('#datepicker').datepicker({
+                                iconsLibrary: 'fontawesome',
+                                icons: {
+                                    rightIcon: '<span class="fa fa-caret-down"></span>'
+                                }
+                            });
+                            $('#datepicker2').datepicker({
+                                iconsLibrary: 'fontawesome',
+                                icons: {
+                                    rightIcon: '<span class="fa fa-caret-down"></span>'
+                                }
 
-         });
+                            });
         </script>
 
 

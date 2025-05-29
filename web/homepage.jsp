@@ -1,12 +1,6 @@
-<%-- 
-    Document   : homepage
-    Created on : May 25, 2025, 2:31:34 PM
-    Author     : nguye
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ page import="models.AdminDTO, models.UserDTO" %>
+<%@ page import="models.UserDTO, models.AdminDTO, models.GoogleAccount" %>
 
 <!doctype html>
 <html class="no-js" lang="zxx">
@@ -35,7 +29,21 @@
         <link rel="stylesheet" href="css/slicknav.css">
         <link rel="stylesheet" href="css/style.css">
         <!-- <link rel="stylesheet" href="css/responsive.css"> -->
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script>
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        colors: {
+                            primary: '#78350f', // Green
+                            secondary: '#78350f', // Red
+                        }
+                    }
+                }
+            }
+        </script>
     </head>
+
 
     <body>
         <!--[if lte IE 9]>
@@ -44,29 +52,19 @@
 
         <!-- header-start -->
         <%
-    Object acc = session.getAttribute("acc");
-    if (acc == null) {
-        // Nếu chưa đăng nhập, hiển thị header mặc định
+            String accType = (String) session.getAttribute("accType");
+            if (accType == null) {
         %>
         <jsp:include page="header.jsp" />
         <%
-            } else {
-                int type = 0;
-                if (acc instanceof AdminDTO) {
-                    type = 1;
-                } else if (acc instanceof UserDTO) {
-                    type = 2;
-                }
-
-                if (type == 1) {
+            } else if ("admin".equals(accType)) {
         %>
         <jsp:include page="header-auth.jsp" />
         <%
-                } else if (type == 2) {
+            } else if ("user".equals(accType) || "google".equals(accType)) {
         %>
         <jsp:include page="header-user.jsp" />
         <%
-                }
             }
         %>
 
@@ -80,8 +78,8 @@
                         <div class="row">
                             <div class="col-xl-12">
                                 <div class="slider_text text-center">
-                                    <h3>Montana Resort</h3>
-                                    <p>Unlock to enjoy the view of Martine</p>
+                                    <h3>BadmintonHub</h3>
+                                    <p>Nơi đốt cháy đam mê</p>
                                 </div>
                             </div>
                         </div>
@@ -93,7 +91,7 @@
                             <div class="col-xl-12">
                                 <div class="slider_text text-center">
                                     <h3>Life is Beautiful</h3>
-                                    <p>Unlock to enjoy the view of Martine</p>
+                                    <p>Nơi kết nối tình thương</p>
                                 </div>
                             </div>
                         </div>
@@ -104,8 +102,8 @@
                         <div class="row">
                             <div class="col-xl-12">
                                 <div class="slider_text text-center">
-                                    <h3>Montana Resort</h3>
-                                    <p>Unlock to enjoy the view of Martine</p>
+                                    <h3>BadmintonHub</h3>
+                                    <p>Sống lại đam mê của bạn</p>
                                 </div>
                             </div>
                         </div>
@@ -117,7 +115,7 @@
                             <div class="col-xl-12">
                                 <div class="slider_text text-center">
                                     <h3>Life is Beautiful</h3>
-                                    <p>Unlock to enjoy the view of Martine</p>
+                                    <p>Cùng tìm lại cảm xúc</p>
                                 </div>
                             </div>
                         </div>
@@ -135,12 +133,12 @@
                         <div class="about_info">
                             <div class="section_title mb-20px">
                                 <span>About Us</span>
-                                <h3>A Luxuries Hotel <br>
-                                    with Nature</h3>
+                                <h3>Sân Cầu Lông Hiện Đại<br>
+                                    Trải Nghiệm Thể Thao Chuẩn Chuyên Nghiệp</h3>
                             </div>
-                            <p>Suscipit libero pretium nullam potenti. Interdum, blandit phasellus consectetuer dolor ornare
-                                dapibus enim ut tincidunt rhoncus tellus sollicitudin pede nam maecenas, dolor sem. Neque
-                                sollicitudin enim. Dapibus lorem feugiat facilisi faucibus et. Rhoncus.</p>
+                            <p>Mang đến trải nghiệm thể thao năng động và tiện nghi. Không gian rộng rãi, hệ thống sân chuẩn thi đấu cùng dịch vụ đặt sân trực tuyến tiện lợi giúp bạn dễ dàng chủ động thời gian. Chúng tôi tạo ra môi trường luyện tập thoải mái, thân thiện, phù hợp mọi lứa tuổi và trình độ.
+                                Tiện ích hiện đại. Đăng ký dễ dàng. Trải nghiệm trọn vẹn.
+                                Chào đón bạn đến với sân cầu lông lý tưởng cho sức khỏe và đam mê!</p>
                             <a href="#" class="line-button">Learn More</a>
                         </div>
                     </div>
@@ -176,11 +174,11 @@
                             <div class="about_thumb">
                                 <img src="img/offers/1.png" alt="">
                             </div>
-                            <h3>Up to 35% savings on Club <br>
+                            <h3>Sân Đơn <br>
                                 courts and Suites</h3>
                             <ul>
                                 <li>Luxaries condition</li>
-                                <li>3 Adults & 2 Children size</li>
+                                <li>2 người</li>
                                 <li>Sea view side</li>
                             </ul>
                             <a href="#" class="book_now">book now</a>
@@ -191,11 +189,11 @@
                             <div class="about_thumb">
                                 <img src="img/offers/2.png" alt="">
                             </div>
-                            <h3>Up to 35% savings on Club <br>
+                            <h3>Sân VIP<br>
                                 courts and Suites</h3>
                             <ul>
                                 <li>Luxaries condition</li>
-                                <li>3 Adults & 2 Children size</li>
+                                <li>4 người</li>
                                 <li>Sea view side</li>
                             </ul>
                             <a href="#" class="book_now">book now</a>
@@ -206,11 +204,11 @@
                             <div class="about_thumb">
                                 <img src="img/offers/3.png" alt="">
                             </div>
-                            <h3>Up to 35% savings on Club <br>
+                            <h3>Sân Đôi <br>
                                 courts and Suites</h3>
                             <ul>
                                 <li>Luxaries condition</li>
-                                <li>3 Adults & 2 Children size</li>
+                                <li>4 người</li>
                                 <li>Sea view side</li>
                             </ul>
                             <a href="#" class="book_now">book now</a>
@@ -224,10 +222,10 @@
         <!-- video_area_start -->
         <div class="video_area video_bg overlay">
             <div class="video_area_inner text-center">
-                <span>Montana Sea View</span>
-                <h3>Relax and Enjoy your <br>
-                    Vacation </h3>
-                <a href="https://www.youtube.com/watch?v=vLnPwxZdW4Y" class="video_btn popup-video">
+                <span>Nhạc Deep chill đánh cầu</span>
+                <h3>Nhạc bốc thôi rồi<br>
+                    Nói chung là chill vô cùng </h3>
+                <a href="https://www.youtube.com/watch?v=m5gfoNneQUo" class="video_btn popup-video">
                     <i class="fa fa-play"></i>
                 </a>
             </div>
@@ -235,168 +233,215 @@
         <!-- video_area_end -->
 
         <!-- about_area_start -->
-        <div class="about_area">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-7 col-lg-7">
-                        <div class="about_thumb2 d-flex">
-                            <div class="img_1">
-                                <img src="img/about/1.png" alt="">
-                            </div>
-                            <div class="img_2">
-                                <img src="img/about/2.png" alt="">
+        <c:if test="${empty param.search}">
+            <div class="about_area">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-7 col-lg-7">
+                            <div class="about_thumb2 d-flex">
+                                <div class="img_1">
+                                    <img src="img/about/1.png" alt="">
+                                </div>
+                                <div class="img_2">
+                                    <img src="img/about/2.png" alt="">
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-xl-5 col-lg-5">
-                        <div class="about_info">
-                            <div class="section_title mb-20px">
-                                <span>Delicious Food</span>
-                                <h3>We Serve Fresh and <br>
-                                    Delicious Food</h3>
+                        <div class="col-xl-5 col-lg-5">
+                            <div class="about_info">
+                                <div class="section_title mb-20px">
+                                    <span>Dụng cụ thi đấu</span>
+                                    <h3>Chúng tôi cho thuê dụng cụ thi đấu <br>
+                                        Tiêu chuẩn</h3>
+                                </div>
+                                <p>Chúng tôi cung cấp đầy đủ dụng cụ cầu lông chất lượng cao, phù hợp với mọi đối tượng từ người chơi phong trào đến vận động viên chuyên nghiệp.
+                                    <br>Tại sân, bạn có thể thuê hoặc mua các loại vợt, cầu lông, giày thể thao và phụ kiện đạt chuẩn thi đấu.<br>Tất cả dụng cụ đều được bảo quản kỹ lưỡng, đảm bảo độ bền và hiệu suất khi sử dụng.
+                                    <br>Bạn chỉ cần đến sân, còn lại chúng tôi đã chuẩn bị sẵn sàng cho một trận cầu trọn vẹn! </p>
+                                <a href="about.jsp" class="line-button">Learn More</a>
                             </div>
-                            <p>Suscipit libero pretium nullam potenti. Interdum, blandit phasellus consectetuer dolor ornare
-                                dapibus enim ut tincidunt rhoncus tellus sollicitudin pede nam maecenas, dolor sem. Neque
-                                sollicitudin enim. Dapibus lorem feugiat facilisi faucibus et. Rhoncus.</p>
-                            <a href="#" class="line-button">Learn More</a>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </c:if>
         <!-- about_area_end -->
 
-        <!--    list court-->
-        <section class="court-section px-4 py-10 bg-gray-50">
+        <!-- List court -->
+        <section class="court-section px-4 py-12 bg-gray-100">
             <div class="container mx-auto">
 
                 <!-- Form tìm kiếm -->
-                <form method="get" action="./home" class="mb-8 flex justify-center">
-                    <input type="text" name="search" value="${param.search}" placeholder="Find court"
-                           class="px-4 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-primary">
+                <form method="get" action="./home" class="mb-10 max-w-4xl mx-auto flex flex-wrap gap-2 md:gap-4 items-center justify-center">
+                    <!-- Ô tìm kiếm -->
+                    <input 
+                        type="text" 
+                        name="search" 
+                        value="${param.search}" 
+                        placeholder="Tìm kiếm sân cầu lông..."
+                        class="w-full md:w-1/3 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary text-gray-700"
+                        value="${search != null ? search : ''}"
+                        />
+
+                    <!-- Lọc trạng thái -->
+                    <select name="status"
+                            class="w-full md:w-1/5 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary text-gray-700">
+                        <option value="">Tất cả trạng thái</option>
+                        <option value="Available" ${param.status == 'Available' ? 'selected' : ''}>Available</option>
+                        <option value="Unavailable" ${param.status == 'Unavailable' ? 'selected' : ''}>Unavailable</option>
+                    </select>
+
+                    <!-- Lọc loại sân -->
+                    <select name="courtType"
+                            class="w-full md:w-1/5 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary text-gray-700">
+                        <option value="">Tất cả loại sân</option>
+                        <option value="Single" ${param.courtType == 'Single' ? 'selected' : ''}>Single</option>
+                        <option value="Double" ${param.courtType == 'Double' ? 'selected' : ''}>Double</option>
+                        <option value="VIP" ${param.courtType == 'VIP' ? 'selected' : ''}>VIP</option>
+                    </select>
+
+                    <!-- Nút tìm -->
                     <button type="submit"
-                            class="px-4 py-2 bg-secondary text-white rounded-r-md hover:bg-red-600 transition duration-300">
-                        Go
+                            class="w-full md:w-auto px-6 py-2 bg-secondary text-white font-semibold rounded-lg hover:bg-red-600 transition duration-300">
+                        Tìm
                     </button>
                 </form>
 
+
                 <!-- Thông báo -->
                 <c:if test="${message != null}">
-                    <p class="text-center text-secondary mb-4">${message}</p>
+                    <p class="text-center text-secondary font-medium text-lg mb-6">${message}</p>
                 </c:if>
 
                 <!-- Danh sách sân -->
                 <c:if test="${courts != null}">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    <div class="flex flex-wrap justify-center gap-6">
                         <c:forEach items="${courts}" var="court">
-                            <div class="court-card bg-white rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:scale-105">
-                                <img src="${court.courtImage}" alt="${court.courtName}" class="w-full h-48 object-cover">
+                            <div class="court-card w-full max-w-[400px] bg-white rounded-2xl shadow-md hover:shadow-xl transform transition duration-300 hover:-translate-y-1">
+                                <img src="${court.courtImage}" alt="Sân cầu lông ${court.courtName}"
+                                     class="w-full h-[300px] object-cover rounded-t-2xl">
                                 <div class="p-4">
-                                    <h3 class="text-xl font-semibold mb-2">${court.courtName}</h3>
-                                    <p class="text-gray-600 mb-2">${court.description}</p>
-                                    <p class="text-sm text-gray-500 mb-2">Type: ${court.courtType}</p>
-                                    <p class="text-sm text-gray-500 mb-4">Status: <span class="font-semibold">${court.status}</span></p>
-                                    <form method="get" action="./court-detail" class="inline-block">
+                                    <h3 class="text-lg font-bold text-gray-800 mb-2 truncate">${court.courtName}</h3>
+                                    <p class="text-gray-600 text-sm mb-2 line-clamp-2">${court.description}</p>
+                                    <p class="text-sm text-gray-500">Loại sân: <span class="font-medium text-gray-700">${court.courtType}</span></p>
+                                    <p class="text-sm text-gray-500 mb-4">
+                                        Trạng thái:
+                                        <span class="font-semibold ${court.status == 'Available' ? 'text-green-600' : 'text-red-500'}">${court.status}</span>
+                                    </p>
+                                    <form method="get" action="./court-detail" class="text-right">
                                         <input type="hidden" name="courtId" value="${court.courtId}">
                                         <button type="submit"
-                                                class="px-4 py-2 bg-secondary text-white rounded hover:bg-red-600 transition duration-300">
-                                            View Details
+                                                class="px-4 py-2 bg-secondary text-white rounded-md hover:bg-red-600 transition duration-300 text-sm">
+                                            Xem chi tiết
                                         </button>
                                     </form>
                                 </div>
                             </div>
+
                         </c:forEach>
+
                     </div>
                 </c:if>
 
                 <!-- Phân trang -->
                 <c:if test="${totalPages > 1}">
-                    <div class="flex justify-center mt-10 space-x-2">
+                    <div class="flex justify-center mt-8 space-x-2">
+                        <!-- Nút lùi lại -->
+                        <c:if test="${currentPage > 1}">
+                            <a href="home?page=${currentPage - 1}&search=${param.search}&status=${param.status}&courtType=${param.courtType}"
+                               class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition duration-200">
+                                &laquo; 🏍️
+                            </a>
+                        </c:if>
+
+                        <!-- Hiển thị số trang -->
                         <c:forEach begin="1" end="${totalPages}" var="i">
-                            <form method="get" action="./home">
-                                <input type="hidden" name="page" value="${i}">
-                                <c:if test="${not empty search}">
-                                    <input type="hidden" name="search" value="${search}">
-                                </c:if>
-                                <button type="submit"
-                                        class="px-3 py-1 rounded-md
-                                        ${i == currentPage ? 'bg-secondary text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}">
-                                    ${i}
-                                </button>
-                            </form>
+                            <a href="home?page=${i}&search=${param.search}&status=${param.status}&courtType=${param.courtType}"
+                               class="px-4 py-2 rounded ${i == currentPage ? 'bg-secondary text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-300'} transition duration-200">
+                                ${i}
+                            </a>
                         </c:forEach>
+
+                        <!-- Nút tiến -->
+                        <c:if test="${currentPage < totalPages}">
+                            <a href="home?page=${currentPage + 1}&search=${param.search}&status=${param.status}&courtType=${param.courtType}"
+                               class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition duration-200">
+                                🛬 &raquo;
+                            </a>
+                        </c:if>
                     </div>
                 </c:if>
 
+
             </div>
         </section>
+        <!-- List court end -->
 
-
-        <!--List court end-->
 
         <!-- features_court_startt -->
-        <div class="features_court">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-12">
-                        <div class="section_title text-center mb-100">
-                            <span>Featured Courts</span>
-                            <h3>Choose a Better Court</h3>
+        <c:if test="${empty param.search}">
+            <div class="features_court">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="section_title text-center mb-100">
+                                <span>Featured Courts</span>
+                                <h3>Choose a Better Court</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="courts_here">
+                    <div class="single_courts">
+                        <div class="court_thumb">
+                            <img src="img/courts/1.png" alt="" width="600" height="450">
+                            <div class="court_heading d-flex justify-content-between align-items-center">
+                                <div class="court_heading_inner">
+                                    <span>From $250/h</span>
+                                    <h3>Superior Court</h3>
+                                </div>
+                                <a href="#" class="line-button">book now</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="single_courts">
+                        <div class="court_thumb">
+                            <img src="img/courts/2.png" alt="" width="600" height="450">
+                            <div class="court_heading d-flex justify-content-between align-items-center">
+                                <div class="court_heading_inner">
+                                    <span>From $250/h</span>
+                                    <h3>Deluxe Court</h3>
+                                </div>
+                                <a href="#" class="line-button">book now</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="single_courts">
+                        <div class="court_thumb">
+                            <img src="img/courts/3.png" alt="" width="600" height="450">
+                            <div class="court_heading d-flex justify-content-between align-items-center">
+                                <div class="court_heading_inner">
+                                    <span>From $250/h</span>
+                                    <h3>Signature Court</h3>
+                                </div>
+                                <a href="#" class="line-button">book now</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="single_courts">
+                        <div class="court_thumb">
+                            <img src="img/courts/4.png" alt="" width="600" height="450">
+                            <div class="court_heading d-flex justify-content-between align-items-center">
+                                <div class="court_heading_inner">
+                                    <span>From $250/h</span>
+                                    <h3>Couple Court</h3>
+                                </div>
+                                <a href="#" class="line-button">book now</a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="courts_here">
-                <div class="single_courts">
-                    <div class="court_thumb">
-                        <img src="img/courts/1.png" alt="">
-                        <div class="court_heading d-flex justify-content-between align-items-center">
-                            <div class="court_heading_inner">
-                                <span>From $250/night</span>
-                                <h3>Superior Court</h3>
-                            </div>
-                            <a href="#" class="line-button">book now</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="single_courts">
-                    <div class="court_thumb">
-                        <img src="img/courts/2.png" alt="">
-                        <div class="court_heading d-flex justify-content-between align-items-center">
-                            <div class="court_heading_inner">
-                                <span>From $250/night</span>
-                                <h3>Deluxe Court</h3>
-                            </div>
-                            <a href="#" class="line-button">book now</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="single_courts">
-                    <div class="court_thumb">
-                        <img src="img/courts/3.png" alt="">
-                        <div class="court_heading d-flex justify-content-between align-items-center">
-                            <div class="court_heading_inner">
-                                <span>From $250/night</span>
-                                <h3>Signature Court</h3>
-                            </div>
-                            <a href="#" class="line-button">book now</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="single_courts">
-                    <div class="court_thumb">
-                        <img src="img/courts/4.png" alt="">
-                        <div class="court_heading d-flex justify-content-between align-items-center">
-                            <div class="court_heading_inner">
-                                <span>From $250/night</span>
-                                <h3>Couple Court</h3>
-                            </div>
-                            <a href="#" class="line-button">book now</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </c:if>
         <!-- features_court_end -->
 
         <!--                 forQuery_start -->
@@ -413,7 +458,7 @@
                                 </div>
                                 <div class="col-xl-6 col-md-6">
                                     <div class="phone_num">
-                                        <a href="#" class="mobile_no">+10 576 377 4789</a>
+                                        <a href="#" class="mobile_no">+84981944060</a>
                                     </div>
                                 </div>
                             </div>
@@ -470,7 +515,7 @@
         <!--                 instragram_area_end -->
 
         <!-- footer -->
-        <footer class="footer">
+        <footer class="footer" >
             <div class="footer_top">
                 <div class="container">
                     <div class="row">
@@ -479,8 +524,8 @@
                                 <h3 class="footer_title">
                                     address
                                 </h3>
-                                <p class="footer_text"> 200, Green road, Mongla, <br>
-                                    New Yor City USA</p>
+                                <p class="footer_text" >  Khu công nghệ cao <br>
+                                    Hòa Lạc, Hà Nội</p>
                                 <a href="#" class="line-button">Get Direction</a>
                             </div>
                         </div>
@@ -489,8 +534,8 @@
                                 <h3 class="footer_title">
                                     Reservation
                                 </h3>
-                                <p class="footer_text">+10 367 267 2678 <br>
-                                    reservation@montana.com</p>
+                                <p class="footer_text" >+10 367 267 2678 <br>
+                                    thanhnnhe186491@fpt.edu.vn</p>
                             </div>
                         </div>
                         <div class="col-xl-2 col-md-6 col-lg-2">
@@ -499,10 +544,10 @@
                                     Navigation
                                 </h3>
                                 <ul>
-                                    <li><a href="#">Home</a></li>
-                                    <li><a href="#">Courts</a></li>
-                                    <li><a href="#">About</a></li>
-                                    <li><a href="#">News</a></li>
+                                    <li><a href="./home">Home</a></li>
+                                    <li><a href="./court">Courts</a></li>
+                                    <li><a href="about.jsp">About</a></li>
+                                    <li><a href="blog.jsp">News</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -513,7 +558,7 @@
                                 </h3>
                                 <form action="#" class="newsletter_form">
                                     <input type="text" placeholder="Enter your mail">
-                                    <button type="submit">Sign Up</button>
+                                    <button type="submit" >Sign Up</button>
                                 </form>
                                 <p class="newsletter_text">Subscribe newsletter to get updates</p>
                             </div>
@@ -528,8 +573,9 @@
                         <div class="col-xl-8 col-md-7 col-lg-9">
                             <p class="copy_right">
                                 <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                                Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                                Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved
                                 <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                            </p>
                         </div>
                         <div class="col-xl-4 col-md-5 col-lg-3">
                             <div class="socail_links">
@@ -556,6 +602,7 @@
                 </div>
             </div>
         </footer>
+        <!-- footer_end -->
 
         <!-- link that opens popup -->
 
@@ -636,19 +683,19 @@
 
         <script src="js/main.js"></script>
         <script>
-                                    $('#datepicker').datepicker({
-                                        iconsLibrary: 'fontawesome',
-                                        icons: {
-                                            rightIcon: '<span class="fa fa-caret-down"></span>'
-                                        }
-                                    });
-                                    $('#datepicker2').datepicker({
-                                        iconsLibrary: 'fontawesome',
-                                        icons: {
-                                            rightIcon: '<span class="fa fa-caret-down"></span>'
-                                        }
+                            $('#datepicker').datepicker({
+                                iconsLibrary: 'fontawesome',
+                                icons: {
+                                    rightIcon: '<span class="fa fa-caret-down"></span>'
+                                }
+                            });
+                            $('#datepicker2').datepicker({
+                                iconsLibrary: 'fontawesome',
+                                icons: {
+                                    rightIcon: '<span class="fa fa-caret-down"></span>'
+                                }
 
-                                    });
+                            });
         </script>
 
 

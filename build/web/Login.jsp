@@ -1,5 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="models.AdminDTO, models.UserDTO" %>
+<%@ page import="models.AdminDTO, models.UserDTO, models.GoogleAccount" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <!DOCTYPE html>
 <html class="no-js" lang="zxx">
     <head>
@@ -32,34 +34,10 @@
         <!--[if lte IE 9]>
                 <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
         <![endif]-->
-        
-                    <%
-    Object acc = session.getAttribute("acc");
-    if (acc == null) {
-        // Nếu chưa đăng nhập, hiển thị header mặc định
-        %>
-        <jsp:include page="header.jsp" />
-        <%
-            } else {
-                int type = 0;
-                if (acc instanceof AdminDTO) {
-                    type = 1;
-                } else if (acc instanceof UserDTO) {
-                    type = 2;
-                }
 
-                if (type == 1) {
-        %>
-        <jsp:include page="header-auth.jsp" />
-        <%
-                } else if (type == 2) {
-        %>
-        <jsp:include page="header-user.jsp" />
-        <%
-                }
-            }
-        %>
-        
+        <jsp:include page="header.jsp" />
+
+
         <div class="bradcam_area breadcam_bg">
             <h3>About Montana</h3>
         </div>
@@ -92,14 +70,18 @@
                                             </c:if>
 
                                             <div class="form-floating mb-3">
-                                                <input type="text" class="form-control border-0 border-bottom rounded-0" name="emailOrUsername" id="emailOrUsername" placeholder="Enter your email or username" required>
+                                                <input type="text" class="form-control border-0 border-bottom rounded-0"
+                                                       name="emailOrUsername" id="emailOrUsername"
+                                                       value="${savedIdentifier}" placeholder="Enter your email or username" required>
                                                 <label for="emailOrUsername" class="form-label">Email or Username</label>
                                             </div>
                                         </div>
 
                                         <div class="col-12">
                                             <div class="form-floating mb-3">
-                                                <input type="password" class="form-control border-0 border-bottom rounded-0" name="password" id="password" placeholder="Password" required>
+                                                <input type="password" class="form-control border-0 border-bottom rounded-0"
+                                                       name="password" id="password"
+                                                       value="${savedPassword}" placeholder="Password" required>
                                                 <label for="password" class="form-label">Password</label>
                                             </div>
                                         </div>
@@ -108,7 +90,9 @@
                                             <div class="row justify-content-between">
                                                 <div class="col-6">
                                                     <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" name="remember_me" id="remember_me">
+                                                        <input class="form-check-input" type="checkbox" name="remember_me" id="remember_me"
+                                                               ${rememberChecked ? "checked" : ""}>
+
                                                         <label class="form-check-label text-secondary" for="remember_me">
                                                             Remember me
                                                         </label>

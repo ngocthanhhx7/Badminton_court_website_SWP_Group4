@@ -1,11 +1,5 @@
-<%-- 
-    Document   : contact
-    Created on : May 26, 2025, 5:34:13 PM
-    Author     : nguye
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="models.AdminDTO, models.UserDTO" %>
+<%@ page import="models.UserDTO, models.AdminDTO, models.GoogleAccount" %>
 <!doctype html>
 <html class="no-js" lang="zxx">
 
@@ -42,29 +36,19 @@
 
         <!-- header-start -->
         <%
-    Object acc = session.getAttribute("acc");
-    if (acc == null) {
-        // Nếu chưa đăng nhập, hiển thị header mặc định
+            String accType = (String) session.getAttribute("accType");
+            if (accType == null) {
         %>
         <jsp:include page="header.jsp" />
         <%
-            } else {
-                int type = 0;
-                if (acc instanceof AdminDTO) {
-                    type = 1;
-                } else if (acc instanceof UserDTO) {
-                    type = 2;
-                }
-
-                if (type == 1) {
+            } else if ("admin".equals(accType)) {
         %>
         <jsp:include page="header-auth.jsp" />
         <%
-                } else if (type == 2) {
+            } else if ("user".equals(accType) || "google".equals(accType)) {
         %>
         <jsp:include page="header-user.jsp" />
         <%
-                }
             }
         %>
 
@@ -82,266 +66,273 @@
                 <div class="d-none d-sm-block mb-5 pb-4">
                     <iframe
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.019150846257!2d-122.41941508468183!3d37.774929779759754!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808581530dfb0b3b%3A0x50b0f4e3a4e44237!2sSan%20Francisco%2C%20CA!5e0!3m2!1sen!2sus!4v1614551234567!5m2!1sen!2sus"
-                        width="100%"
-                        height="480"
-                        frameborder="0"
-                        style="border:0;"
-                        allowfullscreen=""
-                        aria-hidden="false"
-                        tabindex="0"
-                        ></iframe>
+                        width="100%" height="480" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false"
+                        tabindex="0"></iframe>
+                </div>
+
+                <!-- THÔNG BÁO -->
+                <?php if (isset($_GET['status'])): ?>
+                <div class="alert <?= $_GET['status'] == 'success' ? 'alert-success' : 'alert-danger' ?>">
+                    <?= $_GET['status'] == 'success' ? 'Gửi mail thành công!' : 'Gửi mail thất bại. Vui lòng thử lại.' ?>
+                </div>
+                <?php endif; ?>
+
+                <div class="row">
+                    <div class="col-12">
+                        <h2 class="contact-title">Get in Touch</h2>
+                    </div>
+                    <div class="col-lg-8">
+                        <form class="form-contact contact_form" action="contact_process.php" method="post" id="contactForm" novalidate="novalidate">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <textarea class="form-control w-100" name="message" id="message" cols="30" rows="9"
+                                                  onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter Message'"
+                                                  placeholder="Enter Message"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <input class="form-control valid" name="name" id="name" type="text"
+                                               onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter your name'"
+                                               placeholder="Enter your name">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <input class="form-control valid" name="email" id="email" type="email"
+                                               onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter email address'"
+                                               placeholder="Email">
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <input class="form-control" name="subject" id="subject" type="text"
+                                               onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter Subject'"
+                                               placeholder="Enter Subject">
+                                    </div>
+                                </div>
+                            </div
+                            <div class="form-group mt-3">
+                                <button type="submit" class="button button-contactForm boxed-btn">Send</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="col-lg-3 offset-lg-1">
+                        <div class="media contact-info">
+                            <span class="contact-info__icon"><i class="ti-home"></i></span>
+                            <div class="media-body">
+                                <h3>Hà Nội, Hòa Lạc.</h3>
+                                <p>Khu công nghệ cao, Đại học FPT</p>
+                            </div>
+                        </div>
+                        <div class="media contact-info">
+                            <span class="contact-info__icon"><i class="ti-tablet"></i></span>
+                            <div class="media-body">
+                                <h3>+84981944060</h3>
+                                <p>Thứ 2 Đến Thứ 6, 6h đến 18h </p>
+                            </div>
+                        </div>
+                        <div class="media contact-info">
+                            <span class="contact-info__icon"><i class="ti-email"></i></span>
+                            <div class="media-body">
+                                <h3>thanhnnhe186491@fpt.edu.vn</h3>
+                                <p>Send us your query anytime!</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
+        <!-- ================ contact section end ================= -->
 
-
-        <div class="row">
-            <div class="col-12">
-                <h2 class="contact-title">Get in Touch</h2>
-            </div>
-            <div class="col-lg-8">
-                <form class="form-contact contact_form" action="contact_process.php" method="post" id="contactForm" novalidate="novalidate">
+        <!-- footer -->
+        <footer class="footer" >
+            <div class="footer_top">
+                <div class="container">
                     <div class="row">
-                        <div class="col-12">
-                            <div class="form-group">
-                                <textarea class="form-control w-100" name="message" id="message" cols="30" rows="9" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter Message'" placeholder=" Name"></textarea>
+                        <div class="col-xl-3 col-md-6 col-lg-3">
+                            <div class="footer_widget">
+                                <h3 class="footer_title">
+                                    address
+                                </h3>
+                                <p class="footer_text" >  Khu công nghệ cao <br>
+                                    Hòa Lạc, Hà Nội</p>
+                                <a href="#" class="line-button">Get Direction</a>
                             </div>
                         </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <input class="form-control valid" name="name" id="name" type="text" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter your name'" placeholder="Enter your name">
+                        <div class="col-xl-3 col-md-6 col-lg-3">
+                            <div class="footer_widget">
+                                <h3 class="footer_title">
+                                    Reservation
+                                </h3>
+                                <p class="footer_text" >+10 367 267 2678 <br>
+                                    thanhnnhe186491@fpt.edu.vn</p>
                             </div>
                         </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <input class="form-control valid" name="email" id="email" type="email" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter email address'" placeholder="Email">
+                        <div class="col-xl-2 col-md-6 col-lg-2">
+                            <div class="footer_widget">
+                                <h3 class="footer_title">
+                                    Navigation
+                                </h3>
+                                <ul>
+                                    <li><a href="./home">Home</a></li>
+                                    <li><a href="./court">Courts</a></li>
+                                    <li><a href="about.jsp">About</a></li>
+                                    <li><a href="blog.jsp">News</a></li>
+                                </ul>
                             </div>
                         </div>
-                        <div class="col-12">
-                            <div class="form-group">
-                                <input class="form-control" name="subject" id="subject" type="text" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter Subject'" placeholder="Enter Subject">
+                        <div class="col-xl-4 col-md-6 col-lg-4">
+                            <div class="footer_widget">
+                                <h3 class="footer_title">
+                                    Newsletter
+                                </h3>
+                                <form action="#" class="newsletter_form">
+                                    <input type="text" placeholder="Enter your mail">
+                                    <button type="submit" >Sign Up</button>
+                                </form>
+                                <p class="newsletter_text">Subscribe newsletter to get updates</p>
                             </div>
                         </div>
-                    </div>
-                    <div class="form-group mt-3">
-                        <button type="submit" class="button button-contactForm boxed-btn">Send</button>
-                    </div>
-                </form>
-            </div>
-            <div class="col-lg-3 offset-lg-1">
-                <div class="media contact-info">
-                    <span class="contact-info__icon"><i class="ti-home"></i></span>
-                    <div class="media-body">
-                        <h3>Buttonwood, California.</h3>
-                        <p>Rosemead, CA 91770</p>
-                    </div>
-                </div>
-                <div class="media contact-info">
-                    <span class="contact-info__icon"><i class="ti-tablet"></i></span>
-                    <div class="media-body">
-                        <h3>+1 253 565 2365</h3>
-                        <p>Mon to Fri 9am to 6pm</p>
-                    </div>
-                </div>
-                <div class="media contact-info">
-                    <span class="contact-info__icon"><i class="ti-email"></i></span>
-                    <div class="media-body">
-                        <h3>support@colorlib.com</h3>
-                        <p>Send us your query anytime!</p>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</section>
-<!-- ================ contact section end ================= -->
-
-<!-- footer -->
-<footer class="footer" >
-    <div class="footer_top">
-        <div class="container">
-            <div class="row">
-                <div class="col-xl-3 col-md-6 col-lg-3">
-                    <div class="footer_widget">
-                        <h3 class="footer_title">
-                            address
-                        </h3>
-                        <p class="footer_text" >  200, Green road, Mongla, <br>
-                            New Yor City USA</p>
-                        <a href="#" class="line-button">Get Direction</a>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-md-6 col-lg-3">
-                    <div class="footer_widget">
-                        <h3 class="footer_title">
-                            Reservation
-                        </h3>
-                        <p class="footer_text" >+10 367 267 2678 <br>
-                            reservation@montana.com</p>
-                    </div>
-                </div>
-                <div class="col-xl-2 col-md-6 col-lg-2">
-                    <div class="footer_widget">
-                        <h3 class="footer_title">
-                            Navigation
-                        </h3>
-                        <ul>
-                            <li><a href="#">Home</a></li>
-                            <li><a href="#">Courts</a></li>
-                            <li><a href="#">About</a></li>
-                            <li><a href="#">News</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-xl-4 col-md-6 col-lg-4">
-                    <div class="footer_widget">
-                        <h3 class="footer_title">
-                            Newsletter
-                        </h3>
-                        <form action="#" class="newsletter_form">
-                            <input type="text" placeholder="Enter your mail">
-                            <button type="submit" >Sign Up</button>
-                        </form>
-                        <p class="newsletter_text">Subscribe newsletter to get updates</p>
+            <div class="copy-right_text">
+                <div class="container">
+                    <div class="footer_border"></div>
+                    <div class="row">
+                        <div class="col-xl-8 col-md-7 col-lg-9">
+                            <p class="copy_right">
+                                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                                Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved
+                                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                            </p>
+                        </div>
+                        <div class="col-xl-4 col-md-5 col-lg-3">
+                            <div class="socail_links">
+                                <ul>
+                                    <li>
+                                        <a href="#">
+                                            <i class="fa fa-facebook-square"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="fa fa-twitter"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="fa fa-instagram"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="copy-right_text">
-        <div class="container">
-            <div class="footer_border"></div>
-            <div class="row">
-                <div class="col-xl-8 col-md-7 col-lg-9">
-                    <p class="copy_right">
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                        Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                    </p>
-                </div>
-                <div class="col-xl-4 col-md-5 col-lg-3">
-                    <div class="socail_links">
-                        <ul>
-                            <li>
-                                <a href="#">
-                                    <i class="fa fa-facebook-square"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <i class="fa fa-twitter"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <i class="fa fa-instagram"></i>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+        </footer>
+        <!-- footer_end -->
+
+
+        <!-- form itself end-->
+        <form id="test-form" class="white-popup-block mfp-hide">
+            <div class="popup_box ">
+                <div class="popup_inner">
+                    <h3>Check Availability</h3>
+                    <form action="#">
+                        <div class="row">
+                            <div class="col-xl-6">
+                                <input id="datepicker" placeholder="Check in date">
+                            </div>
+                            <div class="col-xl-6">
+                                <input id="datepicker2" placeholder="Check out date">
+                            </div>
+                            <div class="col-xl-6">
+                                <select class="form-select wide" id="default-select" class="">
+                                    <option data-display="Adult">1</option>
+                                    <option value="1">2</option>
+                                    <option value="2">3</option>
+                                    <option value="3">4</option>
+                                </select>
+                            </div>
+                            <div class="col-xl-6">
+                                <select class="form-select wide" id="default-select" class="">
+                                    <option data-display="Children">1</option>
+                                    <option value="1">2</option>
+                                    <option value="2">3</option>
+                                    <option value="3">4</option>
+                                </select>
+                            </div>
+                            <div class="col-xl-12">
+                                <select class="form-select wide" id="default-select" class="">
+                                    <option data-display="Court type">Court type</option>
+                                    <option value="1">Laxaries Courts</option>
+                                    <option value="2">Deluxe Court</option>
+                                    <option value="3">Signature Court</option>
+                                    <option value="4">Couple Court</option>
+                                </select>
+                            </div>
+                            <div class="col-xl-12">
+                                <button type="submit" class="boxed-btn3">Check Availability</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
-        </div>
-    </div>
-</footer>
-<!-- footer_end -->
+        </form>
+        <!-- form itself end -->
 
+        <!-- JS here -->
+        <script src="js/vendor/modernizr-3.5.0.min.js"></script>
+        <script src="js/vendor/jquery-1.12.4.min.js"></script>
+        <script src="js/popper.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/owl.carousel.min.js"></script>
+        <script src="js/isotope.pkgd.min.js"></script>
+        <script src="js/ajax-form.js"></script>
+        <script src="js/waypoints.min.js"></script>
+        <script src="js/jquery.counterup.min.js"></script>
+        <script src="js/imagesloaded.pkgd.min.js"></script>
+        <script src="js/scrollIt.js"></script>
+        <script src="js/jquery.scrollUp.min.js"></script>
+        <script src="js/wow.min.js"></script>
+        <script src="js/nice-select.min.js"></script>
+        <script src="js/jquery.slicknav.min.js"></script>
+        <script src="js/jquery.magnific-popup.min.js"></script>
+        <script src="js/plugins.js"></script>
+        <script src="js/gijgo.min.js"></script>
 
-<!-- form itself end-->
-<form id="test-form" class="white-popup-block mfp-hide">
-    <div class="popup_box ">
-        <div class="popup_inner">
-            <h3>Check Availability</h3>
-            <form action="#">
-                <div class="row">
-                    <div class="col-xl-6">
-                        <input id="datepicker" placeholder="Check in date">
-                    </div>
-                    <div class="col-xl-6">
-                        <input id="datepicker2" placeholder="Check out date">
-                    </div>
-                    <div class="col-xl-6">
-                        <select class="form-select wide" id="default-select" class="">
-                            <option data-display="Adult">1</option>
-                            <option value="1">2</option>
-                            <option value="2">3</option>
-                            <option value="3">4</option>
-                        </select>
-                    </div>
-                    <div class="col-xl-6">
-                        <select class="form-select wide" id="default-select" class="">
-                            <option data-display="Children">1</option>
-                            <option value="1">2</option>
-                            <option value="2">3</option>
-                            <option value="3">4</option>
-                        </select>
-                    </div>
-                    <div class="col-xl-12">
-                        <select class="form-select wide" id="default-select" class="">
-                            <option data-display="Court type">Court type</option>
-                            <option value="1">Laxaries Courts</option>
-                            <option value="2">Deluxe Court</option>
-                            <option value="3">Signature Court</option>
-                            <option value="4">Couple Court</option>
-                        </select>
-                    </div>
-                    <div class="col-xl-12">
-                        <button type="submit" class="boxed-btn3">Check Availability</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-</form>
-<!-- form itself end -->
+        <!--contact js-->
+        <script src="js/contact.js"></script>
+        <script src="js/jquery.ajaxchimp.min.js"></script>
+        <script src="js/jquery.form.js"></script>
+        <script src="js/jquery.validate.min.js"></script>
+        <script src="js/mail-script.js"></script>
 
-<!-- JS here -->
-<script src="js/vendor/modernizr-3.5.0.min.js"></script>
-<script src="js/vendor/jquery-1.12.4.min.js"></script>
-<script src="js/popper.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/owl.carousel.min.js"></script>
-<script src="js/isotope.pkgd.min.js"></script>
-<script src="js/ajax-form.js"></script>
-<script src="js/waypoints.min.js"></script>
-<script src="js/jquery.counterup.min.js"></script>
-<script src="js/imagesloaded.pkgd.min.js"></script>
-<script src="js/scrollIt.js"></script>
-<script src="js/jquery.scrollUp.min.js"></script>
-<script src="js/wow.min.js"></script>
-<script src="js/nice-select.min.js"></script>
-<script src="js/jquery.slicknav.min.js"></script>
-<script src="js/jquery.magnific-popup.min.js"></script>
-<script src="js/plugins.js"></script>
-<script src="js/gijgo.min.js"></script>
+        <script src="js/main.js"></script>
+        <script>
+                                    $('#datepicker').datepicker({
+                                        iconsLibrary: 'fontawesome',
+                                        icons: {
+                                            rightIcon: '<span class="fa fa-caret-down"></span>'
+                                        }
+                                    });
+                                    $('#datepicker2').datepicker({
+                                        iconsLibrary: 'fontawesome',
+                                        icons: {
+                                            rightIcon: '<span class="fa fa-caret-down"></span>'
+                                        }
 
-<!--contact js-->
-<script src="js/contact.js"></script>
-<script src="js/jquery.ajaxchimp.min.js"></script>
-<script src="js/jquery.form.js"></script>
-<script src="js/jquery.validate.min.js"></script>
-<script src="js/mail-script.js"></script>
-
-<script src="js/main.js"></script>
-<script>
-                            $('#datepicker').datepicker({
-                                iconsLibrary: 'fontawesome',
-                                icons: {
-                                    rightIcon: '<span class="fa fa-caret-down"></span>'
-                                }
-                            });
-                            $('#datepicker2').datepicker({
-                                iconsLibrary: 'fontawesome',
-                                icons: {
-                                    rightIcon: '<span class="fa fa-caret-down"></span>'
-                                }
-
-                            });
-</script>
+                                    });
+        </script>
 
 
 
-</body>
+    </body>
 
 </html>

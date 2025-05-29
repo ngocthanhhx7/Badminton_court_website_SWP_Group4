@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -66,51 +67,100 @@ public class loginController extends HttpServlet {
             request.setAttribute("mess", mess);
             session.removeAttribute("mess");
         }
+        Cookie[] cookies = request.getCookies();
+        String savedIdentifier = "";
+        String savedPassword = "";
+
+        if (cookies != null) {
+            for (Cookie c : cookies) {
+                if (c.getName().equals("loginIdentifier")) {
+                    savedIdentifier = c.getValue();
+                }
+                if (c.getName().equals("loginPassword")) {
+                    savedPassword = c.getValue();
+                }
+            }
+        }
+
+        request.setAttribute("savedIdentifier", savedIdentifier);
+        request.setAttribute("savedPassword", savedPassword);
+        request.setAttribute("rememberChecked", !savedIdentifier.isEmpty());
         request.getRequestDispatcher("login.jsp").forward(request, response);
+
     }
 
     @Override
-protected void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-    String emailOrUsername = request.getParameter("emailOrUsername");
-    String password = request.getParameter("password");
+        String emailOrUsername = request.getParameter("emailOrUsername");
+        String password = request.getParameter("password");
 
-    // Kiểm tra đầu vào
-    if (emailOrUsername == null || emailOrUsername.trim().isEmpty() ||
-        password == null || password.trim().isEmpty()) {
-        request.setAttribute("error", "Email/Username và mật khẩu là bắt buộc.");
+        // Kiểm tra đầu vào
+        if (emailOrUsername == null || emailOrUsername.trim().isEmpty()
+                || password == null || password.trim().isEmpty()) {
+            request.setAttribute("error", "Email/Username và mật khẩu là bắt buộc.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+        }
+
+        // Khởi tạo DAO
+        AdminDAO adminDao = new AdminDAO();
+        UserDAO userDao = new UserDAO();
+
+        // Thử đăng nhập với email hoặc username
+        AdminDTO admin = adminDao.loginWithEmailOrUsername(emailOrUsername, password);
+        UserDTO user = userDao.loginWithEmailOrUsername(emailOrUsername, password);
+
+        if (admin != null) {
+            HttpSession session = request.getSession();
+            session.setAttribute("acc", admin);
+            session.setAttribute("accType", "admin");
+
+            handleRememberMe(request, response, emailOrUsername, password);
+
+            response.sendRedirect("Success.jsp");
+            return;
+        }
+
+        if (user != null) {
+            HttpSession session = request.getSession();
+            session.setAttribute("acc", user);
+            session.setAttribute("accType", "user");
+
+            handleRememberMe(request, response, emailOrUsername, password);
+
+            response.sendRedirect("./home");
+            return;
+        }
+        
+
+        // Sai thông tin đăng nhập
+        request.setAttribute("error", "Sai email/username hoặc mật khẩu.");
         request.getRequestDispatcher("login.jsp").forward(request, response);
-        return;
     }
 
-    // Khởi tạo DAO
-    AdminDAO adminDao = new AdminDAO();
-    UserDAO userDao = new UserDAO();
+    private void handleRememberMe(HttpServletRequest request, HttpServletResponse response, String identifier, String password) {
+        String remember = request.getParameter("remember_me");
+        if ("on".equals(remember)) {
+            Cookie idCookie = new Cookie("loginIdentifier", identifier);
+            Cookie pwCookie = new Cookie("loginPassword", password); // Thực tế nên mã hóa!
 
-    // Thử đăng nhập với email hoặc username
-    AdminDTO admin = adminDao.loginWithEmailOrUsername(emailOrUsername, password);
-    UserDTO user = userDao.loginWithEmailOrUsername(emailOrUsername, password);
+            idCookie.setMaxAge(60 * 60 * 24 * 7); // 7 ngày
+            pwCookie.setMaxAge(60 * 60 * 24 * 7);
 
-    if (admin != null) {
-        HttpSession session = request.getSession();
-        session.setAttribute("acc", admin);
-        response.sendRedirect("Success.jsp");
-        return;
+            response.addCookie(idCookie);
+            response.addCookie(pwCookie);
+        } else {
+            // Xóa cookie nếu user không chọn Remember
+            Cookie idCookie = new Cookie("loginIdentifier", "");
+            Cookie pwCookie = new Cookie("loginPassword", "");
+            idCookie.setMaxAge(0);
+            pwCookie.setMaxAge(0);
+            response.addCookie(idCookie);
+            response.addCookie(pwCookie);
+        }
     }
-
-    if (user != null) {
-        HttpSession session = request.getSession();
-        session.setAttribute("acc", user);
-        response.sendRedirect("Success.jsp");
-        return;
-    }
-
-    // Sai thông tin đăng nhập
-    request.setAttribute("error", "Sai email/username hoặc mật khẩu.");
-    request.getRequestDispatcher("login.jsp").forward(request, response);
-}
-
 
     /**
      * Returns a short description of the servlet.

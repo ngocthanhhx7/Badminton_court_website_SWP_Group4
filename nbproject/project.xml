@@ -31,13 +31,17 @@
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
+<<<<<<< HEAD
                     <file>${file.reference.commons-logging-1.2.jar}</file>
                 </library>
                 <library dirs="200">
+=======
+>>>>>>> 62f9255234be8a1b8a7e666717f838b2b39e5758
                     <file>${file.reference.commons-logging-1.2.jar-1}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
+<<<<<<< HEAD
                     <file>${file.reference.fluent-hc-4.5.5.jar}</file>
                 </library>
                 <library dirs="200">
@@ -67,6 +71,33 @@
                 </library>
                 <library dirs="200">
                     <file>${file.reference.httpcore-4.4.9.jar-1}</file>
+=======
+                    <file>${file.reference.fluent-hc-4.5.5.jar-1}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${file.reference.gson-2.8.2.jar-1}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${file.reference.httpclient-4.5.5.jar-1}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${file.reference.httpcore-4.4.9.jar-1}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${file.reference.PHPMailer-master.zip}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${file.reference.PHPMailer-master.zip}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${file.reference.jbcrypt-0.4.jar}</file>
+>>>>>>> 62f9255234be8a1b8a7e666717f838b2b39e5758
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
             </web-module-libraries>

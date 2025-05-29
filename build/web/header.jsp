@@ -1,5 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ page import="models.UserDTO, models.AdminDTO, models.GoogleAccount" %>
 
 <head>
     <meta charset="utf-8">
@@ -66,17 +67,17 @@
                             <div class="socail_links">
                                 <ul>
                                     <li>
-                                        <a href="#">
+                                        <a href="https://www.facebook.com/ngocthanh552004/">
                                             <i class="fa fa-facebook-square"></i>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#">
+                                        <a href="https://www.facebook.com/ngocthanh552004/">
                                             <i class="fa fa-twitter"></i>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#">
+                                        <a href="https://www.facebook.com/ngocthanh552004/">
                                             <i class="fa fa-instagram"></i>
                                         </a>
                                     </li>
