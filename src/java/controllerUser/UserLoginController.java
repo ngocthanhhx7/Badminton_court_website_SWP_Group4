@@ -1,17 +1,25 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ */
 package controllerUser;
 
 import java.io.IOException;
-import java.sql.SQLException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import service.UserService;
+import java.sql.SQLException;
 import models.UserDTO;
+import service.UserService;
 
-
-@WebServlet(name = "UserLoginController", urlPatterns = {"/UserLoginController"})
+/**
+ *
+ * @author nguye
+ */
+@WebServlet(name = "UserLoginController", urlPatterns = {"/user-login"})
 public class UserLoginController extends HttpServlet {
 
     private UserService userService;
@@ -28,8 +36,8 @@ public class UserLoginController extends HttpServlet {
         String password = request.getParameter("password");
 
         // Kiểm tra đầu vào
-        if (emailOrUsername == null || emailOrUsername.trim().isEmpty() ||
-            password == null || password.trim().isEmpty()) {
+        if (emailOrUsername == null || emailOrUsername.trim().isEmpty()
+                || password == null || password.trim().isEmpty()) {
             request.setAttribute("error", "Email/Username và mật khẩu là bắt buộc.");
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;

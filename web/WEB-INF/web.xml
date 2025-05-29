@@ -1,11 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
     <servlet>
-        <servlet-name>Homepage</servlet-name>
+        <servlet-name>HomepageController</servlet-name>
         <servlet-class>controllerUser.HomepageController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>LoginController</servlet-name>
+        <servlet-class>controllerUser.LoginController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LoginGoogleController</servlet-name>
+        <servlet-class>controllerUser.LoginGoogleController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LogoutController</servlet-name>
+        <servlet-class>controllerUser.LogoutController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>RegisterController</servlet-name>
+        <servlet-class>controllerUser.RegisterController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>RegistrationController</servlet-name>
+        <servlet-class>controllerUser.RegistrationController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateProfileController</servlet-name>
+        <servlet-class>controllerUser.UpdateProfileController</servlet-class>
+    </servlet>
     <servlet-mapping>
-        <servlet-name>Homepage</servlet-name>
+        <servlet-name>HomepageController</servlet-name>
         <url-pattern>/home</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LoginController</servlet-name>
+        <url-pattern>/Login</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LoginGoogleController</servlet-name>
+        <url-pattern>/loginGoogle</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LogoutController</servlet-name>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RegisterController</servlet-name>
+        <url-pattern>/register</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RegistrationController</servlet-name>
+        <url-pattern>/registration</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateProfileController</servlet-name>
+        <url-pattern>/update-profile</url-pattern>
     </servlet-mapping>
 </web-app>

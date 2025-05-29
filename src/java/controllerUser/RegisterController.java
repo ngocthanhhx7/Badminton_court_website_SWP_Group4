@@ -6,8 +6,8 @@ package controllerUser;
 
 import dao.UserDAO;
 import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,9 +16,8 @@ import models.UserDTO;
 
 /**
  *
- * @author Admin
+ * @author nguye
  */
-@WebServlet(name = "RegisterServlet", urlPatterns = {"/register"})
 public class RegisterController extends HttpServlet {
 
     private UserDAO userDAO = new UserDAO();
