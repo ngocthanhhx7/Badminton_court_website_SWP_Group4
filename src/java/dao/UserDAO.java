@@ -249,7 +249,7 @@ public class UserDAO {
 
     public void updateUser(UserDTO user) {
         String selectSql = "SELECT UpdatedAt FROM Users WHERE Email = ?";
-        String updateSql = "UPDATE Users SET FullName = ?, Dob = ?, Gender = ?, Phone = ?, Address = ?, SportLevel = ?, CreatedAt = ?, UpdatedAt = ? WHERE Email = ?";
+        String updateSql = "UPDATE Users SET FullName = ?, Dob = ?, Gender = ?, Phone = ?, Address = ?, SportLevel = ?, Password = ?, CreatedAt = ?, UpdatedAt = ? WHERE Email = ?";
 
         try (Connection conn = DBUtils.getConnection(); PreparedStatement selectPs = conn.prepareStatement(selectSql); PreparedStatement updatePs = conn.prepareStatement(updateSql)) {
 
@@ -273,14 +273,15 @@ public class UserDAO {
 
             // 4. Update thông tin + thời gian
             updatePs.setString(1, user.getFullName());
-            updatePs.setString(2, user.getGender());
-            updatePs.setDate(3, new java.sql.Date(user.getDob().getTime()));
+            updatePs.setDate(2, new java.sql.Date(user.getDob().getTime()));
+            updatePs.setString(3, user.getGender());
             updatePs.setString(4, user.getPhone());
             updatePs.setString(5, user.getAddress());
             updatePs.setString(6, user.getSportLevel());
-            updatePs.setTimestamp(7, prevUpdatedAt); // CreatedAt = UpdatedAt cũ
-            updatePs.setTimestamp(8, now);           // UpdatedAt = hiện tại
-            updatePs.setString(9, user.getEmail());
+            updatePs.setString(7, user.getPassword());
+            updatePs.setTimestamp(8, prevUpdatedAt);
+            updatePs.setTimestamp(9, now);
+            updatePs.setString(10, user.getEmail());
 
             updatePs.executeUpdate();
 

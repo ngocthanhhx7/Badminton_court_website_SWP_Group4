@@ -19,7 +19,6 @@ import models.UserDTO;
 import java.sql.SQLException;
 import java.text.ParseException;
 
-
 @WebServlet(name = "UpdateProfileController", urlPatterns = {"/update-profile"})
 public class UpdateProfileController extends HttpServlet {
 
@@ -50,7 +49,7 @@ public class UpdateProfileController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        request.setCharacterEncoding("UTF-8"); 
+        request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
 
         HttpSession session = request.getSession();
@@ -60,6 +59,8 @@ public class UpdateProfileController extends HttpServlet {
             response.sendRedirect("login.html");
             return;
         }
+        String password = request.getParameter("password");
+        user.setPassword(password);
 
         String fullName = request.getParameter("fullName");
         String dobStr = request.getParameter("dob");
@@ -96,10 +97,5 @@ public class UpdateProfileController extends HttpServlet {
         session.setAttribute("currentUser", user);
 
         response.sendRedirect("view-profile.jsp?success=true");
-    }
-
-    @Override
-    public String getServletInfo() {
-        return "Short description";
     }
 }

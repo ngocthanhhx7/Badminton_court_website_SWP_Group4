@@ -112,7 +112,7 @@
                                                placeholder="Enter Subject">
                                     </div>
                                 </div>
-                            </div>
+                            </div
                             <div class="form-group mt-3">
                                 <button type="submit" class="button button-contactForm boxed-btn">Send</button>
                             </div>
