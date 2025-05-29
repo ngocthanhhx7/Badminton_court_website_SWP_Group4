@@ -106,7 +106,7 @@ public class UserDAO {
     }
 
     public boolean registerUserBasic(UserDTO user) throws SQLException {
-        String sql = "INSERT INTO users (username, email, password, role, phone, created_at, created_by) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO users (username, email, password, role, phone, createdAt, createdBy) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, user.getUsername());
             ps.setString(2, user.getEmail());
@@ -114,7 +114,14 @@ public class UserDAO {
             ps.setString(4, user.getRole());
             ps.setString(5, user.getPhone());
             ps.setTimestamp(6, user.getCreatedAt());
-            ps.setInt(7, user.getCreatedBy());
+
+            // Sửa đúng:
+            if (user.getCreatedBy() != null) {
+                ps.setInt(7, user.getCreatedBy());
+            } else {
+                ps.setNull(7, Types.INTEGER);
+            }
+
             return ps.executeUpdate() > 0;
         }
     }

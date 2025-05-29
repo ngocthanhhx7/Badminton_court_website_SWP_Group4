@@ -16,7 +16,7 @@ public class UserDTO {
     private String SportLevel;
     private String Role;
     private String Status;
-    private int CreatedBy;
+    private Integer CreatedBy;
     private Timestamp CreatedAt;
     private Timestamp UpdatedAt;
 
@@ -141,11 +141,11 @@ public class UserDTO {
         this.Status = status;
     }
 
-    public int getCreatedBy() {
+    public Integer getCreatedBy() {
         return CreatedBy;
     }
 
-    public void setCreatedBy(int createdBy) {
+    public void setCreatedBy(Integer createdBy) {
         this.CreatedBy = createdBy;
     }
 
