@@ -18,8 +18,8 @@ import models.UserDTO;
  *
  * @author Admin
  */
-@WebServlet(name = "RegisterServlet", urlPatterns = {"/RegisterServlet"})
-public class RegisterServlet extends HttpServlet {
+@WebServlet(name = "RegisterServlet", urlPatterns = {"/register"})
+public class RegisterController extends HttpServlet {
 
     private UserDAO userDAO = new UserDAO();
 

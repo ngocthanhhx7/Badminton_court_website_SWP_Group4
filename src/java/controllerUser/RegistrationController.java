@@ -11,7 +11,7 @@ import jakarta.servlet.http.HttpSession;
 import service.UserService;
 
 @WebServlet(name = "RegistrationServlet", urlPatterns = {"/register"})
-public class RegistrationServlet extends HttpServlet {
+public class RegistrationController extends HttpServlet {
 private UserService userService;
     @Override
     public void init() throws ServletException {

@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 @WebServlet(name = "LoginGoogleContro", urlPatterns = {"/loginGoogle"})
-public class LoginGoogleContro extends HttpServlet {
+public class LoginGoogleController extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
