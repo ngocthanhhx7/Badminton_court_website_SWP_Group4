@@ -85,7 +85,7 @@ public class loginController extends HttpServlet {
         request.setAttribute("savedIdentifier", savedIdentifier);
         request.setAttribute("savedPassword", savedPassword);
         request.setAttribute("rememberChecked", !savedIdentifier.isEmpty());
-        request.getRequestDispatcher("login.jsp").forward(request, response);
+        request.getRequestDispatcher("Login.jsp").forward(request, response);
 
     }
 
@@ -100,7 +100,7 @@ public class loginController extends HttpServlet {
         if (emailOrUsername == null || emailOrUsername.trim().isEmpty()
                 || password == null || password.trim().isEmpty()) {
             request.setAttribute("error", "Email/Username và mật khẩu là bắt buộc.");
-            request.getRequestDispatcher("login.jsp").forward(request, response);
+            request.getRequestDispatcher("Login.jsp").forward(request, response);
             return;
         }
 
@@ -119,7 +119,7 @@ public class loginController extends HttpServlet {
 
             handleRememberMe(request, response, emailOrUsername, password);
 
-            response.sendRedirect("Success.jsp");
+            response.sendRedirect("./home");
             return;
         }
 
@@ -137,7 +137,7 @@ public class loginController extends HttpServlet {
 
         // Sai thông tin đăng nhập
         request.setAttribute("error", "Sai email/username hoặc mật khẩu.");
-        request.getRequestDispatcher("login.jsp").forward(request, response);
+        request.getRequestDispatcher("Login.jsp").forward(request, response);
     }
 
     private void handleRememberMe(HttpServletRequest request, HttpServletResponse response, String identifier, String password) {

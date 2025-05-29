@@ -39,21 +39,13 @@
 
 
         <div class="bradcam_area breadcam_bg">
-            <h3>About Montana</h3>
+            <h3>Sign in</h3>
+            <p class="text-center m-0">Don't have an account? <a href="register.jsp">Sign up</a></p>
         </div>
 
-        <section class="py-3 py-md-5 py-xl-8" style="margin-top: 120px;">
+        <section class="py-3 py-md-5 py-xl-8" style="margin-top: 0px;">
 
             <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="mb-5">
-                            <h2 class="display-5 fw-bold text-center">Sign in</h2>
-                            <p class="text-center m-0">Don't have an account? <a href="register.jsp">Sign up</a></p>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="row justify-content-center">
                     <div class="col-12 col-lg-10 col-xl-8">
                         <div class="row gy-5 justify-content-center">
