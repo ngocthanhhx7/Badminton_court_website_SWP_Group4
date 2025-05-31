@@ -1,26 +1,22 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package models;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.sql.Timestamp;
+import lombok.*;
 
-/**
- *
- * @author nguye
- */
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class BookingNoteDTO {
-    private Long noteId;
-    private BookingDTO booking;
-    private UserDTO customer;
-    private String noteDetails;
-    private String status;
+    private int NoteID;
+    private int BookingID;
+    private int CustomerID;
+    private String NoteDetails;
+    private String Status;
+    private String NoteType;
+    private Integer Rating;
+    private Integer CreatedBy;
+    private Timestamp CreatedAt;
+    private Timestamp UpdatedAt;
 }

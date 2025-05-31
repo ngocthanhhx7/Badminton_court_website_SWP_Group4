@@ -4,24 +4,21 @@
  */
 package models;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.sql.Timestamp;
+import lombok.*;
 
-/**
- *
- * @author nguye
- */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ServiceDTO {
-    private Long serviceId;
-    private String serviceName;
-    private String description;
-    private double price;
-    private String status;
+    private int ServiceID;
+    private String ServiceName;
+    private String Description;
+    private double Price;
+    private String Status;
+    private String ServiceType;
+    private Integer CreatedBy;
+    private Timestamp CreatedAt;
+    private Timestamp UpdatedAt;
 }
-

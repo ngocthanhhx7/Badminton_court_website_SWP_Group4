@@ -4,25 +4,23 @@
  */
 package models;
 
-import java.time.LocalDateTime;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.sql.Timestamp;
+import lombok.*;
 
-/**
- *
- * @author nguye
- */
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class CourtScheduleDTO {
-    private Long scheduleId;
-    private CourtDTO court;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
-    private String dayOfWeek;
-    private String status;
+    private int ScheduleID;
+    private int CourtID;
+    private Timestamp StartTime;
+    private Timestamp EndTime;
+    private String DayOfWeek;
+    private String Status;
+    private Integer CreatedBy;
+    private Timestamp CreatedAt;
+    private Timestamp UpdatedAt;
 }
+

@@ -4,24 +4,23 @@
  */
 package models;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.sql.Timestamp;
+import lombok.*;
 
-/**
- *
- * @author nguye
- */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class InvoiceDTO {
-    private Long invoiceId;
-    private BookingDTO booking;
-    private UserDTO customer;
-    private double totalAmount;
-    private String status;
+    private int InvoiceID;
+    private int BookingID;
+    private int CustomerID;
+    private double TotalAmount;
+    private String Status;
+    private double Discount;
+    private double Tax;
+    private String PaymentMethod;
+    private Integer CreatedBy;
+    private Timestamp CreatedAt;
+    private Timestamp UpdatedAt;
 }
-
