@@ -74,7 +74,7 @@
             <c:if test="${not empty message}">
                 <div class="error">${message}</div>
             </c:if>
-            <form action="UpdateProfileServlet" method="post">
+            <form action="update-profile" method="post">
                 <input type="text" name="fullname" placeholder="Họ và tên" required />
                 <input type="date" name="dob" placeholder="Ngày sinh" required />
                 <select name="gender" required>

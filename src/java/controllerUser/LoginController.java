@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-
 package controllerUser;
 
 import dao.AdminDAO;
@@ -23,24 +22,23 @@ import models.UserDTO;
  * @author nguye
  */
 public class LoginController extends HttpServlet {
-   
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet LoginController</title>");  
+            out.println("<title>Servlet LoginController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet LoginController at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet LoginController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
-    } 
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -112,12 +110,24 @@ public class LoginController extends HttpServlet {
             session.setAttribute("acc", user);
             session.setAttribute("accType", "user");
 
-            handleRememberMe(request, response, emailOrUsername, password);
+            // Kiểm tra profile đầy đủ chưa
+            if (user.getFullName() == null
+                    || user.getDob() == null
+                    || user.getGender() == null
+                    || user.getPhone() == null
+                    || user.getAddress() == null
+                    || user.getSportLevel() == null) {
 
+                handleRememberMe(request, response, emailOrUsername, password);
+                session.setAttribute("currentUser", user); // Lưu user để dùng trong CompleteProfile.jsp
+                response.sendRedirect("completeProfile.jsp");
+                return;
+            }
+
+            handleRememberMe(request, response, emailOrUsername, password);
             response.sendRedirect("./home");
             return;
         }
-        
 
         // Sai thông tin đăng nhập
         request.setAttribute("error", "Sai email/username hoặc mật khẩu.");
