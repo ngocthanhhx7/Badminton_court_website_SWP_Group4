@@ -91,7 +91,7 @@ public class UpdateProfileController extends HttpServlet {
         String address = request.getParameter("address");
         String sportLevel = request.getParameter("sportLevel");
 
-        String phoneRegex = "^(09|03)\\d{8}$";
+        String phoneRegex = "^(01|03|04|06|07|08|09)\\d{8}$";
         if (!phone.matches(phoneRegex)) {
             request.setAttribute("error", "Số điện thoại không hợp lệ! Phải bắt đầu bằng 09 hoặc 03 và có đúng 10 chữ số.");
             request.getRequestDispatcher("edit-profile.jsp").forward(request, response);
