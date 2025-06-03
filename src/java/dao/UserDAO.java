@@ -4,6 +4,7 @@ import models.UserDTO;
 import utils.DBUtils;
 
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -297,4 +298,131 @@ public class UserDAO {
             e.printStackTrace();
         }
     }
+
+    public boolean registerUser(UserDTO user) throws SQLException {
+        String sql = "INSERT INTO Users (Username, [Password], Email, FullName, Dob, Gender, Phone, [Address], SportLevel, [Role], [Status], CreatedBy, CreatedAt, UpdatedAt) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Active', ?, GETDATE(), GETDATE())";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, user.getUsername());
+            ps.setString(2, user.getPassword()); // Mật khẩu đã hash bên ngoài
+            ps.setString(3, user.getEmail());
+
+            if (user.getFullName() != null && !user.getFullName().isEmpty()) {
+                ps.setString(4, user.getFullName());
+            } else {
+                ps.setNull(4, Types.NVARCHAR);
+            }
+
+            if (user.getDob() != null) {
+                ps.setDate(5, new java.sql.Date(user.getDob().getTime()));
+            } else {
+                ps.setNull(5, Types.DATE);
+            }
+
+            if (user.getGender() != null && !user.getGender().isEmpty()) {
+                ps.setString(6, user.getGender());
+            } else {
+                ps.setNull(6, Types.NVARCHAR);
+            }
+
+            if (user.getPhone() != null && !user.getPhone().isEmpty()) {
+                ps.setString(7, user.getPhone());
+            } else {
+                ps.setNull(7, Types.NVARCHAR);
+            }
+
+            if (user.getAddress() != null && !user.getAddress().isEmpty()) {
+                ps.setString(8, user.getAddress());
+            } else {
+                ps.setNull(8, Types.NVARCHAR);
+            }
+
+            if (user.getSportLevel() != null && !user.getSportLevel().isEmpty()) {
+                ps.setString(9, user.getSportLevel());
+            } else {
+                ps.setNull(9, Types.NVARCHAR);
+            }
+
+            ps.setString(10, user.getRole() != null ? user.getRole() : "Customer");
+
+            if (user.getCreatedBy() != null) {
+                ps.setInt(11, user.getCreatedBy());
+            } else {
+                ps.setNull(11, Types.INTEGER);
+            }
+
+            return ps.executeUpdate() > 0;
+        }
+    }
+
+    public static void main(String[] args) {
+        UserDAO userDAO = new UserDAO();
+
+        try {
+            // Tạo đối tượng UserDTO test
+            UserDTO newUser = new UserDTO();
+            newUser.setUsername("testuser123");
+            newUser.setPassword(hashPassword("123456")); // Hash mật khẩu trước khi lưu
+            newUser.setEmail("testuser123@example.com");
+            newUser.setFullName("Test User");
+            // Chuyển String sang Date
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            newUser.setDob(sdf.parse("1990-01-01"));
+            newUser.setGender("Male");
+            newUser.setPhone("0123456789");
+            newUser.setAddress("123 ABC Street");
+            newUser.setSportLevel("Intermediate");
+            newUser.setRole("Customer");
+            newUser.setCreatedBy(null); // null nếu không có admin tạo
+
+            boolean result = userDAO.registerUser(newUser);
+            if (result) {
+                System.out.println("Đăng ký thành công!");
+            } else {
+                System.out.println("Đăng ký thất bại!");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Hàm hash password đơn giản bằng MD5, giống trong servlet hoặc DAO
+    private static String hashPassword(String password) {
+        try {
+            java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
+            md.update(password.getBytes());
+            byte[] digest = md.digest();
+            StringBuilder sb = new StringBuilder();
+            for (byte b : digest) {
+                sb.append(String.format("%02x", b & 0xff));
+            }
+            return sb.toString();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    // trong UserDAO.java
+public boolean updateUserProfile1(UserDTO user) throws SQLException {
+    String sql = "UPDATE Users "
+               + "SET FullName = ?, Dob = ?, Gender = ?, Phone = ?, Address = ?, SportLevel = ? "
+               + "WHERE UserID = ?";
+    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setString(1, user.getFullName());
+        if (user.getDob() != null) {
+            ps.setDate(2, new java.sql.Date(user.getDob().getTime()));
+        } else {
+            ps.setNull(2, java.sql.Types.DATE);
+        }
+        ps.setString(3, user.getGender());
+        ps.setString(4, user.getPhone());
+        ps.setString(5, user.getAddress());
+        ps.setString(6, user.getSportLevel());
+        ps.setInt(7, user.getUserID());
+        // executeUpdate trả về số bản ghi bị ảnh hưởng
+        return ps.executeUpdate() > 0;
+    }
+}
+
 }

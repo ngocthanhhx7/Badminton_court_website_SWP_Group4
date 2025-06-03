@@ -229,8 +229,8 @@
                                 <ul>
                                     <li><a href="./home">Home</a></li>
                                     <li><a href="./court">Courts</a></li>
-                                    <li><a href="about.jsp">About</a></li>
-                                    <li><a href="blog.jsp">News</a></li>
+                                    <li><a href="./about.jsp">About</a></li>
+                                    <li><a href="./blog.jsp">News</a></li>
                                 </ul>
                             </div>
                         </div>

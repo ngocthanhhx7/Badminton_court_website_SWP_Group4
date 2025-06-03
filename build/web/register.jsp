@@ -81,48 +81,28 @@
     </head>
     <body>
         <div class="container">
-            <h2>Đăng ký tài khoản mới</h2>
-            <form action="RegisterServlet" method="post">
-                <label for="username">Username*:</label>
-                <input type="text" id="username" name="username" required>
-
-                <label for="email">Email*:</label>
-                <input type="email" id="email" name="email" required>
-
-                <label for="password">Password*:</label>
-                <input type="password" id="password" name="password" required>
-
-                <label for="fullname">Full Name:</label>
-                <input type="text" id="fullname" name="fullname">
-
-                <label for="dob">Date of Birth:</label>
-                <input type="date" id="dob" name="dob">
-
-                <label for="gender">Gender:</label>
-                <select id="gender" name="gender">
-                    <option value="">--Chọn--</option>
-                    <option value="Male">Nam</option>
-                    <option value="Female">Nữ</option>
-                    <option value="Other">Khác</option>
-                </select>
-
-                <label for="phone">Phone:</label>
-                <input type="text" id="phone" name="phone">
-
-                <label for="address">Address:</label>
-                <input type="text" id="address" name="address">
-
-                <label for="sportlevel">Sport Level:</label>
-                <input type="text" id="sportlevel" name="sportlevel">
-
-                <input type="submit" value="Đăng ký">
+            <h2>Đăng ký tài khoản</h2>
+            <c:if test="${not empty message}">
+                <div class="message">${message}</div>
+            </c:if>
+            <form action="RegisterController" method="post">
+                <div class="form-group">
+                    <label for="username">Username <span style="color:red">*</span></label>
+                    <input type="text" id="username" name="username" value="${param.username}" required />
+                </div>
+                <div class="form-group">
+                    <label for="email">Email <span style="color:red">*</span></label>
+                    <input type="email" id="email" name="email" value="${param.email}" required />
+                </div>
+                <div class="form-group">
+                    <label for="password">Mật khẩu <span style="color:red">*</span></label>
+                    <input type="password" id="password" name="password" required />
+                </div>
+                <button type="submit">Đăng ký</button>
             </form>
-
-            <% String message = (String) request.getAttribute("message");
-               if (message != null) {
-            %>
-            <p class="message"><%= message %></p>
-            <% } %>
+            <div class="footer">
+                <p>Đã có tài khoản? <a href="Login.jsp">Đăng nhập</a></p>
+            </div>
         </div>
     </body>
 </html>

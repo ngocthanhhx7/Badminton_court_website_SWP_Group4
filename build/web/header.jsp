@@ -36,8 +36,8 @@
                         <div class="main-menu  d-none d-lg-block">
                             <nav>
                                 <ul id="navigation">
-                                    <li><a class="active" href="homepage.jsp">home</a></li>
-                                    <li><a href="courts.jsp">Courts</a></li>
+                                    <li><a class="active" href="./home">home</a></li>
+                                    <li><a href="./court">Courts</a></li>
                                     <li><a href="about.jsp">About</a></li>
                                     <li><a href="#">blog <i class="ti-angle-down"></i></a>
                                         <ul class="submenu">
@@ -57,7 +57,7 @@
                     </div>
                     <div class="col-xl-2 col-lg-2">
                         <div class="logo-img">
-                            <a href="homepage.jsp">
+                            <a href="./home">
                                 <img src="img/logo.png" alt="" width="200" height="92">
                             </a>
                         </div>
@@ -85,7 +85,7 @@
                             </div>
                             <div class="book_btn d-none d-lg-block">
                                 <a href="./Login" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">Login</a>
-                                <a href="./register" class="block px-3 py-2 rounded-md text-base font-medium text-white bg-secondary hover:bg-red-600">Register</a>
+                                <a href="register.jsp" class="block px-3 py-2 rounded-md text-base font-medium text-white bg-secondary hover:bg-red-600">Register</a>
                             </div>
                         </div>
                     </div>

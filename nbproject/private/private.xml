@@ -3,19 +3,60 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/SWP-project/src/java/models/BookingNoteDTO.java</file>
-            <file>file:/C:/SWP-project/src/java/models/InvoiceDetailDTO.java</file>
-            <file>file:/C:/SWP-project/src/java/models/InvoiceDTO.java</file>
-            <file>file:/C:/SWP-project/src/java/models/ServiceUsageDTO.java</file>
-            <file>file:/C:/SWP-project/src/java/models/BookingDTO.java</file>
+            <file>file:/C:/SWP-project/web/UI/homepage.jsp</file>
+            <file>file:/C:/SWP-project/src/java/models/SliderDTO.java</file>
+            <file>file:/C:/SWP-project/src/java/models/PostTagMapDTO.java</file>
             <file>file:/C:/SWP-project/src/java/models/GoogleAccount.java</file>
-            <file>file:/C:/SWP-project/src/java/models/UserDTO.java</file>
             <file>file:/C:/SWP-project/src/java/models/BookingDetailDTO.java</file>
+            <file>file:/C:/SWP-project/src/java/models/AboutSectionDTO.java</file>
             <file>file:/C:/SWP-project/src/java/models/CourtDTO.java</file>
-            <file>file:/C:/SWP-project/src/java/models/AdminDTO.java</file>
+            <file>file:/C:/SWP-project/web/UI/view-profile.jsp</file>
+            <file>file:/C:/SWP-project/src/java/models/BlogSubscriberDTO.java</file>
+            <file>file:/C:/SWP-project/src/java/controllerUser/UserLoginController.java</file>
+            <file>file:/C:/SWP-project/src/java/controllerUser/LogoutController.java</file>
+            <file>file:/C:/SWP-project/src/java/models/InstagramFeedDTO.java</file>
+            <file>file:/C:/SWP-project/src/java/controllerUser/UpdateProfileController.java</file>
+            <file>file:/C:/SWP-project/web/UI/single-blog.jsp</file>
+            <file>file:/C:/SWP-project/src/java/models/InvoiceDetailDTO.java</file>
+            <file>file:/C:/SWP-project/src/java/models/FeaturedCourtDTO.java</file>
+            <file>file:/C:/SWP-project/src/java/models/BlogCategoryDTO.java</file>
+            <file>file:/C:/SWP-project/src/java/models/EquipmentRentalDTO.java</file>
+            <file>file:/C:/SWP-project/src/java/controllerUser/RegisterController.java</file>
+            <file>file:/C:/SWP-project/src/java/models/UserDTO.java</file>
             <file>file:/C:/SWP-project/src/java/models/ServiceDTO.java</file>
-            <file>file:/C:/SWP-project/src/java/models/CourtRateDTO.java</file>
+            <file>file:/C:/SWP-project/src/java/controllerUser/LoginGoogleController.java</file>
+            <file>file:/C:/SWP-project/src/java/models/ContactInfoDTO.java</file>
+            <file>file:/C:/SWP-project/src/java/models/BlogCommentDTO.java</file>
+            <file>file:/C:/SWP-project/web/UI/header.jsp</file>
+            <file>file:/C:/SWP-project/src/java/utils/PasswordUtil.java</file>
+            <file>file:/C:/SWP-project/web/UI/about.jsp</file>
+            <file>file:/C:/SWP-project/web/WEB-INF/web.xml</file>
+            <file>file:/C:/SWP-project/src/java/models/ServiceUsageDTO.java</file>
+            <file>file:/C:/SWP-project/web/UI/header-user.jsp</file>
+            <file>file:/C:/SWP-project/src/java/models/ServiceHighlightDTO.java</file>
+            <file>file:/C:/SWP-project/src/java/controllerUser/CourtController.java</file>
+            <file>file:/C:/SWP-project/src/java/models/AdminDTO.java</file>
+            <file>file:/C:/SWP-project/src/java/models/VideoDTO.java</file>
+            <file>file:/C:/SWP-project/web/UI/register.jsp</file>
+            <file>file:/C:/SWP-project/src/java/models/BlogTagDTO.java</file>
+            <file>file:/C:/SWP-project/web/UI/Login.jsp</file>
+            <file>file:/C:/SWP-project/web/UI/header-auth.jsp</file>
             <file>file:/C:/SWP-project/src/java/models/CourtScheduleDTO.java</file>
+            <file>file:/C:/SWP-project/src/java/utils/DBUtils.java</file>
+            <file>file:/C:/SWP-project/src/java/models/BookingNoteDTO.java</file>
+            <file>file:/C:/SWP-project/web/UI/header-auth2.jsp</file>
+            <file>file:/C:/SWP-project/src/java/models/PostCategoryMapDTO.java</file>
+            <file>file:/C:/SWP-project/src/java/models/InvoiceDTO.java</file>
+            <file>file:/C:/SWP-project/src/java/models/BookingDTO.java</file>
+            <file>file:/C:/SWP-project/src/java/models/OfferDTO.java</file>
+            <file>file:/C:/SWP-project/src/java/dao/UserDAO.java</file>
+            <file>file:/C:/SWP-project/src/java/service/UserService.java</file>
+            <file>file:/C:/SWP-project/src/java/controllerUser/HomepageController.java</file>
+            <file>file:/C:/SWP-project/src/java/models/BlogPostDTO.java</file>
+            <file>file:/C:/SWP-project/src/java/controllerUser/RegistrationController.java</file>
+            <file>file:/C:/SWP-project/web/UI/CompleteProfile.jsp</file>
+            <file>file:/C:/SWP-project/src/java/controllerUser/LoginController.java</file>
+            <file>file:/C:/SWP-project/src/java/models/CourtRateDTO.java</file>
         </group>
     </open-files>
 </project-private>

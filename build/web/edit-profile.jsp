@@ -4,7 +4,7 @@
 <%
     UserDTO user = (UserDTO) session.getAttribute("acc");
     if (user == null) {
-        response.sendRedirect("login.jsp");
+        response.sendRedirect("./Login");
         return;
     }
     String dobFormatted = "";

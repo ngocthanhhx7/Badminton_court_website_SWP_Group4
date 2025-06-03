@@ -36,9 +36,9 @@
                         <div class="main-menu d-none d-lg-block">
                             <nav>
                                 <ul id="navigation">
-                                    <li><a class="active" href="homepage.jsp">home</a></li>
-                                    <li><a href="courts.jsp">Courts</a></li>
-                                    <li><a href="about.jsp">About</a></li>
+                                    <li><a class="active" href="./homepage.jsp">home</a></li>
+                                    <li><a href="./courts.jsp">Courts</a></li>
+                                    <li><a href="./about.jsp">About</a></li>
                                     <li><a href="#">blog <i class="ti-angle-down"></i></a>
                                         <ul class="submenu">
                                             <li><a href="blog.jsp">blog</a></li>
@@ -57,7 +57,7 @@
                     </div>
                     <div class="col-xl-2 col-lg-2">
                         <div class="logo-img">
-                            <a href="homepage.jsp">
+                            <a href="./home">
                                 <img src="img/logo.png" alt="Logo" width="200" height="92">
                             </a>
                         </div>

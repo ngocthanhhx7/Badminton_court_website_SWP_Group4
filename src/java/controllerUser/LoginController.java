@@ -69,7 +69,7 @@ public class LoginController extends HttpServlet {
         request.setAttribute("savedIdentifier", savedIdentifier);
         request.setAttribute("savedPassword", savedPassword);
         request.setAttribute("rememberChecked", !savedIdentifier.isEmpty());
-        request.getRequestDispatcher("Login.jsp").forward(request, response);
+        request.getRequestDispatcher("UI/Login.jsp").forward(request, response);
 
     }
 
@@ -84,7 +84,7 @@ public class LoginController extends HttpServlet {
         if (emailOrUsername == null || emailOrUsername.trim().isEmpty()
                 || password == null || password.trim().isEmpty()) {
             request.setAttribute("error", "Email/Username và mật khẩu là bắt buộc.");
-            request.getRequestDispatcher("Login.jsp").forward(request, response);
+            request.getRequestDispatcher("UI/Login.jsp").forward(request, response);
             return;
         }
 

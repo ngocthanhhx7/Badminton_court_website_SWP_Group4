@@ -38,9 +38,9 @@
         <div class="header_login p-4 text-center border-t border-gray-200">
             <c:choose>
         <c:when test="${sessionScope.acc == null}">
-            <a href="register.jsp" class="text-indigo-600 hover:text-indigo-800 transition-colors">Register</a>
+            <a href="UI/register.jsp" class="text-indigo-600 hover:text-indigo-800 transition-colors">Register</a>
             <span class="text-gray-500 mx-2">/</span>
-            <a href="login.jsp" class="text-indigo-600 hover:text-indigo-800 transition-colors">Login</a>
+            <a href="UI/login.jsp" class="text-indigo-600 hover:text-indigo-800 transition-colors">Login</a>
         </c:when>
 
         <c:otherwise>

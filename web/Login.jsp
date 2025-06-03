@@ -40,7 +40,7 @@
 
         <div class="bradcam_area breadcam_bg">
             <h3>Sign in</h3>
-            <p class="text-center m-0">Don't have an account? <a href="register.jsp">Sign up</a></p>
+            <p class="text-center m-0">Don't have an account? <a href="./register">Sign up</a></p>
         </div>
 
         <section class="py-3 py-md-5 py-xl-8" style="margin-top: 0px;">
@@ -91,7 +91,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-6 text-end">
-                                                    <a href="forgotPassword.jsp" class="link-secondary text-decoration-none">Forgot password?</a>
+                                                    <a href="./forgotPassword.jsp" class="link-secondary text-decoration-none">Forgot password?</a>
                                                 </div>
                                             </div>
                                         </div>

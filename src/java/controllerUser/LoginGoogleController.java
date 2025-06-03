@@ -27,7 +27,7 @@ public class LoginGoogleController extends HttpServlet {
         String code = request.getParameter("code");
         String error = request.getParameter("error");
         if (error != null) {
-            request.getRequestDispatcher("login.jsp").forward(request, response);
+            request.getRequestDispatcher("./Login").forward(request, response);
             return;
         }
 

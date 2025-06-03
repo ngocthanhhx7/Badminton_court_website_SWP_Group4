@@ -3,7 +3,7 @@
 <%
     Object accObj = session.getAttribute("acc");
     if (accObj == null || !(accObj instanceof UserDTO)) {
-        response.sendRedirect("login.jsp");
+        response.sendRedirect("./Login.jsp");
         return;
     }
 
@@ -229,8 +229,8 @@
             </div>
 
             <div class="button-row">
-                <a href="edit-profile.jsp" class="btn">Chỉnh sửa thông tin</a>
-                <a href="./home" class="btn">← Về trang chủ</a>
+                <a href="./edit-profile.jsp" class="btn">Chỉnh sửa thông tin</a>
+                <a href="./homepage.jsp" class="btn">← Về trang chủ</a>
             </div>
         </div>
 

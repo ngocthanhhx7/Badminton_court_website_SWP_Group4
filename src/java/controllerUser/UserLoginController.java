@@ -39,7 +39,7 @@ public class UserLoginController extends HttpServlet {
         if (emailOrUsername == null || emailOrUsername.trim().isEmpty()
                 || password == null || password.trim().isEmpty()) {
             request.setAttribute("error", "Email/Username và mật khẩu là bắt buộc.");
-            request.getRequestDispatcher("login.jsp").forward(request, response);
+            request.getRequestDispatcher("./Login").forward(request, response);
             return;
         }
 
@@ -71,14 +71,14 @@ public class UserLoginController extends HttpServlet {
             System.err.println("UserLoginController: Lỗi SQL: " + e.getMessage());
             e.printStackTrace();
             request.setAttribute("error", "Lỗi kết nối: " + e.getMessage());
-            request.getRequestDispatcher("/login.jsp").forward(request, response);
+            request.getRequestDispatcher("./Login").forward(request, response);
         }
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("/login.jsp").forward(request, response);
+        request.getRequestDispatcher("./Login").forward(request, response);
     }
 
     private String getDashboardUrl(String role) {

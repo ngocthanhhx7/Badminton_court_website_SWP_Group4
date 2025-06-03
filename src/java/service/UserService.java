@@ -26,15 +26,15 @@ public class UserService {
         }
         
 
-//        // Mã hóa và validate mật khẩu
-//        validatePassword(password);
-//        String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+        // Mã hóa và validate mật khẩu
+        validatePassword(password);
+        String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
 
         // Tạo đối tượng user
         UserDTO user = new UserDTO();
         user.setUsername(username);
         user.setEmail(email);
-//        user.setPassword(hashedPassword);
+        user.setPassword(hashedPassword);
         user.setRole(role);
         user.setPhone(phone);
         user.setCreatedAt(new java.sql.Timestamp(System.currentTimeMillis()));

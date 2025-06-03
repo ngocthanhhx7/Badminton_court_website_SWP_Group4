@@ -43,7 +43,7 @@ public class RegistrationController extends HttpServlet {
                 || role == null || role.trim().isEmpty()) {
             request.setAttribute("error", "Vui lòng điền đầy đủ Username, Email, Password và Role.");
             request.setAttribute("form", "register"); // Stay on registration form
-            request.getRequestDispatcher("/register.jsp").forward(request, response);
+            request.getRequestDispatcher("register.jsp").forward(request, response);
             return;
         }
 
@@ -55,23 +55,23 @@ public class RegistrationController extends HttpServlet {
             } else {
                 request.setAttribute("error", "Username hoặc Email đã tồn tại.");
                 request.setAttribute("form", "register"); // Stay on registration form
-                request.getRequestDispatcher("/register.jsp").forward(request, response);
+                request.getRequestDispatcher("register.jsp").forward(request, response);
             }
         } catch (SQLException e) {
             e.printStackTrace();
             request.setAttribute("error", "Lỗi khi đăng ký: " + e.getMessage());
             request.setAttribute("form", "register"); // Stay on registration form
-            request.getRequestDispatcher("/register.jsp").forward(request, response);
+            request.getRequestDispatcher("register.jsp").forward(request, response);
         } catch (IllegalArgumentException e) {
             request.setAttribute("error", e.getMessage());
             request.setAttribute("form", "register"); // Stay on registration form
-            request.getRequestDispatcher("/register.jsp").forward(request, response);
+            request.getRequestDispatcher("register.jsp").forward(request, response);
         }
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("/register.jsp").forward(request, response);
+        request.getRequestDispatcher("register.jsp").forward(request, response);
     }
 }
