@@ -112,7 +112,7 @@
             </div>
             <% } %>
 
-            <form action="update-profile" method="post">
+            <form action="update-profile" method="get">
                 <table>
                     <tr><td>Name:</td><td><input type="text" name="fullName" value="<%= user.getFullName() %>" /></td></tr>
                     <tr><td>Password:</td><td><input type="text" name="password" value="<%= user.getPassword() %>" /></td></tr>

@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import models.UserDTO;
 
 public class UpdateProfileController extends HttpServlet {
@@ -58,17 +59,83 @@ public class UpdateProfileController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+
+        HttpSession session = request.getSession();
+        UserDTO user = (UserDTO) session.getAttribute("acc");
+
+        if (user == null) {
+            response.sendRedirect("login.jsp");
+            return;
+        }
+        String password = request.getParameter("password");
+
+        String specialCharRegex = ".*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?].*";
+        String upperCaseRegex = ".*[A-Z].*";
+
+        if (password.length() <= 6
+                || !password.matches(upperCaseRegex)
+                || !password.matches(specialCharRegex)) {
+
+            request.setAttribute("error", "Mật khẩu phải nhiều hơn 6 ký tự, chứa ít nhất 1 chữ in hoa và 1 ký tự đặc biệt.");
+            request.getRequestDispatcher("edit-profile.jsp").forward(request, response);
+            return;
+        }
+        user.setPassword(password);
+
+        String fullName = request.getParameter("fullName");
+        String dobStr = request.getParameter("dob");
+        String gender = request.getParameter("gender");
+        String phone = request.getParameter("phone");
+        String address = request.getParameter("address");
+        String sportLevel = request.getParameter("sportLevel");
+
+        String phoneRegex = "^(09|03)\\d{8}$";
+        if (!phone.matches(phoneRegex)) {
+            request.setAttribute("error", "Số điện thoại không hợp lệ! Phải bắt đầu bằng 09 hoặc 03 và có đúng 10 chữ số.");
+            request.getRequestDispatcher("edit-profile.jsp").forward(request, response);
+            return;
+        }
+
+        java.util.Date dob = null;
+
+        try {
+            dob = new SimpleDateFormat("yyyy-MM-dd").parse(dobStr);
+        } catch (ParseException e) {
+            request.setAttribute("error", "Ngày sinh không hợp lệ! Định dạng phải là yyyy-MM-dd.");
+            request.getRequestDispatcher("edit-profile.jsp").forward(request, response);
+            return;
+        }
+        try {
+            dob = new SimpleDateFormat("yyyy-MM-dd").parse(dobStr);
+
+            Date currentDate = new Date();
+            if (dob.after(currentDate)) {
+                request.setAttribute("error", "Ngày sinh không được vượt quá ngày hiện tại.");
+                request.getRequestDispatcher("edit-profile.jsp").forward(request, response);
+                return;
+            }
+
+        } catch (ParseException e) {
+            request.setAttribute("error", "Ngày sinh không hợp lệ! Định dạng phải là yyyy-MM-dd.");
+            request.getRequestDispatcher("edit-profile.jsp").forward(request, response);
+            return;
+        }
+
+        user.setFullName(fullName);
+        user.setDob(dob);
+        user.setGender(gender);
+        user.setPhone(phone);
+        user.setAddress(address);
+        user.setSportLevel(sportLevel);
+
+        new UserDAO().updateUser(user);
+        session.setAttribute("currentUser", user);
+
+        response.sendRedirect("view-profile.jsp?success=true");
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
