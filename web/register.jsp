@@ -85,7 +85,7 @@
             <c:if test="${not empty message}">
                 <div class="message">${message}</div>
             </c:if>
-            <form action="RegisterController" method="post">
+            <form action="register" method="post">
                 <div class="form-group">
                     <label for="username">Username <span style="color:red">*</span></label>
                     <input type="text" id="username" name="username" value="${param.username}" required />
