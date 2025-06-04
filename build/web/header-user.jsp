@@ -89,6 +89,7 @@
                                         <div>
                                             <span class="text-dark">Welcome,</span>
                                             <a href="view-profile.jsp" class="text-primary fw-bold">${sessionScope.acc.name}</a>
+                                            <div class="text-muted small">${sessionScope.acc.email}</div>
                                         </div>
                                     </c:when>
 
