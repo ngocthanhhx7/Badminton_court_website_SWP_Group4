@@ -1,0 +1,151 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap');
+* {
+    margin: 0;
+
+}
+html, body {
+    height: 100%;
+    overflow: hidden;
+}
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #42a5f5, #7e57c2);
+}
+.card {
+    color: #fff;
+    width: 400px;
+    border-radius: 10px;
+    background: linear-gradient(145deg, #9a40a9, #b74cc9);
+    box-shadow: 20px 20px 60px #913ca0, -20px -20px 60px #c552d8;
+    border: none;
+    padding: 30px 20px;
+    text-align: center;
+}
+.card img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+.card h3 {
+    font-size: 22px;
+    margin: 1px 0 1px;
+}
+.card span {
+    font-size: 14px;
+    color: #eee;
+}
+.info-row {
+    margin-top: 10px;
+    font-size: 14px;
+    text-align: left;
+}
+.info-label {
+    font-weight: bold;
+    display: inline-block;
+    width: 120px;
+}
+.line {
+    margin: 1px 0;
+    border: 0;
+    height: 1px;
+    background-color: #fff;
+}
+.neo-button {
+    width: 40px;
+    height: 40px;
+    outline: 0 !important;
+    cursor: pointer;
+    color: #fff;
+    font-size: 15px;
+    border: none;
+    margin: 5px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #9a40a9, #b74cc9);
+    box-shadow: inset 20px 20px 60px #913ca0, inset -20px -20px 60px #c552d8;
+}
+.neo-button:active {
+    background: #AB47BC;
+    box-shadow: 28px 28px 57px #933da2, -28px -28px 57px #c351d6;
+}
+.profile_button, .home_button {
+    color: #fff;
+    padding: 10px 30px;
+    border: none;
+    outline: 0 !important;
+    border-radius: 50px;
+    background: #AB47BC;
+    box-shadow: 28px 28px 57px #933da2, -28px -28px 57px #c351d6;
+    margin: 10px;
+    cursor: pointer;
+}
+.social-buttons {
+    margin-top: 20px;
+}
+.message-success {
+    color: limegreen;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    background-color: #9b42b0; /* Màu nền tím như ảnh */
+    padding: 20px;
+    border-radius: 8px;
+    gap: 20px;
+}
+
+.profile-header img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid white;
+    background-color: white;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: white;
+}
+
+.user-info h3 {
+    font-size: 20px;
+    margin: 0;
+    font-weight: bold;
+}
+
+.user-info span {
+    font-size: 14px;
+    margin-top: 4px;
+    color: #f1f1f1;
+}
+.button-row {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Khoảng cách giữa 2 nút */
+    margin-top: 20px;
+}
+
+.btn {
+    padding: 10px 20px;
+    background-color: rgba(255, 255, 255, 0.15);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    text-decoration: none;
+    font-size: 16px;
+    transition: background 0.3s ease;
+}
+
+.btn:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}

@@ -49,45 +49,71 @@
                     // padding-left: 20px;
                     width: 70px;
                 }
-               
+
             }
         }
-        .book_room{
-            @include flexbox();
-            @include align-items(center);
-            @include justify-content(flex-end);
-           .socail_links{
-               ul{
-                   li{
-                       display: inline-block;
+        .book_room {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
 
-                       a{
-                        color: #A8A7A0;
-                        margin: 0 10px;
-                        font-size: 15px;
-                        &:hover{
+            .social_links {
+                ul {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    margin: 0;
+                    padding: 0;
+
+                    li {
+                        display: inline-block;
+
+                        a {
+                            font-size: 18px;
+                            color: #A8A7A0;
+                            transition: color 0.3s ease;
+
+                            &:hover {
+                                color: #fff;
+                            }
+                        }
+                    }
+                }
+            }
+
+            .book_btn {
+                display: flex;
+                gap: 10px;
+
+                a {
+                    padding: 8px 18px;
+                    font-size: 14px;
+                    border-radius: 4px;
+                    transition: all 0.3s ease;
+
+                    &.btn-primary {
+                        background-color: #009DFF;
+                        color: #fff;
+                        border: 1px solid #009DFF;
+
+                        &:hover {
+                            background-color: #007ACC;
+                            border-color: #007ACC;
+                        }
+                    }
+
+                    &.btn-outline-primary {
+                        background-color: transparent;
+                        color: #009DFF;
+                        border: 1px solid #009DFF;
+
+                        &:hover {
+                            background-color: #009DFF;
                             color: #fff;
                         }
-                       }
-                   }
-               }
-           }
-           .book_btn{
-               margin-left: 30px;
-               a{
-                background: #009DFF;
-                padding: 12px 26px;
-                font-size: 14px;
-                font-weight: 400;
-                border: 1px solid transparent;
-                color: #fff;
-                &:hover{
-                    background: #fff;
-                    color: #009DFF;
-                    border: 1px solid #009DFF;
+                    }
                 }
-               }
-           }
+            }
         }
         .main-menu{
             text-align: center;
@@ -113,7 +139,7 @@
                         font-family: $font1;
                         position: relative;
                         text-transform:capitalize;
-                        
+
                         @media #{$mid_device} {
                             // padding: 41px 0px 10px 0px;
                             font-size: 15px;
@@ -128,7 +154,8 @@
                                 display: none !important;
                             }
                             @media #{$tablet_device}{
-                                display: none !important;;
+                                display: none !important;
+                                ;
                             }
                         }
                         &::before {
@@ -231,7 +258,7 @@
                 padding: 0;
             }
         }
-        
+
     }
 
 }

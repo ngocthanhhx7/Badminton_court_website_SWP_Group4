@@ -2,11 +2,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-
 package controllerUser;
 
+import dao.AboutSectionDAO;
+import dao.ContactInfoDAO;
 import dao.CourtDAO;
+import dao.InstagramFeedDAO;
+import dao.OfferDAO;
 import dao.SliderDAO;
+import dao.VideoDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,11 +18,16 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
+import models.AboutSectionDTO;
+import models.ContactInfoDTO;
 import models.CourtDTO;
+import models.InstagramFeedDTO;
+import models.OfferDTO;
 import models.SliderDTO;
+import models.VideoDTO;
 
 public class HomepageController extends HttpServlet {
-   
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -45,8 +54,31 @@ public class HomepageController extends HttpServlet {
         String status = request.getParameter("status");
         String courtType = request.getParameter("courtType");
         SliderDAO sliderDAO = new SliderDAO();
-        
+        AboutSectionDAO aboutDAO = new AboutSectionDAO();
+        VideoDAO videoDAO = new VideoDAO();
+        OfferDAO offerDAO = new OfferDAO();
+        ContactInfoDAO contactDAO = new ContactInfoDAO();
+        InstagramFeedDAO dao = new InstagramFeedDAO();
+
         List<SliderDTO> sliders = sliderDAO.getAllActiveSliders();
+        List<AboutSectionDTO> aboutSections = aboutDAO.getAllActiveSections();
+        List<VideoDTO> videoList = videoDAO.getAllVideos();
+        List<OfferDTO> allOffers = offerDAO.getActiveOffers();
+        List<ContactInfoDTO> contactInfos = contactDAO.getAllActiveContactInfo();
+        List<InstagramFeedDTO> visibleFeeds = dao.getAllFeeds()
+                .stream()
+                .filter(InstagramFeedDTO::getIsVisible)
+                .limit(5)
+                .toList();
+
+        if (videoList != null && !videoList.isEmpty()) {
+            request.setAttribute("video", videoList.get(0)); // chỉ lấy video đầu tiên
+        }
+
+        int maxOffersToShow = 3;
+        List<OfferDTO> displayedOffers = allOffers.size() > maxOffersToShow
+                ? allOffers.subList(0, maxOffersToShow)
+                : allOffers;
 
         int page = 1;
         int courtsPerPage = 2;
@@ -89,6 +121,10 @@ public class HomepageController extends HttpServlet {
         request.setAttribute("status", status);
         request.setAttribute("courtType", courtType);
         request.setAttribute("sliders", sliders);
+        request.setAttribute("aboutSections", aboutSections);
+        request.setAttribute("offers", displayedOffers);
+        request.setAttribute("contactInfos", contactInfos);
+        request.setAttribute("instagramFeeds", visibleFeeds);
 
         request.getRequestDispatcher("homepage.jsp").forward(request, response);
     }

@@ -40,6 +40,36 @@ public class AboutSectionDAO {
             return null;
         }
     }
+    
+    public List<AboutSectionDTO> getAllActiveSections() {
+    List<AboutSectionDTO> list = new ArrayList<>();
+    String sql = "SELECT * FROM AboutSections WHERE IsActive = 1 ORDER BY AboutID ASC";
+
+    try (Connection conn = DBUtils.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            AboutSectionDTO dto = AboutSectionDTO.builder()
+                    .AboutID(rs.getInt("AboutID"))
+                    .Title(rs.getString("Title"))
+                    .Subtitle(rs.getString("Subtitle"))
+                    .Content(rs.getString("Content"))
+                    .Image1(rs.getString("Image1"))
+                    .Image2(rs.getString("Image2"))
+                    .SectionType(rs.getString("SectionType"))
+                    .IsActive(rs.getBoolean("IsActive"))
+                    .CreatedAt(rs.getTimestamp("CreatedAt"))
+                    .build();
+            list.add(dto);
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    return list;
+}
+
 
     public AboutSectionDTO getSectionById(int id) {
         String sql = "SELECT * FROM AboutSections WHERE AboutID = ?";

@@ -40,6 +40,36 @@ public class OfferDAO {
             return null;
         }
     }
+    
+    public List<OfferDTO> getActiveOffers() {
+        String sql = "SELECT * FROM Offers WHERE IsActive = 1 ORDER BY CreatedAt DESC";
+        try (Connection connection = DBUtils.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            List<OfferDTO> offers = new ArrayList<>();
+
+            while (resultSet.next()) {
+                OfferDTO offer = OfferDTO.builder()
+                        .OfferID(resultSet.getInt("OfferID"))
+                        .Title(resultSet.getString("Title"))
+                        .Subtitle(resultSet.getString("Subtitle"))
+                        .Description(resultSet.getString("Description"))
+                        .ImageUrl(resultSet.getString("ImageUrl"))
+                        .Capacity(resultSet.getInt("Capacity"))
+                        .IsVIP(resultSet.getBoolean("IsVIP"))
+                        .IsActive(resultSet.getBoolean("IsActive"))
+                        .CreatedAt(resultSet.getTimestamp("CreatedAt"))
+                        .build();
+                offers.add(offer);
+            }
+
+            return offers;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     public OfferDTO getOfferById(int offerId) {
         String sql = "SELECT * FROM Offers WHERE OfferID = ?";

@@ -12,9 +12,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ContactInfoDTO {
-    private int ContactID;
-    private String Message;
-    private String PhoneNumber;
-    private Boolean IsVisible;
-    private Timestamp CreatedAt;
+    private int contactID;
+    private String message;
+    private String phoneNumber;
+    private boolean isActive;
 }

@@ -4,18 +4,20 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/SWP-project/src/java/models/SliderDTO.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerUser/Iconstant.java</file>
             <file>file:/C:/SWP-project/src/java/models/PostTagMapDTO.java</file>
-            <file>file:/C:/SWP-project/web/Login.jsp</file>
+            <file>file:/C:/SWP-project/src/java/dao/OfferDAO.java</file>
             <file>file:/C:/SWP-project/src/java/models/GoogleAccount.java</file>
-            <file>file:/C:/SWP-project/src/java/models/BookingDetailDTO.java</file>
+            <file>file:/C:/SWP-project/src/java/dao/VideoDAO.java</file>
             <file>file:/C:/SWP-project/src/java/models/AboutSectionDTO.java</file>
+            <file>file:/C:/SWP-project/src/java/models/BookingDetailDTO.java</file>
+            <file>file:/C:/SWP-project/src/java/dao/CourtDAO.java</file>
+            <file>file:/C:/SWP-project/src/java/dao/InstagramFeedDAO.java</file>
             <file>file:/C:/SWP-project/src/java/models/CourtDTO.java</file>
+            <file>file:/C:/SWP-project/web/scss/_slick-nav.scss</file>
             <file>file:/C:/SWP-project/src/java/models/BlogSubscriberDTO.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerUser/UserLoginController.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerUser/LogoutController.java</file>
+            <file>file:/C:/SWP-project/web/scss/_responsive.scss</file>
             <file>file:/C:/SWP-project/src/java/models/InstagramFeedDTO.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerUser/UpdateProfileController.java</file>
+            <file>file:/C:/SWP-project/web/scss/theme-default.scss</file>
             <file>file:/C:/SWP-project/src/java/models/InvoiceDetailDTO.java</file>
             <file>file:/C:/SWP-project/web/homepage.jsp</file>
             <file>file:/C:/SWP-project/web/courts.jsp</file>
@@ -23,45 +25,34 @@
             <file>file:/C:/SWP-project/src/java/models/BlogCategoryDTO.java</file>
             <file>file:/C:/SWP-project/web/blog.jsp</file>
             <file>file:/C:/SWP-project/src/java/models/EquipmentRentalDTO.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerUser/RegisterController.java</file>
             <file>file:/C:/SWP-project/src/java/models/UserDTO.java</file>
-            <file>file:/C:/SWP-project/web/contact.jsp</file>
-            <file>file:/C:/SWP-project/web/view-profile.jsp</file>
             <file>file:/C:/SWP-project/src/java/models/ServiceDTO.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerUser/LoginGoogleController.java</file>
             <file>file:/C:/SWP-project/src/java/models/ContactInfoDTO.java</file>
             <file>file:/C:/SWP-project/src/java/models/BlogCommentDTO.java</file>
-            <file>file:/C:/SWP-project/web/register.jsp</file>
-            <file>file:/C:/SWP-project/web/elements.jsp</file>
-            <file>file:/C:/SWP-project/web/completeProfile.jsp</file>
-            <file>file:/C:/SWP-project/src/java/utils/PasswordUtil.java</file>
-            <file>file:/C:/SWP-project/web/header-user.jsp</file>
-            <file>file:/C:/SWP-project/web/WEB-INF/web.xml</file>
+            <file>file:/C:/SWP-project/web/scss/_about.scss</file>
             <file>file:/C:/SWP-project/src/java/models/ServiceUsageDTO.java</file>
-            <file>file:/C:/SWP-project/web/header-auth2.jsp</file>
+            <file>file:/C:/SWP-project/web/scss/_slider.scss</file>
             <file>file:/C:/SWP-project/src/java/models/ServiceHighlightDTO.java</file>
             <file>file:/C:/SWP-project/src/java/controllerUser/CourtController.java</file>
+            <file>file:/C:/SWP-project/web/scss/_elements.scss</file>
+            <file>file:/C:/SWP-project/src/java/dao/AdminDAO.java</file>
             <file>file:/C:/SWP-project/src/java/models/AdminDTO.java</file>
             <file>file:/C:/SWP-project/src/java/models/VideoDTO.java</file>
-            <file>file:/C:/SWP-project/src/java/models/BlogTagDTO.java</file>
+            <file>file:/C:/SWP-project/web/scss/_section_title.scss</file>
+            <file>file:/C:/SWP-project/web/scss/_varriable.scss</file>
             <file>file:/C:/SWP-project/src/java/models/CourtScheduleDTO.java</file>
-            <file>file:/C:/SWP-project/src/java/utils/DBUtils.java</file>
-            <file>file:/C:/SWP-project/web/edit-profile.jsp</file>
             <file>file:/C:/SWP-project/src/java/models/BookingNoteDTO.java</file>
             <file>file:/C:/SWP-project/src/java/models/PostCategoryMapDTO.java</file>
             <file>file:/C:/SWP-project/src/java/models/InvoiceDTO.java</file>
             <file>file:/C:/SWP-project/src/java/models/BookingDTO.java</file>
             <file>file:/C:/SWP-project/src/java/models/OfferDTO.java</file>
-            <file>file:/C:/SWP-project/web/single-blog.jsp</file>
             <file>file:/C:/SWP-project/src/java/dao/UserDAO.java</file>
-            <file>file:/C:/SWP-project/src/java/service/UserService.java</file>
-            <file>file:/C:/SWP-project/web/about.jsp</file>
+            <file>file:/C:/SWP-project/web/scss/style.scss</file>
+            <file>file:/C:/SWP-project/web/scss/_offers.scss</file>
             <file>file:/C:/SWP-project/src/java/controllerUser/HomepageController.java</file>
-            <file>file:/C:/SWP-project/web/header.jsp</file>
+            <file>file:/C:/SWP-project/src/java/dao/AboutSectionDAO.java</file>
             <file>file:/C:/SWP-project/src/java/models/BlogPostDTO.java</file>
-            <file>file:/C:/SWP-project/web/header-auth.jsp</file>
-            <file>file:/C:/SWP-project/src/java/controllerUser/RegistrationController.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerUser/LoginController.java</file>
+            <file>file:/C:/SWP-project/src/java/dao/ContactInfoDAO.java</file>
             <file>file:/C:/SWP-project/src/java/models/CourtRateDTO.java</file>
         </group>
     </open-files>

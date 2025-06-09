@@ -42,6 +42,27 @@
                 }
             }
         </script>
+
+        <link rel="stylesheet" href="css/owl.carousel.min.css">
+        <script src="js/jquery.min.js"></script>
+        <script src="js/owl.carousel.min.js"></script>
+
+        <script>
+            $(document).ready(function () {
+                $('.about_active').owlCarousel({
+                    items: 1,
+                    loop: true,
+                    autoplay: true,
+                    autoplayTimeout: 6000,
+                    nav: false,
+                    dots: true
+                });
+            });
+        </script>
+
+
+
+
     </head>
 
 
@@ -93,141 +114,122 @@
         <!-- slider_area_end -->
 
 
+
+
         <!-- about_area_start -->
         <div class="about_area">
             <div class="container">
-                <div class="row">
-                    <div class="col-xl-5 col-lg-5">
-                        <div class="about_info">
-                            <div class="section_title mb-20px">
-                                <span>About Us</span>
-                                <h3>Sân Cầu Lông Hiện Đại<br>
-                                    Trải Nghiệm Thể Thao Chuẩn Chuyên Nghiệp</h3>
+                <div class="about_active owl-carousel">
+                    <c:forEach var="about" items="${aboutSections}">
+                        <div class="row">
+                            <div class="col-xl-5 col-lg-5">
+                                <div class="about_info">
+                                    <div class="section_title mb-20px">
+                                        <span>About Us</span>
+                                        <h3>${about.title}<br>${about.subtitle}</h3>
+                                    </div>
+                                    <p>${about.content}</p>
+                                    <a href="#" class="line-button">Learn More</a>
+                                </div>
                             </div>
-                            <p>Mang đến trải nghiệm thể thao năng động và tiện nghi. Không gian rộng rãi, hệ thống sân chuẩn thi đấu cùng dịch vụ đặt sân trực tuyến tiện lợi giúp bạn dễ dàng chủ động thời gian. Chúng tôi tạo ra môi trường luyện tập thoải mái, thân thiện, phù hợp mọi lứa tuổi và trình độ.
-                                Tiện ích hiện đại. Đăng ký dễ dàng. Trải nghiệm trọn vẹn.
-                                Chào đón bạn đến với sân cầu lông lý tưởng cho sức khỏe và đam mê!</p>
-                            <a href="#" class="line-button">Learn More</a>
+                            <div class="col-xl-7 col-lg-7">
+                                <div class="about_thumb d-flex">
+                                    <div class="img_1">
+                                        <img src="${about.image1}" alt="">
+                                    </div>
+                                    <div class="img_2">
+                                        <img src="${about.image2}" alt="">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-xl-7 col-lg-7">
-                        <div class="about_thumb d-flex">
-                            <div class="img_1">
-                                <img src="img/about/about_1.png" alt="">
-                            </div>
-                            <div class="img_2">
-                                <img src="img/about/about_2.png" alt="">
-                            </div>
-                        </div>
-                    </div>
+                    </c:forEach>
                 </div>
             </div>
         </div>
         <!-- about_area_end -->
 
+
         <!-- offers_area_start -->
-        <div class="offers_area">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-12">
-                        <div class="section_title text-center mb-100">
-                            <span>Our Offers</span>
-                            <h3>Ongoing Offers</h3>
+        <c:if test="${not empty offers}">
+            <div class="offers_area">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="section_title text-center mb-100">
+                                <span>Our Offers</span>
+                                <h3>Ongoing Offers</h3>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-xl-4 col-md-4">
-                        <div class="single_offers">
-                            <div class="about_thumb">
-                                <img src="img/offers/1.png" alt="">
+                    <div class="row">
+                        <c:forEach var="offer" items="${offers}">
+                            <div class="col-xl-4 col-md-4">
+                                <div class="single_offers">
+                                    <div class="about_thumb">
+                                        <img src="${offer.imageUrl}" alt="">
+                                    </div>
+                                    <h3>${offer.title} <br>${offer.subtitle}</h3>
+                                    <ul>
+                                        <li>${offer.description}</li>
+                                        <li>${offer.capacity} người</li>
+                                        <li>${offer.isVIP ? "VIP Service" : "Standard Service"}</li>
+                                    </ul>
+                                    <a href="bookCourt?offerID=${offer.offerID}" class="book_now">book now</a>
+                                </div>
                             </div>
-                            <h3>Sân Đơn <br>
-                                courts and Suites</h3>
-                            <ul>
-                                <li>Luxaries condition</li>
-                                <li>2 người</li>
-                                <li>Sea view side</li>
-                            </ul>
-                            <a href="#" class="book_now">book now</a>
-                        </div>
-                    </div>
-                    <div class="col-xl-4 col-md-4">
-                        <div class="single_offers">
-                            <div class="about_thumb">
-                                <img src="img/offers/2.png" alt="">
-                            </div>
-                            <h3>Sân VIP<br>
-                                courts and Suites</h3>
-                            <ul>
-                                <li>Luxaries condition</li>
-                                <li>4 người</li>
-                                <li>Sea view side</li>
-                            </ul>
-                            <a href="#" class="book_now">book now</a>
-                        </div>
-                    </div>
-                    <div class="col-xl-4 col-md-4">
-                        <div class="single_offers">
-                            <div class="about_thumb">
-                                <img src="img/offers/3.png" alt="">
-                            </div>
-                            <h3>Sân Đôi <br>
-                                courts and Suites</h3>
-                            <ul>
-                                <li>Luxaries condition</li>
-                                <li>4 người</li>
-                                <li>Sea view side</li>
-                            </ul>
-                            <a href="#" class="book_now">book now</a>
-                        </div>
+                        </c:forEach>
                     </div>
                 </div>
             </div>
-        </div>
+        </c:if>
+
         <!-- offers_area_end -->
 
         <!-- video_area_start -->
-        <div class="video_area video_bg overlay">
-            <div class="video_area_inner text-center">
-                <span>Nhạc Deep chill đánh cầu</span>
-                <h3>Nhạc bốc thôi rồi<br>
-                    Nói chung là chill vô cùng </h3>
-                <a href="https://www.youtube.com/watch?v=m5gfoNneQUo" class="video_btn popup-video">
-                    <i class="fa fa-play"></i>
-                </a>
+        <c:if test="${not empty video}">
+            <div class="video_area video_bg overlay" style="background-image: url('${video.thumbnailUrl}');">
+                <div class="video_area_inner text-center">
+                    <span>${video.title}</span>
+                    <h3>${video.subtitle}</h3>
+                    <a href="${video.videoUrl}" class="video_btn popup-video">
+                        <i class="fa fa-play"></i>
+                    </a>
+                </div>
             </div>
-        </div>
+        </c:if>
+
         <!-- video_area_end -->
 
         <!-- about_area_start -->
         <c:if test="${empty param.search}">
             <div class="about_area">
                 <div class="container">
-                    <div class="row">
-                        <div class="col-xl-7 col-lg-7">
-                            <div class="about_thumb2 d-flex">
-                                <div class="img_1">
-                                    <img src="img/about/1.png" alt="">
+                    <div class="about_active owl-carousel">
+                        <c:forEach var="about" items="${aboutSections}">
+                            <div class="row">
+                                <div class="col-xl-7 col-lg-7">
+                                    <div class="about_thumb2 d-flex">
+                                        <div class="img_1">
+                                            <img src="${about.image1}" alt="">
+                                        </div>
+                                        <div class="img_2">
+                                            <img src="${about.image2}" alt="">
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="img_2">
-                                    <img src="img/about/2.png" alt="">
+                                <div class="col-xl-5 col-lg-5">
+                                    <div class="about_info">
+                                        <div class="section_title mb-20px">
+                                            <span>${about.sectionType}</span>
+                                            <h3>${about.title} <br> ${about.subtitle}</h3>
+                                        </div>
+                                        <p>${about.content}</p>
+                                        <a href="about.jsp" class="line-button">Learn More</a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-xl-5 col-lg-5">
-                            <div class="about_info">
-                                <div class="section_title mb-20px">
-                                    <span>Dụng cụ thi đấu</span>
-                                    <h3>Chúng tôi cho thuê dụng cụ thi đấu <br>
-                                        Tiêu chuẩn</h3>
-                                </div>
-                                <p>Chúng tôi cung cấp đầy đủ dụng cụ cầu lông chất lượng cao, phù hợp với mọi đối tượng từ người chơi phong trào đến vận động viên chuyên nghiệp.
-                                    <br>Tại sân, bạn có thể thuê hoặc mua các loại vợt, cầu lông, giày thể thao và phụ kiện đạt chuẩn thi đấu.<br>Tất cả dụng cụ đều được bảo quản kỹ lưỡng, đảm bảo độ bền và hiệu suất khi sử dụng.
-                                    <br>Bạn chỉ cần đến sân, còn lại chúng tôi đã chuẩn bị sẵn sàng cho một trận cầu trọn vẹn! </p>
-                                <a href="about.jsp" class="line-button">Learn More</a>
-                            </div>
-                        </div>
+                        </c:forEach>
                     </div>
                 </div>
             </div>
@@ -344,141 +346,46 @@
         </section>
         <!-- List court end -->
 
-
-        <!-- features_court_startt -->
-        <c:if test="${empty param.search}">
-            <div class="features_court">
+        <!--                 forQuery_start -->
+        <c:forEach var="contact" items="${contactInfos}">
+            <div class="forQuery">
                 <div class="container">
                     <div class="row">
-                        <div class="col-xl-12">
-                            <div class="section_title text-center mb-100">
-                                <span>Featured Courts</span>
-                                <h3>Choose a Better Court</h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="courts_here">
-                    <div class="single_courts">
-                        <div class="court_thumb">
-                            <img src="img/courts/1.png" alt="" width="600" height="450">
-                            <div class="court_heading d-flex justify-content-between align-items-center">
-                                <div class="court_heading_inner">
-                                    <span>From $250/h</span>
-                                    <h3>Superior Court</h3>
+                        <div class="col-xl-10 offset-xl-1 col-md-12">
+                            <div class="Query_border">
+                                <div class="row align-items-center justify-content-center">
+                                    <div class="col-xl-6 col-md-6">
+                                        <div class="Query_text">
+                                            <p>${contact.message}</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-6 col-md-6">
+                                        <div class="phone_num">
+                                            <a href="tel:${contact.phoneNumber}" class="mobile_no">${contact.phoneNumber}</a>
+                                        </div>
+                                    </div>
                                 </div>
-                                <a href="#" class="line-button">book now</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="single_courts">
-                        <div class="court_thumb">
-                            <img src="img/courts/2.png" alt="" width="600" height="450">
-                            <div class="court_heading d-flex justify-content-between align-items-center">
-                                <div class="court_heading_inner">
-                                    <span>From $250/h</span>
-                                    <h3>Deluxe Court</h3>
-                                </div>
-                                <a href="#" class="line-button">book now</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="single_courts">
-                        <div class="court_thumb">
-                            <img src="img/courts/3.png" alt="" width="600" height="450">
-                            <div class="court_heading d-flex justify-content-between align-items-center">
-                                <div class="court_heading_inner">
-                                    <span>From $250/h</span>
-                                    <h3>Signature Court</h3>
-                                </div>
-                                <a href="#" class="line-button">book now</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="single_courts">
-                        <div class="court_thumb">
-                            <img src="img/courts/4.png" alt="" width="600" height="450">
-                            <div class="court_heading d-flex justify-content-between align-items-center">
-                                <div class="court_heading_inner">
-                                    <span>From $250/h</span>
-                                    <h3>Couple Court</h3>
-                                </div>
-                                <a href="#" class="line-button">book now</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </c:if>
-        <!-- features_court_end -->
+        </c:forEach>
 
-        <!--                 forQuery_start -->
-        <div class="forQuery">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-10 offset-xl-1 col-md-12">
-                        <div class="Query_border">
-                            <div class="row align-items-center justify-content-center">
-                                <div class="col-xl-6 col-md-6">
-                                    <div class="Query_text">
-                                        <p>For Reservation 0r Query?</p>
-                                    </div>
-                                </div>
-                                <div class="col-xl-6 col-md-6">
-                                    <div class="phone_num">
-                                        <a href="#" class="mobile_no">+84981944060</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
         <!--                 forQuery_end-->
 
         <!--                 instragram_area_start -->
         <div class="instragram_area">
-            <div class="single_instagram">
-                <img src="img/instragram/1.png" alt="">
-                <div class="ovrelay">
-                    <a href="#">
-                        <i class="fa fa-instagram"></i>
-                    </a>
+            <c:forEach var="feed" items="${instagramFeeds}">
+                <div class="single_instagram">
+                    <img src="${feed.imageUrl}" alt="Instagram Feed">
+                    <div class="ovrelay">
+                        <a href="${feed.instagramLink}" target="_blank">
+                            <i class="fa fa-instagram"></i>
+                        </a>
+                    </div>
                 </div>
-            </div>
-            <div class="single_instagram">
-                <img src="img/instragram/2.png" alt="">
-                <div class="ovrelay">
-                    <a href="#">
-                        <i class="fa fa-instagram"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="single_instagram">
-                <img src="img/instragram/3.png" alt="">
-                <div class="ovrelay">
-                    <a href="#">
-                        <i class="fa fa-instagram"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="single_instagram">
-                <img src="img/instragram/4.png" alt="">
-                <div class="ovrelay">
-                    <a href="#">
-                        <i class="fa fa-instagram"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="single_instagram">
-                <img src="img/instragram/5.png" alt="">
-                <div class="ovrelay">
-                    <a href="#">
-                        <i class="fa fa-instagram"></i>
-                    </a>
-                </div>
-            </div>
+            </c:forEach>
         </div>
         <!--                 instragram_area_end -->
 

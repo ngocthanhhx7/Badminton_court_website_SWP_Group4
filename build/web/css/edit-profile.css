@@ -1,0 +1,77 @@
+body {
+    font-family: 'Noto Sans', sans-serif;
+    background: linear-gradient(135deg, #42a5f5, #7e57c2);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.form-container {
+    background: white;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    width: 400px;
+}
+
+h2 {
+    text-align: center;
+    color: #7b1fa2;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+}
+
+td {
+    padding: 10px 0;
+}
+
+input[type="text"],
+input[type="date"] {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+input[type="text"]:focus,
+input[type="date"]:focus {
+    border-color: #ab47bc;
+    outline: none;
+}
+
+input[type="submit"] {
+    background: #ab47bc;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    width: 100%;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+input[type="submit"]:hover {
+    background: #8e24aa;
+}
+
+a {
+    display: inline-block;
+    margin-top: 15px;
+    text-align: center;
+    color: #7b1fa2;
+    text-decoration: none;
+    width: 100%;
+}
+
+a:hover {
+    text-decoration: underline;
+}

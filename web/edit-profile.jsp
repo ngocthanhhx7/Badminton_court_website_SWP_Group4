@@ -18,88 +18,31 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8">
-        <title>Update Information</title>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Chỉnh sửa profile</title>
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap" rel="stylesheet">
-        <style>
-            body {
-                font-family: 'Noto Sans', sans-serif;
-                background: linear-gradient(135deg, #42a5f5, #7e57c2);
-                margin: 0;
-                padding: 0;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 100vh;
-                overflow: hidden;
-            }
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-            .form-container {
-                background: white;
-                padding: 30px 40px;
-                border-radius: 12px;
-                box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-                width: 400px;
-            }
+        <!-- <link rel="manifest" href="site.webmanifest"> -->
+        <link rel="shortcut icon" type="image/x-icon" href="img/favicon.png">
+        <!-- Place favicon.ico in the root directory -->
 
-            h2 {
-                text-align: center;
-                color: #7b1fa2;
-                margin-bottom: 20px;
-            }
-
-            table {
-                width: 100%;
-            }
-
-            td {
-                padding: 10px 0;
-            }
-
-            input[type="text"],
-            input[type="date"] {
-                width: 100%;
-                padding: 8px 12px;
-                border: 1px solid #ccc;
-                border-radius: 8px;
-                transition: 0.3s;
-            }
-
-            input[type="text"]:focus,
-            input[type="date"]:focus {
-                border-color: #ab47bc;
-                outline: none;
-            }
-
-            input[type="submit"] {
-                background: #ab47bc;
-                color: white;
-                padding: 10px;
-                border: none;
-                border-radius: 30px;
-                cursor: pointer;
-                width: 100%;
-                font-weight: bold;
-                transition: background 0.3s;
-            }
-
-            input[type="submit"]:hover {
-                background: #8e24aa;
-            }
-
-            a {
-                display: inline-block;
-                margin-top: 15px;
-                text-align: center;
-                color: #7b1fa2;
-                text-decoration: none;
-                width: 100%;
-            }
-
-            a:hover {
-                text-decoration: underline;
-            }
-        </style>
+        <!-- CSS here -->
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/owl.carousel.min.css">
+        <link rel="stylesheet" href="css/magnific-popup.css">
+        <link rel="stylesheet" href="css/font-awesome.min.css">
+        <link rel="stylesheet" href="css/themify-icons.css">
+        <link rel="stylesheet" href="css/nice-select.css">
+        <link rel="stylesheet" href="css/flaticon.css">
+        <link rel="stylesheet" href="css/gijgo.css">
+        <link rel="stylesheet" href="css/animate.css">
+        <link rel="stylesheet" href="css/slicknav.css">
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/edit-profile.css">
+        <!-- <link rel="stylesheet" href="css/responsive.css"> -->
     </head>
 
     <body>

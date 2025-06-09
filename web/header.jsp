@@ -63,9 +63,9 @@
                         </div>
                     </div>
                     <div class="col-xl-5 col-lg-4 d-none d-lg-block">
-                        <div class="book_court">
-                            <div class="socail_links">
-                                <ul>
+                        <div class="book_room d-flex align-items-center justify-content-end">
+                            <div class="social_links me-3">
+                                <ul class="d-flex align-items-center mb-0 list-unstyled">
                                     <li>
                                         <a href="https://www.facebook.com/ngocthanh552004/">
                                             <i class="fa fa-facebook-square"></i>
@@ -83,12 +83,13 @@
                                     </li>
                                 </ul>
                             </div>
-                            <div class="book_btn d-none d-lg-block">
-                                <a href="./Login" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">Login</a>
-                                <a href="register.jsp" class="block px-3 py-2 rounded-md text-base font-medium text-white bg-secondary hover:bg-red-600">Register</a>
+                            <div class="book_btn d-flex gap-2">
+                                <a href="./Login" class="btn btn-outline-primary">Login</a>
+                                <a href="register.jsp" class="btn btn-primary">Register</a>
                             </div>
                         </div>
                     </div>
+
                     <div class="col-12">
                         <div class="mobile_menu d-block d-lg-none"></div>
                     </div>
