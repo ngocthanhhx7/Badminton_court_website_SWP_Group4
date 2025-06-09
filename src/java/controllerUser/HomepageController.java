@@ -6,6 +6,7 @@
 package controllerUser;
 
 import dao.CourtDAO;
+import dao.SliderDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,6 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import models.CourtDTO;
+import models.SliderDTO;
 
 public class HomepageController extends HttpServlet {
    
@@ -42,6 +44,9 @@ public class HomepageController extends HttpServlet {
         String pageParam = request.getParameter("page");
         String status = request.getParameter("status");
         String courtType = request.getParameter("courtType");
+        SliderDAO sliderDAO = new SliderDAO();
+        
+        List<SliderDTO> sliders = sliderDAO.getAllActiveSliders();
 
         int page = 1;
         int courtsPerPage = 2;
@@ -83,6 +88,7 @@ public class HomepageController extends HttpServlet {
         request.setAttribute("search", search);
         request.setAttribute("status", status);
         request.setAttribute("courtType", courtType);
+        request.setAttribute("sliders", sliders);
 
         request.getRequestDispatcher("homepage.jsp").forward(request, response);
     }

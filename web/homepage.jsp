@@ -73,57 +73,25 @@
         <!-- slider_area_start -->
         <div class="slider_area">
             <div class="slider_active owl-carousel">
-                <div class="single_slider d-flex align-items-center justify-content-center slider_bg_1">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-xl-12">
-                                <div class="slider_text text-center">
-                                    <h3>BadmintonHub</h3>
-                                    <p>Nơi đốt cháy đam mê</p>
+                <c:forEach var="slider" items="${sliders}">
+                    <div class="single_slider d-flex align-items-center justify-content-center"
+                         style="background-image: url('${slider.backgroundImage}'); background-size: cover; background-repeat: no-repeat; height: 100vh;">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-xl-12">
+                                    <div class="slider_text text-center">
+                                        <h3>${slider.title}</h3>
+                                        <p>${slider.subtitle}</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="single_slider  d-flex align-items-center justify-content-center slider_bg_2">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-xl-12">
-                                <div class="slider_text text-center">
-                                    <h3>Life is Beautiful</h3>
-                                    <p>Nơi kết nối tình thương</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="single_slider d-flex align-items-center justify-content-center slider_bg_1">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-xl-12">
-                                <div class="slider_text text-center">
-                                    <h3>BadmintonHub</h3>
-                                    <p>Sống lại đam mê của bạn</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="single_slider  d-flex align-items-center justify-content-center slider_bg_2">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-xl-12">
-                                <div class="slider_text text-center">
-                                    <h3>Life is Beautiful</h3>
-                                    <p>Cùng tìm lại cảm xúc</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                </c:forEach>
             </div>
         </div>
         <!-- slider_area_end -->
+
 
         <!-- about_area_start -->
         <div class="about_area">
@@ -683,19 +651,19 @@
 
         <script src="js/main.js"></script>
         <script>
-                            $('#datepicker').datepicker({
-                                iconsLibrary: 'fontawesome',
-                                icons: {
-                                    rightIcon: '<span class="fa fa-caret-down"></span>'
-                                }
-                            });
-                            $('#datepicker2').datepicker({
-                                iconsLibrary: 'fontawesome',
-                                icons: {
-                                    rightIcon: '<span class="fa fa-caret-down"></span>'
-                                }
+                                    $('#datepicker').datepicker({
+                                        iconsLibrary: 'fontawesome',
+                                        icons: {
+                                            rightIcon: '<span class="fa fa-caret-down"></span>'
+                                        }
+                                    });
+                                    $('#datepicker2').datepicker({
+                                        iconsLibrary: 'fontawesome',
+                                        icons: {
+                                            rightIcon: '<span class="fa fa-caret-down"></span>'
+                                        }
 
-                            });
+                                    });
         </script>
 
 
