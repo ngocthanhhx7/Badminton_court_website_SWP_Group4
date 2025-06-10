@@ -59,10 +59,7 @@
                 });
             });
         </script>
-
-
-
-
+        <script src="js/chat.js"></script>
     </head>
 
 
