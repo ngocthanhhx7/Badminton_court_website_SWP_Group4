@@ -91,7 +91,7 @@ public class HomepageController extends HttpServlet {
             }
         }
 
-        // Lọc dữ liệu
+        
         List<CourtDTO> courts = courtDAO.filterCourts(search, status, courtType);
 
         if (courts == null || courts.isEmpty()) {

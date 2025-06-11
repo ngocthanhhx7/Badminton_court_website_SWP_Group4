@@ -43,7 +43,17 @@
             <% } %>
 
             <div class="profile-header">
-                <img src="https://cdn2.fptshop.com.vn/unsafe/1920x0/filters:format(webp):quality(75)/small/avatar_hoat_hinh_db4e0e9cf4.jpg" alt="Avatar người dùng">
+                <% String avatarUrl;
+                   String gender = user.getGender();
+                   if ("Male".equalsIgnoreCase(gender)) {
+                       avatarUrl = "https://symbols.vn/wp-content/uploads/2021/11/Anh-avatar-de-thuong-cho-nam.jpg"; 
+                   } else if ("Female".equalsIgnoreCase(gender)) {
+                       avatarUrl = "https://img6.thuthuatphanmem.vn/uploads/2022/10/23/hinh-avatar-chibi-cute_031501070.jpg"; 
+                   } else {
+                       avatarUrl = "https://cdn-icons-png.flaticon.com/512/149/149071.png"; 
+                   }
+                %>
+                <img src="<%= avatarUrl %>" alt="Avatar người dùng">
                 <div class="user-info">
                     <h3><%= user.getFullName() %></h3>
                     <span><%= user.getEmail() %></span>
@@ -53,7 +63,10 @@
             <hr class="line">
 
             <div class="info-row"><span class="info-label">Username:</span> <%= user.getUsername() %></div>
-            <div class="info-row"><span class="info-label">Password:</span> <%= user.getPassword() %></div>
+            <div class="info-row"><span class="info-label">Password:</span> 
+                <%= "*".repeat(user.getPassword().length()) %>
+            </div>
+
             <div class="info-row"><span class="info-label">Email:</span> <%= user.getEmail() %></div>
             <div class="info-row"><span class="info-label">Full Name:</span> <%= user.getFullName() %></div>
             <div class="info-row"><span class="info-label">DOB:</span> <%= user.getDob() %></div>
@@ -62,7 +75,6 @@
             <div class="info-row"><span class="info-label">Address:</span> <%= user.getAddress() %></div>
             <div class="info-row"><span class="info-label">Sport Level:</span> <%= user.getSportLevel() %></div>
             <div class="info-row"><span class="info-label">Role:</span> <%= user.getRole() %></div>
-            <div class="info-row"><span class="info-label">Created By:</span> <%= user.getCreatedBy() %></div>
 
             <hr class="line">
 

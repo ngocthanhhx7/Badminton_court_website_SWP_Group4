@@ -57,18 +57,55 @@
 
             <form action="update-profile" method="get">
                 <table>
-                    <tr><td>Name:</td><td><input type="text" name="fullName" value="<%= user.getFullName() %>" /></td></tr>
-                    <tr><td>Password:</td><td><input type="text" name="password" value="<%= user.getPassword() %>" /></td></tr>
-                    <tr><td>Date:</td><td><input type="date" name="dob" value="<%= dobFormatted %>" /></td></tr>
-                    <tr><td>Gender:</td><td><input type="text" name="gender" value="<%= user.getGender() %>" /></td></tr>
-                    <tr><td>Phone:</td><td><input type="text" name="phone" value="<%= user.getPhone() %>" /></td></tr>
-                    <tr><td>Address:</td><td><input type="text" name="address" value="<%= user.getAddress() %>" /></td></tr>
-                    <tr><td>Sport Level:</td><td><input type="text" name="sportLevel" value="<%= user.getSportLevel() %>" /></td></tr>
-                    <tr><td>Role:</td><td><input type="text" name="role" value="<%= user.getRole() %>" /></td></tr>
-                    <tr><td colspan="2"><input type="submit" value="Update"></td></tr>
+                    <tr>
+                        <td>Name:</td>
+                        <td><input type="text" name="fullName" value="<%= user.getFullName() %>" /></td>
+                    </tr>
+                    <tr>
+                        <td>Password:</td>
+                        <td><input type="text" name="password" value="<%= user.getPassword() %>" /></td>
+                    </tr>
+                    <tr>
+                        <td>Date:</td>
+                        <td><input type="date" name="dob" value="<%= dobFormatted %>" /></td>
+                    </tr>
+                    <tr>
+                        <td>Gender:</td>
+                        <td>
+                            <div class="form-select" id="default-select">
+                                <select name="gender" required>
+                                    <option value="">-- Chọn giới tính --</option>
+                                    <option value="Male" <%= "Male".equals(user.getGender()) ? "selected" : "" %>>Nam</option>
+                                    <option value="Female" <%= "Female".equals(user.getGender()) ? "selected" : "" %>>Nữ</option>
+                                    <option value="Other" <%= "Other".equals(user.getGender()) ? "selected" : "" %>>Khác</option>
+                                </select>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>Phone:</td>
+                        <td><input type="text" name="phone" value="<%= user.getPhone() %>" /></td>
+                    </tr>
+                    <tr>
+                        <td>Address:</td>
+                        <td><input type="text" name="address" value="<%= user.getAddress() %>" /></td>
+                    </tr>
+                    <tr>
+                        <td>Sport Level:</td>
+                        <td><%= user.getSportLevel() %></td>
+                    </tr>
+                    <tr>
+                        <td>Role:</td>
+                        <td><%= user.getRole() %></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><input type="submit" value="Update"></td>
+                    </tr>
                 </table>
             </form>
             <a href="view-profile.jsp">Về Profile</a>
+
         </div>
     </body>
 </html>

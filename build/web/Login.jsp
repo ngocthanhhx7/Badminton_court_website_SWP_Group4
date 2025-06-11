@@ -29,6 +29,17 @@
         <link rel="stylesheet" href="css/slicknav.css">
         <link rel="stylesheet" href="css/style.css">
         <!-- <link rel="stylesheet" href="css/responsive.css"> -->
+        <script>
+            function togglePassword() {
+                const passField = document.getElementById("password");
+                if (passField.type === "password") {
+                    passField.type = "text";
+                } else {
+                    passField.type = "password";
+                }
+            }
+        </script>
+
     </head>
     <body>
         <!--[if lte IE 9]>
@@ -54,7 +65,7 @@
                                 <form action="Login" method="post">
                                     <div class="row gy-3 overflow-hidden">
                                         <div class="col-12">
-                                            <!-- Hiển thị thông báo lỗi -->
+
                                             <c:if test="${not empty mess || not empty error}">
                                                 <div class="alert alert-danger">
                                                     ${mess}${error}
@@ -70,13 +81,21 @@
                                         </div>
 
                                         <div class="col-12">
-                                            <div class="form-floating mb-3">
-                                                <input type="password" class="form-control border-0 border-bottom rounded-0"
+                                            <div class="form-floating mb-3 position-relative">
+                                                <input type="password" class="form-control border-0 border-bottom rounded-0 pe-5"
                                                        name="password" id="password"
                                                        value="${savedPassword}" placeholder="Password" required>
                                                 <label for="password" class="form-label">Password</label>
+
+                                                <button type="button"
+                                                        onclick="togglePassword()"
+                                                        class="position-absolute top-50 end-0 translate-middle-y"
+                                                        style="border: none; background: transparent; padding: 0 10px; font-size: 18px; line-height: 1;">
+                                                    👁️
+                                                </button>
                                             </div>
                                         </div>
+
 
                                         <div class="col-12">
                                             <div class="row justify-content-between">

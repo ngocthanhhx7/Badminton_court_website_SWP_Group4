@@ -2,93 +2,147 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Complete Profile</title>
-    <style>
-        body {
-            background: url('https://via.placeholder.com/1500x1000.png?text=Background') no-repeat center center fixed;
-            background-size: cover;
-            font-family: Arial, sans-serif;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            margin: 0;
-        }
-        .container {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-        .form-box {
-            width: 100%;
-            max-width: 400px;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 30px;
-            border-radius: 10px;
-        }
-        .form-box h2 {
-            font-size: 1.8rem;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-        .form-box input,
-        .form-box select {
-            width: 100%;
-            padding: 10px;
-            margin: 8px 0;
-            border: none;
-            border-radius: 25px;
-        }
-        .form-box button {
-            width: 100%;
-            padding: 12px;
-            margin-top: 15px;
-            border: none;
-            border-radius: 25px;
-            background: #d1d5db;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-        .form-box button:hover {
-            background: #b1b5b9;
-        }
-        .error {
-            color: #900;
-            background: #fff;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="form-box">
-            <h2>Hoàn thiện thông tin cá nhân</h2>
-            <c:if test="${not empty message}">
-                <div class="error">${message}</div>
-            </c:if>
-            <form action="update-profile" method="post">
-                <input type="text" name="fullname" placeholder="Họ và tên" required />
-                <input type="date" name="dob" placeholder="Ngày sinh" required />
-                <select name="gender" required>
-                    <option value="">-- Chọn giới tính --</option>
-                    <option value="Male">Nam</option>
-                    <option value="Female">Nữ</option>
-                    <option value="Other">Khác</option>
-                </select>
-                <input type="text" name="phone" placeholder="Số điện thoại" required />
-                <input type="text" name="address" placeholder="Địa chỉ" required />
-<input type="text" name="sportlevel" placeholder="Nghe Bài Trình Chưa" required />
-                <button type="submit">Lưu thông tin</button>
-            </form>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Hoàn thiện hồ sơ</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- <link rel="manifest" href="site.webmanifest"> -->
+        <link rel="shortcut icon" type="image/x-icon" href="img/favicon.png">
+        <!-- Place favicon.ico in the root directory -->
+
+        <!-- CSS here -->
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/owl.carousel.min.css">
+        <link rel="stylesheet" href="css/magnific-popup.css">
+        <link rel="stylesheet" href="css/font-awesome.min.css">
+        <link rel="stylesheet" href="css/themify-icons.css">
+        <link rel="stylesheet" href="css/nice-select.css">
+        <link rel="stylesheet" href="css/flaticon.css">
+        <link rel="stylesheet" href="css/gijgo.css">
+        <link rel="stylesheet" href="css/animate.css">
+        <link rel="stylesheet" href="css/slicknav.css">
+        <link rel="stylesheet" href="css/style.css">
+        <!-- <link rel="stylesheet" href="css/responsive.css"> -->
+        <style>
+            .form-background {
+                background-color: #eaf4ff; 
+                padding: 30px;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            }
+        </style>
+
+    </head>
+    <body>
+        <!-- bradcam_area_start -->
+        <div class="bradcam_area breadcam_bg">
+            <h3>Hoàn thiện hồ sơ</h3>
         </div>
-    </div>
-</body>
+        <!-- bradcam_area_end -->
+
+        <div class="section-top-border">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 col-md-10 mx-auto">
+                    <div class="form-background">
+                        <h3 class="mb-30 text-center">Hoàn thiện thông tin cá nhân</h3>
+                        <c:if test="${not empty message}">
+                            <div class="alert alert-danger">${message}</div>
+                        </c:if>
+                        <form action="update-profile" method="post">
+                            <div class="mt-10">
+                                <input type="text" name="fullname" placeholder="Họ và tên"
+                                       onfocus="this.placeholder = ''" onblur="this.placeholder = 'Họ và tên'" required
+                                       class="single-input">
+                            </div>
+                            <div class="mt-10">
+                                <input type="date" name="dob" placeholder="Ngày sinh"
+                                       onfocus="this.placeholder = ''" onblur="this.placeholder = 'Ngày sinh'" required
+                                       class="single-input">
+                            </div>
+                            <div class="input-group-icon mt-10">
+                                <div class="icon"><i class="fa fa-venus-mars" aria-hidden="true"></i></div>
+                                <div class="form-select" id="default-select">
+                                    <select name="gender" required>
+                                        <option value="">-- Chọn giới tính --</option>
+                                        <option value="Male">Nam</option>
+                                        <option value="Female">Nữ</option>
+                                        <option value="Other">Khác</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mt-10">
+                                <input type="text" name="phone" placeholder="Số điện thoại"
+                                       onfocus="this.placeholder = ''" onblur="this.placeholder = 'Số điện thoại'" required
+                                       class="single-input">
+                            </div>
+                            <div class="input-group-icon mt-10">
+                                <div class="icon"><i class="fa fa-home" aria-hidden="true"></i></div>
+                                <input type="text" name="address" placeholder="Địa chỉ"
+                                       onfocus="this.placeholder = ''" onblur="this.placeholder = 'Địa chỉ'" required
+                                       class="single-input">
+                            </div>
+                            <div class="mt-10">
+                                <input type="text" name="sportlevel" placeholder="Nghe Bài Trình Chưa"
+                                       onfocus="this.placeholder = ''" onblur="this.placeholder = 'Nghe Bài Trình Chưa'" required
+                                       class="single-input">
+                            </div>
+                            <div class="mt-10 text-center">
+                                <button type="submit" class="genric-btn primary">Lưu thông tin</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- JS here -->
+        <script src="js/vendor/modernizr-3.5.0.min.js"></script>
+        <script src="js/vendor/jquery-1.12.4.min.js"></script>
+        <script src="js/popper.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/owl.carousel.min.js"></script>
+        <script src="js/isotope.pkgd.min.js"></script>
+        <script src="js/ajax-form.js"></script>
+        <script src="js/waypoints.min.js"></script>
+        <script src="js/jquery.counterup.min.js"></script>
+        <script src="js/imagesloaded.pkgd.min.js"></script>
+        <script src="js/scrollIt.js"></script>
+        <script src="js/jquery.scrollUp.min.js"></script>
+        <script src="js/wow.min.js"></script>
+        <script src="js/nice-select.min.js"></script>
+        <script src="js/jquery.slicknav.min.js"></script>
+        <script src="js/jquery.magnific-popup.min.js"></script>
+        <script src="js/plugins.js"></script>
+        <script src="js/gijgo.min.js"></script>
+
+        <!--contact js-->
+        <script src="js/contact.js"></script>
+        <script src="js/jquery.ajaxchimp.min.js"></script>
+        <script src="js/jquery.form.js"></script>
+        <script src="js/jquery.validate.min.js"></script>
+        <script src="js/mail-script.js"></script>
+
+        <script src="js/main.js"></script>
+        <script>
+                                           $('#datepicker').datepicker({
+                                               iconsLibrary: 'fontawesome',
+                                               icons: {
+                                                   rightIcon: '<span class="fa fa-caret-down"></span>'
+                                               }
+                                           });
+                                           $('#datepicker2').datepicker({
+                                               iconsLibrary: 'fontawesome',
+                                               icons: {
+                                                   rightIcon: '<span class="fa fa-caret-down"></span>'
+                                               }
+
+                                           });
+        </script>
+
+
+    </body>
 </html>

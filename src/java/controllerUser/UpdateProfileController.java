@@ -82,6 +82,10 @@ public class UpdateProfileController extends HttpServlet {
             request.getRequestDispatcher("edit-profile.jsp").forward(request, response);
             return;
         }
+        if (password == null || password.isEmpty()) {
+            password = user.getPassword(); 
+        }
+
         user.setPassword(password);
 
         String fullName = request.getParameter("fullName");

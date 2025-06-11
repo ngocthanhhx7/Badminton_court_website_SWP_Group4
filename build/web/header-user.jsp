@@ -65,21 +65,6 @@
                     <div class="col-xl-5 col-lg-4 d-none d-lg-block">
                         <div class="book_court d-flex align-items-center justify-content-end">
 
-                            <!-- Social links -->
-                            <div class="socail_links mb-3">
-                                <ul class="list-inline mb-0 d-flex gap-3 justify-content-end">
-                                    <li class="list-inline-item">
-                                        <a href="https://www.facebook.com/ngocthanh552004/" class="text-primary fs-4"><i class="fa fa-facebook-square"></i></a>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <a href="https://www.facebook.com/ngocthanh552004/" class="text-info fs-4"><i class="fa fa-twitter"></i></a>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <a href="https://www.facebook.com/ngocthanh552004/" class="text-danger fs-4"><i class="fa fa-instagram"></i></a>
-                                    </li>
-                                </ul>
-                            </div>
-
                             <!-- Welcome and Account -->
                             <!-- Welcome + Avatar + Username -->
                             <div class="d-flex align-items-center gap-3 mb-2">

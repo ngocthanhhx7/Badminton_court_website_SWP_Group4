@@ -32,6 +32,10 @@
         <servlet-name>ChatServlet</servlet-name>
         <servlet-class>controllerUser.ChatServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CourtDetailController</servlet-name>
+        <servlet-class>controllerUser.CourtDetailController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>HomepageController</servlet-name>
         <url-pattern>/home</url-pattern>
@@ -63,5 +67,9 @@
     <servlet-mapping>
         <servlet-name>ChatServlet</servlet-name>
         <url-pattern>/chat</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CourtDetailController</servlet-name>
+        <url-pattern>/court-detail</url-pattern>
     </servlet-mapping>
 </web-app>

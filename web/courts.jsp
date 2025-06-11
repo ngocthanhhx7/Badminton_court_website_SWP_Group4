@@ -42,6 +42,24 @@
                 }
             }
         </script>
+
+        <link rel="stylesheet" href="css/owl.carousel.min.css">
+        <script src="js/jquery.min.js"></script>
+        <script src="js/owl.carousel.min.js"></script>
+
+        <script>
+            $(document).ready(function () {
+                $('.about_active').owlCarousel({
+                    items: 1,
+                    loop: true,
+                    autoplay: true,
+                    autoplayTimeout: 6000,
+                    nav: false,
+                    dots: true
+                });
+            });
+        </script>
+        <script src="js/chat.js"></script>
     </head>
 
     <body>
@@ -186,82 +204,58 @@
         <!-- List court end -->
 
         <!-- offers_area_start -->
-        <div class="offers_area">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-12">
-                        <div class="section_title text-center mb-100">
-                            <span>Our Offers</span>
-                            <h3>Ongoing Offers</h3>
+        <c:if test="${not empty offers}">
+            <div class="offers_area">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="section_title text-center mb-100">
+                                <span>Our Offers</span>
+                                <h3>Ongoing Offers</h3>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-xl-4 col-md-4">
-                        <div class="single_offers">
-                            <div class="about_thumb">
-                                <img src="img/offers/1.png" alt="">
+                    <div class="row">
+                        <c:forEach var="offer" items="${offers}">
+                            <div class="col-xl-4 col-md-4">
+                                <div class="single_offers">
+                                    <div class="about_thumb">
+                                        <img src="${offer.imageUrl}" alt="">
+                                    </div>
+                                    <h3>${offer.title} <br>${offer.subtitle}</h3>
+                                    <ul>
+                                        <li>${offer.description}</li>
+                                        <li>${offer.capacity} người</li>
+                                        <li>${offer.isVIP ? "VIP Service" : "Standard Service"}</li>
+                                    </ul>
+                                    <a href="bookCourt?offerID=${offer.offerID}" class="book_now">book now</a>
+                                </div>
                             </div>
-                            <h3>Sân Đơn <br>
-                                courts and Suites</h3>
-                            <ul>
-                                <li>Luxaries condition</li>
-                                <li>2 người</li>
-                                <li>Sea view side</li>
-                            </ul>
-                            <a href="#" class="book_now">book now</a>
-                        </div>
-                    </div>
-                    <div class="col-xl-4 col-md-4">
-                        <div class="single_offers">
-                            <div class="about_thumb">
-                                <img src="img/offers/2.png" alt="">
-                            </div>
-                            <h3>Sân VIP<br>
-                                courts and Suites</h3>
-                            <ul>
-                                <li>Luxaries condition</li>
-                                <li>4 người</li>
-                                <li>Sea view side</li>
-                            </ul>
-                            <a href="#" class="book_now">book now</a>
-                        </div>
-                    </div>
-                    <div class="col-xl-4 col-md-4">
-                        <div class="single_offers">
-                            <div class="about_thumb">
-                                <img src="img/offers/3.png" alt="">
-                            </div>
-                            <h3>Sân Đôi <br>
-                                courts and Suites</h3>
-                            <ul>
-                                <li>Luxaries condition</li>
-                                <li>4 người</li>
-                                <li>Sea view side</li>
-                            </ul>
-                            <a href="#" class="book_now">book now</a>
-                        </div>
+                        </c:forEach>
                     </div>
                 </div>
             </div>
-        </div>
+        </c:if>
+
         <!-- offers_area_end -->
 
         <!-- forQuery_start -->
-        <div class="forQuery">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-10 offset-xl-1 col-md-12">
-                        <div class="Query_border">
-                            <div class="row align-items-center justify-content-center">
-                                <div class="col-xl-6 col-md-6">
-                                    <div class="Query_text">
-                                        <p>For Reservation 0r Query?</p>
+        <c:forEach var="contact" items="${contactInfos}">
+            <div class="forQuery">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-10 offset-xl-1 col-md-12">
+                            <div class="Query_border">
+                                <div class="row align-items-center justify-content-center">
+                                    <div class="col-xl-6 col-md-6">
+                                        <div class="Query_text">
+                                            <p>${contact.message}</p>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-xl-6 col-md-6">
-                                    <div class="phone_num">
-                                        <a href="#" class="mobile_no">+10 576 377 4789</a>
+                                    <div class="col-xl-6 col-md-6">
+                                        <div class="phone_num">
+                                            <a href="tel:${contact.phoneNumber}" class="mobile_no">${contact.phoneNumber}</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -269,51 +263,21 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </c:forEach>
         <!-- forQuery_end-->
 
         <!-- instragram_area_start -->
         <div class="instragram_area">
-            <div class="single_instagram">
-                <img src="img/instragram/1.png" alt="">
-                <div class="ovrelay">
-                    <a href="#">
-                        <i class="fa fa-instagram"></i>
-                    </a>
+            <c:forEach var="feed" items="${instagramFeeds}">
+                <div class="single_instagram">
+                    <img src="${feed.imageUrl}" alt="Instagram Feed">
+                    <div class="ovrelay">
+                        <a href="${feed.instagramLink}" target="_blank">
+                            <i class="fa fa-instagram"></i>
+                        </a>
+                    </div>
                 </div>
-            </div>
-            <div class="single_instagram">
-                <img src="img/instragram/2.png" alt="">
-                <div class="ovrelay">
-                    <a href="#">
-                        <i class="fa fa-instagram"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="single_instagram">
-                <img src="img/instragram/3.png" alt="">
-                <div class="ovrelay">
-                    <a href="#">
-                        <i class="fa fa-instagram"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="single_instagram">
-                <img src="img/instragram/4.png" alt="">
-                <div class="ovrelay">
-                    <a href="#">
-                        <i class="fa fa-instagram"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="single_instagram">
-                <img src="img/instragram/5.png" alt="">
-                <div class="ovrelay">
-                    <a href="#">
-                        <i class="fa fa-instagram"></i>
-                    </a>
-                </div>
-            </div>
+            </c:forEach>
         </div>
         <!-- instragram_area_end -->
 
@@ -484,19 +448,19 @@
 
         <script src="js/main.js"></script>
         <script>
-                            $('#datepicker').datepicker({
-                                iconsLibrary: 'fontawesome',
-                                icons: {
-                                    rightIcon: '<span class="fa fa-caret-down"></span>'
-                                }
-                            });
-                            $('#datepicker2').datepicker({
-                                iconsLibrary: 'fontawesome',
-                                icons: {
-                                    rightIcon: '<span class="fa fa-caret-down"></span>'
-                                }
+            $('#datepicker').datepicker({
+                iconsLibrary: 'fontawesome',
+                icons: {
+                    rightIcon: '<span class="fa fa-caret-down"></span>'
+                }
+            });
+            $('#datepicker2').datepicker({
+                iconsLibrary: 'fontawesome',
+                icons: {
+                    rightIcon: '<span class="fa fa-caret-down"></span>'
+                }
 
-                            });
+            });
         </script>
 
 

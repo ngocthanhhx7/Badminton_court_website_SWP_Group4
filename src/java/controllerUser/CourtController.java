@@ -5,7 +5,10 @@
 
 package controllerUser;
 
+import dao.ContactInfoDAO;
 import dao.CourtDAO;
+import dao.InstagramFeedDAO;
+import dao.OfferDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,22 +17,14 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
+import models.ContactInfoDTO;
 import models.CourtDTO;
+import models.InstagramFeedDTO;
+import models.OfferDTO;
 
-/**
- *
- * @author nguye
- */
 @WebServlet(name="CourtController", urlPatterns={"/court"})
 public class CourtController extends HttpServlet {
    
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -55,6 +50,23 @@ public class CourtController extends HttpServlet {
         String pageParam = request.getParameter("page");
         String status = request.getParameter("status");
         String courtType = request.getParameter("courtType");
+        OfferDAO offerDAO = new OfferDAO();
+        InstagramFeedDAO dao = new InstagramFeedDAO();
+        ContactInfoDAO contactDAO = new ContactInfoDAO();
+        
+        List<ContactInfoDTO> contactInfos = contactDAO.getAllActiveContactInfo();
+        List<InstagramFeedDTO> visibleFeeds = dao.getAllFeeds()
+                .stream()
+                .filter(InstagramFeedDTO::getIsVisible)
+                .limit(5)
+                .toList();
+        
+        List<OfferDTO> allOffers = offerDAO.getActiveOffers();
+        
+        int maxOffersToShow = 3;
+        List<OfferDTO> displayedOffers = allOffers.size() > maxOffersToShow
+                ? allOffers.subList(0, maxOffersToShow)
+                : allOffers;
 
         int page = 1;
         int courtsPerPage = 2;
@@ -67,7 +79,7 @@ public class CourtController extends HttpServlet {
             }
         }
 
-        // Lọc dữ liệu
+        
         List<CourtDTO> courts = courtDAO.filterCourts(search, status, courtType);
 
         if (courts == null || courts.isEmpty()) {
@@ -92,22 +104,18 @@ public class CourtController extends HttpServlet {
             request.setAttribute("totalPages", totalPages);
         }
 
-        // Gửi lại các giá trị lọc cho form
+        
         request.setAttribute("search", search);
         request.setAttribute("status", status);
         request.setAttribute("courtType", courtType);
+        request.setAttribute("offers", displayedOffers);
+        request.setAttribute("instagramFeeds", visibleFeeds);
+        request.setAttribute("contactInfos", contactInfos);
 
         request.getRequestDispatcher("courts.jsp").forward(request, response);
     }
 
 
-    /** 
-     * Handles the HTTP <code>POST</code> method.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {

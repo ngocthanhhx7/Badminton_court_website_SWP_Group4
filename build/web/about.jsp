@@ -27,6 +27,37 @@
         <link rel="stylesheet" href="css/slicknav.css">
         <link rel="stylesheet" href="css/style.css">
         <!-- <link rel="stylesheet" href="css/responsive.css"> -->
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script>
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        colors: {
+                            primary: '#78350f', // Green
+                            secondary: '#78350f', // Red
+                        }
+                    }
+                }
+            }
+        </script>
+
+        <link rel="stylesheet" href="css/owl.carousel.min.css">
+        <script src="js/jquery.min.js"></script>
+        <script src="js/owl.carousel.min.js"></script>
+
+        <script>
+            $(document).ready(function () {
+                $('.about_active').owlCarousel({
+                    items: 1,
+                    loop: true,
+                    autoplay: true,
+                    autoplayTimeout: 6000,
+                    nav: false,
+                    dots: true
+                });
+            });
+        </script>
+        <script src="js/chat.js"></script>
     </head>
 
     <body>
@@ -365,19 +396,19 @@
 
         <script src="js/main.js"></script>
         <script>
-                            $('#datepicker').datepicker({
-                                iconsLibrary: 'fontawesome',
-                                icons: {
-                                    rightIcon: '<span class="fa fa-caret-down"></span>'
-                                }
-                            });
-                            $('#datepicker2').datepicker({
-                                iconsLibrary: 'fontawesome',
-                                icons: {
-                                    rightIcon: '<span class="fa fa-caret-down"></span>'
-                                }
+            $('#datepicker').datepicker({
+                iconsLibrary: 'fontawesome',
+                icons: {
+                    rightIcon: '<span class="fa fa-caret-down"></span>'
+                }
+            });
+            $('#datepicker2').datepicker({
+                iconsLibrary: 'fontawesome',
+                icons: {
+                    rightIcon: '<span class="fa fa-caret-down"></span>'
+                }
 
-                            });
+            });
         </script>
 
 
