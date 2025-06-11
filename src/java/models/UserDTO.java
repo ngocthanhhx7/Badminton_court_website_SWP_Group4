@@ -19,6 +19,16 @@ public class UserDTO {
     private Integer CreatedBy;
     private Timestamp CreatedAt;
     private Timestamp UpdatedAt;
+    private String verifyCode;
+    private boolean isVerified;
+    public String getVerifyCode() {
+        return verifyCode;
+    }
+
+    public void setVerifyCode(String verifyCode) {
+        this.verifyCode = verifyCode;
+    }
+
 
     public UserDTO() {
     }
