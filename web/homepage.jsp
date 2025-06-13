@@ -56,7 +56,7 @@
                     items: 1,
                     loop: true,
                     autoplay: true,
-                    autoplayTimeout: 6000,
+                    autoplayTimeout: 10000,
                     nav: false,
                     dots: true
                 });
@@ -92,6 +92,7 @@
         <!-- header-end -->
 
         <jsp:include page="chatbox.jsp" /> 
+        <jsp:include page="facebook-messenger.jsp" /> 
 
         <!-- slider_area_start -->
         <div class="slider_area">

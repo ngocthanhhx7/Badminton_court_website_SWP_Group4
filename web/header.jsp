@@ -65,25 +65,6 @@
                     </div>
                     <div class="col-xl-5 col-lg-4 d-none d-lg-block">
                         <div class="book_room d-flex align-items-center justify-content-end">
-                            <div class="social_links me-3">
-                                <ul class="d-flex align-items-center mb-0 list-unstyled">
-                                    <li>
-                                        <a href="https://www.facebook.com/ngocthanh552004/">
-                                            <i class="fa fa-facebook-square"></i>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="https://www.facebook.com/ngocthanh552004/">
-                                            <i class="fa fa-twitter"></i>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="https://www.facebook.com/ngocthanh552004/">
-                                            <i class="fa fa-instagram"></i>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
                             <div class="book_btn d-flex gap-2">
                                 <a href="./Login" class="btn btn-outline-primary">Login</a>
                                 <a href="register.jsp" class="btn btn-primary">Register</a>

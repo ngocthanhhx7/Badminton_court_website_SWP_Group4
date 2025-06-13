@@ -62,9 +62,6 @@
 
     </head>
     <body>
-        <button id="chatbox-toggle-btn" onclick="showChatbox()">
-            <i class="fa fa-comments"></i>
-        </button>
 
         <div id="chatbox-container" style="position: fixed; bottom: 30px; right: 30px; width: 350px; z-index: 9999;">
             <div class="card shadow">

@@ -81,4 +81,12 @@
         <filter-name>StaffAccessFilter</filter-name>
         <url-pattern>/home</url-pattern>
     </filter-mapping>
+    <filter>
+        <filter-name>ProfileCheckFilter</filter-name>
+        <filter-class>filter.ProfileCheckFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>ProfileCheckFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 </web-app>
