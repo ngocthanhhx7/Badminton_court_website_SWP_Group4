@@ -44,8 +44,11 @@
         </script>
 
         <link rel="stylesheet" href="css/owl.carousel.min.css">
+        <link rel="stylesheet" href="css/page-transitions.css">
         <script src="js/jquery.min.js"></script>
         <script src="js/owl.carousel.min.js"></script>
+        <script src="js/effects.js"></script>
+        <script src="js/page-transitions.js"></script>
 
         <script>
             $(document).ready(function () {
@@ -172,7 +175,7 @@
                                         <li>${offer.capacity} người</li>
                                         <li>${offer.isVIP ? "VIP Service" : "Standard Service"}</li>
                                     </ul>
-                                    <a href="bookCourt?offerID=${offer.offerID}" class="book_now">book now</a>
+                                    <a href="./court" class="book_now">book now</a>
                                 </div>
                             </div>
                         </c:forEach>

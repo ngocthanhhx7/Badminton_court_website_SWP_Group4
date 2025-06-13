@@ -35,6 +35,13 @@
         <!-- <link rel="stylesheet" href="css/responsive.css"> -->
     </head>
 
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/page-transitions.css">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/effects.js"></script>
+    <script src="js/page-transitions.js"></script>
+
     <body>
         <!--[if lte IE 9]>
                  <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
@@ -644,19 +651,19 @@
 
         <script src="js/main.js"></script>
         <script>
-                            $('#datepicker').datepicker({
-                                iconsLibrary: 'fontawesome',
-                                icons: {
-                                    rightIcon: '<span class="fa fa-caret-down"></span>'
-                                }
-                            });
-                            $('#datepicker2').datepicker({
-                                iconsLibrary: 'fontawesome',
-                                icons: {
-                                    rightIcon: '<span class="fa fa-caret-down"></span>'
-                                }
+                                    $('#datepicker').datepicker({
+                                        iconsLibrary: 'fontawesome',
+                                        icons: {
+                                            rightIcon: '<span class="fa fa-caret-down"></span>'
+                                        }
+                                    });
+                                    $('#datepicker2').datepicker({
+                                        iconsLibrary: 'fontawesome',
+                                        icons: {
+                                            rightIcon: '<span class="fa fa-caret-down"></span>'
+                                        }
 
-                            });
+                                    });
         </script>
 
 

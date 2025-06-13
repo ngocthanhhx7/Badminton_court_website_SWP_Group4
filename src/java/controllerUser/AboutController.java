@@ -5,6 +5,12 @@
 package controllerUser;
 
 import dao.AboutSectionDAO;
+import dao.ContactInfoDAO;
+import dao.CourtDAO;
+import dao.InstagramFeedDAO;
+import dao.OfferDAO;
+import dao.SliderDAO;
+import dao.VideoDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,6 +20,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import models.AboutSectionDTO;
+import models.ContactInfoDTO;
+import models.CourtDTO;
+import models.InstagramFeedDTO;
+import models.OfferDTO;
+import models.SliderDTO;
+import models.VideoDTO;
 
 @WebServlet(name = "AboutController", urlPatterns = {"/about"})
 public class AboutController extends HttpServlet {
@@ -38,13 +50,84 @@ public class AboutController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-//        processRequest(request, response);
+        CourtDAO courtDAO = new CourtDAO();
+        String search = request.getParameter("search");
+        String pageParam = request.getParameter("page");
+        String status = request.getParameter("status");
+        String courtType = request.getParameter("courtType");
+        SliderDAO sliderDAO = new SliderDAO();
         AboutSectionDAO aboutDAO = new AboutSectionDAO();
-        
+        VideoDAO videoDAO = new VideoDAO();
+        OfferDAO offerDAO = new OfferDAO();
+        ContactInfoDAO contactDAO = new ContactInfoDAO();
+        InstagramFeedDAO dao = new InstagramFeedDAO();
+
+        List<SliderDTO> sliders = sliderDAO.getAllActiveSliders();
         List<AboutSectionDTO> aboutSections = aboutDAO.getAllActiveSections();
+        List<VideoDTO> videoList = videoDAO.getAllVideos();
+        List<OfferDTO> allOffers = offerDAO.getActiveOffers();
+        List<ContactInfoDTO> contactInfos = contactDAO.getAllActiveContactInfo();
+        List<InstagramFeedDTO> visibleFeeds = dao.getAllFeeds()
+                .stream()
+                .filter(InstagramFeedDTO::getIsVisible)
+                .limit(5)
+                .toList();
+
+        if (videoList != null && !videoList.isEmpty()) {
+            request.setAttribute("video", videoList.get(0)); // chỉ lấy video đầu tiên
+        }
+
+        int maxOffersToShow = 3;
+        List<OfferDTO> displayedOffers = allOffers.size() > maxOffersToShow
+                ? allOffers.subList(0, maxOffersToShow)
+                : allOffers;
+
+        int page = 1;
+        int courtsPerPage = 2;
+
+        if (pageParam != null) {
+            try {
+                page = Integer.parseInt(pageParam);
+            } catch (NumberFormatException e) {
+                page = 1;
+            }
+        }
+
         
+        List<CourtDTO> courts = courtDAO.filterCourts(search, status, courtType);
+
+        if (courts == null || courts.isEmpty()) {
+            request.setAttribute("message", "No court found");
+        } else {
+            int totalCourts = courts.size();
+            int totalPages = (int) Math.ceil((double) totalCourts / courtsPerPage);
+
+            if (page < 1) {
+                page = 1;
+            }
+            if (page > totalPages) {
+                page = totalPages;
+            }
+
+            int start = (page - 1) * courtsPerPage;
+            int end = Math.min(start + courtsPerPage, totalCourts);
+            List<CourtDTO> pagedCourts = courts.subList(start, end);
+
+            request.setAttribute("courts", pagedCourts);
+            request.setAttribute("currentPage", page);
+            request.setAttribute("totalPages", totalPages);
+        }
+
+        // Gửi lại các giá trị lọc cho form
+        request.setAttribute("search", search);
+        request.setAttribute("status", status);
+        request.setAttribute("courtType", courtType);
+        request.setAttribute("sliders", sliders);
         request.setAttribute("aboutSections", aboutSections);
-        
+        request.setAttribute("offers", displayedOffers);
+        request.setAttribute("contactInfos", contactInfos);
+        request.setAttribute("instagramFeeds", visibleFeeds);
+
         request.getRequestDispatcher("about.jsp").forward(request, response);
     }
 

@@ -72,4 +72,13 @@
         <servlet-name>CourtDetailController</servlet-name>
         <url-pattern>/court-detail</url-pattern>
     </servlet-mapping>
+    <!-- Staff Access Filter -->
+    <filter>
+        <filter-name>StaffAccessFilter</filter-name>
+        <filter-class>filter.StaffAccessFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>StaffAccessFilter</filter-name>
+        <url-pattern>/home</url-pattern>
+    </filter-mapping>
 </web-app>

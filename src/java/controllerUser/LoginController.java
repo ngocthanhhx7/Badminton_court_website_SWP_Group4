@@ -125,6 +125,23 @@ public class LoginController extends HttpServlet {
             }
 
             handleRememberMe(request, response, emailOrUsername, password);
+            
+            // Chuyển hướng dựa trên Role
+            String role = user.getRole();
+            if (role != null) {
+                switch (role.toLowerCase()) {
+                    case "customer":
+                        response.sendRedirect("./home");
+                        return;
+                    case "staff":
+                        response.sendRedirect("./manage-page.jsp");
+                        return;
+                    default:
+                        response.sendRedirect("./home");
+                        return;
+                }
+            }
+            
             response.sendRedirect("./home");
             return;
         }

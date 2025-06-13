@@ -1,12 +1,14 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page import="models.UserDTO, models.AdminDTO, models.GoogleAccount" %>
+
 <!doctype html>
 <html class="no-js" lang="zxx">
 
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>BadmintonHub</title>
+        <title>About</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -42,8 +44,11 @@
         </script>
 
         <link rel="stylesheet" href="css/owl.carousel.min.css">
+        <link rel="stylesheet" href="css/page-transitions.css">
         <script src="js/jquery.min.js"></script>
         <script src="js/owl.carousel.min.js"></script>
+        <script src="js/effects.js"></script>
+        <script src="js/page-transitions.js"></script>
 
         <script>
             $(document).ready(function () {
@@ -94,85 +99,104 @@
         <!-- about_area_start -->
         <div class="about_area">
             <div class="container">
-                <div class="row">
-                    <div class="col-xl-5 col-lg-5">
-                        <div class="about_info">
-                            <div class="section_title mb-20px">
-                                <span>About Us</span>
-                                <h3>Trải Nghiệm Thể Thao Chuẩn <br>
-                                    Chuyên Nghiệp
-                                </h3>
+                <div class="about_active owl-carousel">
+                    <c:forEach var="about" items="${aboutSections}">
+                        <div class="row">
+                            <div class="col-xl-5 col-lg-5">
+                                <div class="about_info">
+                                    <div class="section_title mb-20px">
+                                        <span>About Us</span>
+                                        <h3>${about.title}<br>${about.subtitle}</h3>
+                                    </div>
+                                    <p>${about.content}</p>
+                                    <a href="#" class="line-button">Learn More</a>
+                                </div>
                             </div>
-                            <p>Mang đến trải nghiệm thể thao năng động và tiện nghi. Không gian rộng rãi, hệ thống sân chuẩn thi đấu cùng dịch vụ đặt sân trực tuyến tiện lợi giúp bạn dễ dàng chủ động thời gian. Chúng tôi tạo ra môi trường luyện tập thoải mái, thân thiện, phù hợp mọi lứa tuổi và trình độ.</p>
-                            <a href="#" class="line-button">Learn More</a>
+                            <div class="col-xl-7 col-lg-7">
+                                <div class="about_thumb d-flex">
+                                    <div class="img_1">
+                                        <img src="${about.image1}" alt="">
+                                    </div>
+                                    <div class="img_2">
+                                        <img src="${about.image2}" alt="">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-xl-7 col-lg-7">
-                        <div class="about_thumb d-flex">
-                            <div class="img_1">
-                                <img src="img/about/about_1.png" alt="">
-                            </div>
-                            <div class="img_2">
-                                <img src="img/about/about_2.png" alt="">
-                            </div>
-                        </div>
-                    </div>
+                    </c:forEach>
                 </div>
             </div>
         </div>
         <!-- about_area_end -->
 
-        <!-- about_info_area_start -->
-        <div class="about_info_area">
-            <div class="about_active owl-carousel">
-                <div class="single_slider about_bg_1"></div>
-                <div class="single_slider about_bg_1"></div>
-                <div class="single_slider about_bg_1"></div>
-                <div class="single_slider about_bg_1"></div>
+        <!-- video_area_start -->
+        <c:if test="${not empty video}">
+            <div class="video_area video_bg overlay" style="background-image: url('${video.thumbnailUrl}');">
+                <div class="video_area_inner text-center">
+                    <span>${video.title}</span>
+                    <h3>${video.subtitle}</h3>
+                    <a href="${video.videoUrl}" class="video_btn popup-video">
+                        <i class="fa fa-play"></i>
+                    </a>
+                </div>
             </div>
-        </div>
-        <!-- about_info_area_start -->
+        </c:if>
+        <!-- video_area_end -->
 
-        <!-- about_main_info_start -->
-        <div class="about_main_info">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-6 col-md-6">
-                        <div class="single_about_info">
-                            <h3>Dụng Cụ Thi Đấu <br>
-                                Tiêu Chuẩn</h3>
-                            <p>Chúng tôi cung cấp đầy đủ dụng cụ cầu lông chất lượng cao, phù hợp với mọi đối tượng từ người chơi phong trào đến vận động viên chuyên nghiệp.<br> Tại sân, bạn có thể thuê hoặc mua các loại vợt, cầu lông, giày thể thao và phụ kiện đạt chuẩn thi đấu. <br> Tất cả dụng cụ đều được bảo quản kỹ lưỡng, đảm bảo độ bền và hiệu suất khi sử dụng. <br> Bạn chỉ cần đến sân, còn lại chúng tôi đã chuẩn bị sẵn sàng cho một trận cầu trọn vẹn!
-                            </p>
-                        </div>
-                    </div>
-                    <div class="col-xl-6 col-md-6">
-                        <div class="single_about_info">
-                            <h3>Dịch Vụ Nước Uống & <br>
-                                Thức Ăn Nhẹ</h3>
-                            <p>Chúng tôi hiểu rằng thể thao cần đi kèm với chế độ nghỉ ngơi và bổ sung năng lượng hợp lý.<br> Khu vực nghỉ ngơi tại sân luôn sẵn sàng phục vụ các loại nước uống thể thao, nước suối mát lạnh cùng các <br> món ăn nhẹ lành mạnh như bánh năng lượng, trái cây hoặc sữa chua. <br> Bạn có thể dễ dàng nạp lại năng lượng sau mỗi trận đấu để tiếp tục luyện tập hiệu quả và an toàn.<br>
-                            </p>
-                        </div>
+        <!-- about_area_start -->
+        <c:if test="${empty param.search}">
+            <div class="about_area">
+                <div class="container">
+                    <div class="about_active owl-carousel">
+                        <c:forEach var="about" items="${aboutSections}">
+                            <div class="row">
+                                <div class="col-xl-7 col-lg-7">
+                                    <div class="about_thumb2 d-flex">
+                                        <div class="img_1">
+                                            <img src="${about.image1}" alt="">
+                                        </div>
+                                        <div class="img_2">
+                                            <img src="${about.image2}" alt="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-5 col-lg-5">
+                                    <div class="about_info">
+                                        <div class="section_title mb-20px">
+                                            <span>${about.sectionType}</span>
+                                            <h3>${about.title} <br> ${about.subtitle}</h3>
+                                        </div>
+                                        <p>${about.content}</p>
+                                        <a href="about.jsp" class="line-button">Learn More</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </c:forEach>
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- about_main_info_end -->
+        </c:if>
+        <!-- about_area_end -->
+
+
 
         <!-- forQuery_start -->
-        <div class="forQuery">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-10 offset-xl-1 col-md-12">
-                        <div class="Query_border">
-                            <div class="row align-items-center justify-content-center">
-                                <div class="col-xl-6 col-md-6">
-                                    <div class="Query_text">
-                                        <p>For Reservation 0r Query?</p>
+        <c:forEach var="contact" items="${contactInfos}">
+            <div class="forQuery">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-10 offset-xl-1 col-md-12">
+                            <div class="Query_border">
+                                <div class="row align-items-center justify-content-center">
+                                    <div class="col-xl-6 col-md-6">
+                                        <div class="Query_text">
+                                            <p>${contact.message}</p>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-xl-6 col-md-6">
-                                    <div class="phone_num">
-                                        <a href="#" class="mobile_no">+84981944060</a>
+                                    <div class="col-xl-6 col-md-6">
+                                        <div class="phone_num">
+                                            <a href="tel:${contact.phoneNumber}" class="mobile_no">${contact.phoneNumber}</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -180,53 +204,23 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </c:forEach>
         <!-- forQuery_end-->
 
-        <!-- instragram_area_start -->
+        <!--                 instragram_area_start -->
         <div class="instragram_area">
-            <div class="single_instagram">
-                <img src="img/instragram/1.png" alt="">
-                <div class="ovrelay">
-                    <a href="#">
-                        <i class="fa fa-instagram"></i>
-                    </a>
+            <c:forEach var="feed" items="${instagramFeeds}">
+                <div class="single_instagram">
+                    <img src="${feed.imageUrl}" alt="Instagram Feed">
+                    <div class="ovrelay">
+                        <a href="${feed.instagramLink}" target="_blank">
+                            <i class="fa fa-instagram"></i>
+                        </a>
+                    </div>
                 </div>
-            </div>
-            <div class="single_instagram">
-                <img src="img/instragram/2.png" alt="">
-                <div class="ovrelay">
-                    <a href="#">
-                        <i class="fa fa-instagram"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="single_instagram">
-                <img src="img/instragram/3.png" alt="">
-                <div class="ovrelay">
-                    <a href="#">
-                        <i class="fa fa-instagram"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="single_instagram">
-                <img src="img/instragram/4.png" alt="">
-                <div class="ovrelay">
-                    <a href="#">
-                        <i class="fa fa-instagram"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="single_instagram">
-                <img src="img/instragram/5.png" alt="">
-                <div class="ovrelay">
-                    <a href="#">
-                        <i class="fa fa-instagram"></i>
-                    </a>
-                </div>
-            </div>
+            </c:forEach>
         </div>
-        <!-- instragram_area_end -->
+        <!--                 instragram_area_end -->
 
         <!-- footer -->
         <footer class="footer" >

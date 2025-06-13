@@ -1,0 +1,182 @@
+/* Hiệu ứng chuyển trang nâng cao */
+.page-transition {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    pointer-events: none;
+    background: linear-gradient(45deg, #2196F3, #00BCD4);
+    transform: scale(0);
+    opacity: 0;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform, opacity;
+}
+
+.page-transition.active {
+    transform: scale(1);
+    opacity: 1;
+}
+
+/* Hiệu ứng Reveal */
+.reveal-content {
+    position: relative;
+    overflow: hidden;
+}
+
+.reveal-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, #2196F3, #00BCD4);
+    transform: translateX(-100%);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1;
+    will-change: transform;
+}
+
+.reveal-content.reveal-out::before {
+    transform: translateX(0);
+}
+
+/* Hiệu ứng particles */
+.particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9998;
+    pointer-events: none;
+}
+
+.particle {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0;
+}
+
+/* Hiệu ứng nội dung */
+.fade-content {
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform, opacity;
+}
+
+.fade-content.fade-out {
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+/* Hiệu ứng slide với perspective */
+.slide-content {
+    transform: perspective(1000px) translateX(0) rotateY(0);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-origin: center center;
+    will-change: transform;
+}
+
+.slide-content.slide-out {
+    transform: perspective(1000px) translateX(-100%) rotateY(10deg);
+}
+
+/* Hiệu ứng zoom với blur */
+.zoom-content {
+    transform: scale(1);
+    filter: blur(0);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform, filter;
+}
+
+.zoom-content.zoom-out {
+    transform: scale(0.98);
+    filter: blur(2px);
+}
+
+/* Hiệu ứng flip */
+.flip-content {
+    transform: rotateX(0);
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-origin: center center;
+    perspective: 1000px;
+}
+
+.flip-content.flip-out {
+    transform: rotateX(90deg);
+}
+
+/* Hiệu ứng wave */
+.wave-content {
+    position: relative;
+    overflow: hidden;
+}
+
+.wave-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, #2196F3, #00BCD4);
+    transform: translateY(100%);
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: -1;
+}
+
+.wave-content.wave-out::before {
+    transform: translateY(0);
+}
+
+/* Animation keyframes */
+@keyframes particleAnimation {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--tx), var(--ty)) scale(0);
+        opacity: 0;
+    }
+}
+
+/* Hiệu ứng loading spinner */
+.loading-spinner {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #2196F3;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    z-index: 10000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    will-change: transform;
+}
+
+.loading-spinner.active {
+    opacity: 1;
+}
+
+@keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Tối ưu hóa hiệu suất */
+* {
+    backface-visibility: hidden;
+    -webkit-font-smoothing: antialiased;
+} 

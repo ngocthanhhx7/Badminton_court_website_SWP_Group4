@@ -193,6 +193,31 @@ public class CourtDAO {
 }
 
 
+    public List<CourtDTO> getSimilarCourts(Long excludeCourtId, int limit) {
+        String sql = "SELECT * FROM Courts WHERE CourtID <> ? ORDER BY RAND() LIMIT ?";
+        List<CourtDTO> similarCourts = new ArrayList<>();
+        try (Connection connection = DBUtils.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setLong(1, excludeCourtId);
+            preparedStatement.setInt(2, limit);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                CourtDTO court = CourtDTO.builder()
+                        .courtId(resultSet.getLong("CourtID"))
+                        .courtName(resultSet.getString("CourtName"))
+                        .description(resultSet.getString("Description"))
+                        .courtType(resultSet.getString("CourtType"))
+                        .status(resultSet.getString("Status"))
+                        .courtImage(resultSet.getString("CourtImage"))
+                        .build();
+                similarCourts.add(court);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return similarCourts;
+    }
+
     public static void main(String[] args) {
         CourtDAO dao = new CourtDAO();
         List<CourtDTO> list = dao.getAllCourts();

@@ -86,13 +86,10 @@ public class UserLoginController extends HttpServlet {
             return "/default/dashboard";
         }
         switch (role.toLowerCase()) {
-            case "patient":
-                return "/views/user/Patient/PatientDashBoard.jsp";
-            case "doctor":
-            case "nurse":
-                return "/views/user/DoctorNurse/EmployeeDashBoard.jsp";
-            case "receptionist":
-                return "/views/user/Receptionist/ReceptionistDashBoard.jsp";
+            case "customer":
+                return "/home";
+            case "staff":
+                return "/manage-page.jsp";
             default:
                 return "/default/dashboard";
         }
@@ -103,13 +100,10 @@ public class UserLoginController extends HttpServlet {
             return "/default/completeProfile";
         }
         switch (role.toLowerCase()) {
-            case "patient":
-                return "/views/user/Patient/CompleteProfilePatient.jsp";
-            case "doctor":
-            case "nurse":
-                return "/views/user/DoctorNurse/CompleteProfileDoctorNurse.jsp";
-            case "receptionist":
-                return "/views/user/Receptionist/CompleteProfileReceptionist.jsp";
+            case "customer":
+                return "/completeProfile.jsp";
+            case "staff":
+                return "/completeProfile.jsp";
             default:
                 return "/default/completeProfile";
         }

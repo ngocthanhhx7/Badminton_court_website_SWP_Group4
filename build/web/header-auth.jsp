@@ -36,9 +36,9 @@
                         <div class="main-menu d-none d-lg-block">
                             <nav>
                                 <ul id="navigation">
-                                    <li><a class="active" href="./home">home</a></li>
+                                    <li><a href="./home">home</a></li>
                                     <li><a href="./court">Courts</a></li>
-                                    <li><a href="about.jsp">About</a></li>
+                                    <li><a href="./about">About</a></li>
                                     <li><a href="#">blog <i class="ti-angle-down"></i></a>
                                         <ul class="submenu">
                                             <li><a href="blog.jsp">blog</a></li>
@@ -50,7 +50,6 @@
                                             <li><a href="./court-manager">Page Management</a></li>
                                         </ul>
                                     </li>
-                                    <li><a href="contact.jsp">Contact</a></li>
                                 </ul>
                             </nav>
                         </div>
@@ -64,8 +63,6 @@
                     </div>
                     <div class="col-xl-5 col-lg-4 d-none d-lg-block">
                         <div class="book_court d-flex align-items-center justify-content-end">
-
-                            <!-- Social links -->
                             <div class="socail_links mb-3">
                                 <ul class="list-inline mb-0 d-flex gap-3 justify-content-end">
                                     <li class="list-inline-item">
@@ -79,33 +76,36 @@
                                     </li>
                                 </ul>
                             </div>
-
-                            <!-- Welcome and Account -->
-                            <!-- Welcome + Avatar + Username -->
-                            <div class="d-flex align-items-center gap-3 mb-2">
-                                <c:choose>
-                                    <c:when test="${sessionScope.accType == 'google'}">
-                                        <img src="${sessionScope.acc.picture}" alt="Avatar" class="rounded-circle" width="40" height="40">
-                                        <div>
-                                            <span class="text-dark">Welcome,</span>
-                                            <a href="view-profile.jsp" class="text-primary fw-bold">${sessionScope.acc.name}</a>
+                            <!-- Welcome, Name, Avatar, Dropdown -->
+                            <div class="dropdown d-flex align-items-center gap-3 mb-2">
+                                <span class="me-2" style="color: #fff;">Welcome,</span>
+                                <% 
+                                    Object accObj = session.getAttribute("acc");
+                                    String avatarUrl = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+                                    if (accObj != null && accObj instanceof models.UserDTO) {
+                                        models.UserDTO user = (models.UserDTO) accObj;
+                                        String gender = user.getGender();
+                                        if ("Male".equalsIgnoreCase(gender)) {
+                                            avatarUrl = "https://symbols.vn/wp-content/uploads/2021/11/Anh-avatar-de-thuong-cho-nam.jpg";
+                                        } else if ("Female".equalsIgnoreCase(gender)) {
+                                            avatarUrl = "https://img6.thuthuatphanmem.vn/uploads/2022/10/23/hinh-avatar-chibi-cute_031501070.jpg";
+                                        }
+                                    }
+                                %>
+                                <img src="<%= avatarUrl %>" alt="Avatar" class="rounded-circle dropdown-toggle" width="40" height="40" style="cursor:pointer;" id="avatarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <ul class="dropdown-menu dropdown-menu-end mt-2" aria-labelledby="avatarDropdown">
+                                    <li>
+                                        <div class="dropdown-header text-center fw-bold">
+                                            ${sessionScope.acc.username}
                                         </div>
-                                    </c:when>
-
-                                    <c:otherwise>
-                                        <div>
-                                            <span class="text-dark">Welcome,</span>
-                                            <a href="view-profile.jsp" class="text-primary fw-bold">${sessionScope.acc.username}</a>
-                                        </div>
-                                    </c:otherwise>
-                                </c:choose>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="view-profile.jsp"><i class="fa fa-user me-2"></i>View Profile</a></li>
+                                    <li><a class="dropdown-item" href="change-password.jsp"><i class="fa fa-key me-2"></i>Change Password</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item text-danger" href="./logout"><i class="fa fa-sign-out me-2"></i>Logout</a></li>
+                                </ul>
                             </div>
-
-                            <!-- Logout Button -->
-                            <div class="text-end">
-                                <a href="./logout" class="btn btn-danger px-4">Logout</a>
-                            </div>
-
                         </div>
                     </div>
 

@@ -44,8 +44,11 @@
         </script>
 
         <link rel="stylesheet" href="css/owl.carousel.min.css">
+        <link rel="stylesheet" href="css/page-transitions.css">
         <script src="js/jquery.min.js"></script>
         <script src="js/owl.carousel.min.js"></script>
+        <script src="js/effects.js"></script>
+        <script src="js/page-transitions.js"></script>
 
         <script>
             $(document).ready(function () {
@@ -98,7 +101,7 @@
             <div class="container mx-auto">
 
                 <!-- Form tìm kiếm -->
-                <form method="get" action="./court" class="mb-10 max-w-4xl mx-auto flex flex-wrap gap-2 md:gap-4 items-center justify-center">
+                <form method="get" action="./home" class="mb-10 max-w-4xl mx-auto flex flex-wrap gap-2 md:gap-4 items-center justify-center">
                     <!-- Ô tìm kiếm -->
                     <input 
                         type="text" 
@@ -174,7 +177,7 @@
                     <div class="flex justify-center mt-8 space-x-2">
                         <!-- Nút lùi lại -->
                         <c:if test="${currentPage > 1}">
-                            <a href="court?page=${currentPage - 1}&search=${param.search}&status=${param.status}&courtType=${param.courtType}"
+                            <a href="home?page=${currentPage - 1}&search=${param.search}&status=${param.status}&courtType=${param.courtType}"
                                class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition duration-200">
                                 &laquo; 🏍️
                             </a>
@@ -182,7 +185,7 @@
 
                         <!-- Hiển thị số trang -->
                         <c:forEach begin="1" end="${totalPages}" var="i">
-                            <a href="court?page=${i}&search=${param.search}&status=${param.status}&courtType=${param.courtType}"
+                            <a href="home?page=${i}&search=${param.search}&status=${param.status}&courtType=${param.courtType}"
                                class="px-4 py-2 rounded ${i == currentPage ? 'bg-secondary text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-300'} transition duration-200">
                                 ${i}
                             </a>
@@ -190,7 +193,7 @@
 
                         <!-- Nút tiến -->
                         <c:if test="${currentPage < totalPages}">
-                            <a href="court?page=${currentPage + 1}&search=${param.search}&status=${param.status}&courtType=${param.courtType}"
+                            <a href="home?page=${currentPage + 1}&search=${param.search}&status=${param.status}&courtType=${param.courtType}"
                                class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition duration-200">
                                 🛬 &raquo;
                             </a>
@@ -462,7 +465,6 @@
 
             });
         </script>
-
 
 
     </body>
