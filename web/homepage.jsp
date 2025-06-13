@@ -91,6 +91,8 @@
 
         <!-- header-end -->
 
+        <jsp:include page="chatbox.jsp" /> 
+
         <!-- slider_area_start -->
         <div class="slider_area">
             <div class="slider_active owl-carousel">
