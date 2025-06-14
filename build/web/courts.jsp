@@ -177,7 +177,7 @@
                     <div class="flex justify-center mt-8 space-x-2">
                         <!-- Nút lùi lại -->
                         <c:if test="${currentPage > 1}">
-                            <a href="home?page=${currentPage - 1}&search=${param.search}&status=${param.status}&courtType=${param.courtType}"
+                            <a href="court?page=${currentPage - 1}&search=${param.search}&status=${param.status}&courtType=${param.courtType}"
                                class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition duration-200">
                                 &laquo; 🏍️
                             </a>
@@ -185,7 +185,7 @@
 
                         <!-- Hiển thị số trang -->
                         <c:forEach begin="1" end="${totalPages}" var="i">
-                            <a href="home?page=${i}&search=${param.search}&status=${param.status}&courtType=${param.courtType}"
+                            <a href="court?page=${i}&search=${param.search}&status=${param.status}&courtType=${param.courtType}"
                                class="px-4 py-2 rounded ${i == currentPage ? 'bg-secondary text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-300'} transition duration-200">
                                 ${i}
                             </a>
@@ -193,7 +193,7 @@
 
                         <!-- Nút tiến -->
                         <c:if test="${currentPage < totalPages}">
-                            <a href="home?page=${currentPage + 1}&search=${param.search}&status=${param.status}&courtType=${param.courtType}"
+                            <a href="court?page=${currentPage + 1}&search=${param.search}&status=${param.status}&courtType=${param.courtType}"
                                class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition duration-200">
                                 🛬 &raquo;
                             </a>

@@ -50,6 +50,7 @@
         <script src="js/effects.js"></script>
         <script src="js/page-transitions.js"></script>
 
+
         <script>
             $(document).ready(function () {
                 $('.about_active').owlCarousel({
@@ -91,8 +92,9 @@
 
         <!-- header-end -->
 
-        <jsp:include page="chatbox.jsp" /> 
+
         <jsp:include page="facebook-messenger.jsp" /> 
+        <jsp:include page="chatbox.jsp" /> 
 
         <!-- slider_area_start -->
         <div class="slider_area">
@@ -377,7 +379,7 @@
 
         <!--                 forQuery_end-->
 
-        <!--                 instragram_area_start -->
+        <!-- instragram_area_start -->
         <div class="instragram_area">
             <c:forEach var="feed" items="${instagramFeeds}">
                 <div class="single_instagram">
@@ -390,7 +392,7 @@
                 </div>
             </c:forEach>
         </div>
-        <!--                 instragram_area_end -->
+        <!-- instragram_area_end -->
 
         <!-- footer -->
         <footer class="footer" >
@@ -561,19 +563,19 @@
 
         <script src="js/main.js"></script>
         <script>
-                                    $('#datepicker').datepicker({
-                                        iconsLibrary: 'fontawesome',
-                                        icons: {
-                                            rightIcon: '<span class="fa fa-caret-down"></span>'
-                                        }
-                                    });
-                                    $('#datepicker2').datepicker({
-                                        iconsLibrary: 'fontawesome',
-                                        icons: {
-                                            rightIcon: '<span class="fa fa-caret-down"></span>'
-                                        }
+            $('#datepicker').datepicker({
+                iconsLibrary: 'fontawesome',
+                icons: {
+                    rightIcon: '<span class="fa fa-caret-down"></span>'
+                }
+            });
+            $('#datepicker2').datepicker({
+                iconsLibrary: 'fontawesome',
+                icons: {
+                    rightIcon: '<span class="fa fa-caret-down"></span>'
+                }
 
-                                    });
+            });
         </script>
 
 

@@ -72,7 +72,7 @@ public class HomepageController extends HttpServlet {
                 .toList();
 
         if (videoList != null && !videoList.isEmpty()) {
-            request.setAttribute("video", videoList.get(0)); // chỉ lấy video đầu tiên
+            request.setAttribute("video", videoList.get(0)); 
         }
 
         int maxOffersToShow = 3;
@@ -116,7 +116,6 @@ public class HomepageController extends HttpServlet {
             request.setAttribute("totalPages", totalPages);
         }
 
-        // Gửi lại các giá trị lọc cho form
         request.setAttribute("search", search);
         request.setAttribute("status", status);
         request.setAttribute("courtType", courtType);
