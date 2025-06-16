@@ -40,8 +40,8 @@ public class RegisterController extends HttpServlet {
                 request.getRequestDispatcher("register.jsp").forward(request, response);
                 return;
             }
-
-            String hashedPwd = PasswordUtil.hashMD5(rawPwd);
+String hashedPwd = PasswordUtil.hashPassword(rawPwd);
+            
             String verify_code = generateVerifyCode();
 
             UserDTO user = new UserDTO();
@@ -63,7 +63,7 @@ public class RegisterController extends HttpServlet {
 
             if (success) {
                 try {
-                    EmailUtils.sendEmail(email, verify_code);
+                    EmailUtils.sendVerificationEmail(email, verify_code);
 
                     // Lưu vào session để verify.jsp dùng lại
                     HttpSession session = request.getSession();

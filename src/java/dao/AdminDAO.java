@@ -78,8 +78,8 @@ public class AdminDAO {
     }
 
     private void validateEmail(String email) throws SQLException {
-        if (email == null || email.trim().isEmpty() || !email.endsWith("@gmail.com") || email.equals("@gmail.com")) {
-            throw new SQLException("Email phải có đuôi @gmail.com.");
+        if (email == null || email.trim().isEmpty() || !email.endsWith(".com") || email.equals(".com")) {
+            throw new SQLException("Email phải có đuôi .com.");
         }
     }
 

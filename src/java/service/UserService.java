@@ -58,15 +58,17 @@ public class UserService {
 
     // Xác thực người dùng khi đăng nhập
     public UserDTO authenticateUser(String emailOrUsername, String password) throws SQLException {
-        UserDTO user = userDAO.findUserByEmailOrUsername(emailOrUsername);
-        if (user == null) {
-            return null;
-        }
-        if (BCrypt.checkpw(password, user.getPassword())) {
-            return user;
-        }
+    UserDTO user = userDAO.findUserByEmailOrUsername(emailOrUsername);
+    if (user == null) {
         return null;
     }
+    String hashed = user.getPassword();
+    // Phải dùng checkpw mới xác minh được
+    if (BCrypt.checkpw(password, hashed)) {
+        return user;
+    }
+    return null;
+}
 
     // Kiểm tra xem user đã hoàn thiện hồ sơ chưa
     public boolean isProfileComplete(UserDTO user) {
@@ -82,10 +84,10 @@ public class UserService {
         userDAO.updateUserProfile(user);
     }
 
-    // Validate email: must end with @gmail.com
+    // Validate email: must end with .com
     private void validateEmail(String email) throws IllegalArgumentException {
-        if (email == null || email.trim().isEmpty() || !email.endsWith("@gmail.com") || email.equals("@gmail.com")) {
-            throw new IllegalArgumentException("Email phải có đuôi @gmail.com.");
+        if (email == null || email.trim().isEmpty() || !email.endsWith(".com") || email.equals(".com")) {
+            throw new IllegalArgumentException("Email phải có đuôi .com.");
         }
     }
 
@@ -105,6 +107,7 @@ public class UserService {
             throw new IllegalArgumentException("Mật khẩu phải có ít nhất 8 ký tự, 1 chữ cái in hoa, 1 ký tự đặc biệt và 1 số.");
         }
     }
+    
 
     // New method to update password
     public boolean updatePassword(String email, String newPassword) throws SQLException {
@@ -169,8 +172,12 @@ public class UserService {
     return users != null ? users : new ArrayList<>();
 }
 
+
 public UserDTO getEmpolyeeByID(int userID) throws SQLException {
     return userDAO.getEmployeeByID(userID);
+}
+public UserDTO getUserByEmail(String email) throws SQLException {
+    return userDAO.findUserByEmailOrUsername(email); // Nếu bạn đã có hàm này trong DAO
 }
   public boolean UpdateEmployee(UserDTO user) throws SQLException {
         try {
