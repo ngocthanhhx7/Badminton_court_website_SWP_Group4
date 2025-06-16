@@ -14,8 +14,7 @@ import lombok.*;
 public class BlogCommentDTO {
     private int CommentID;
     private int PostID;
-    private String UserName;
-    private String Email;
+    private int UserID;
     private String Content;
     private Timestamp CreatedAt;
     private Integer ParentCommentID;

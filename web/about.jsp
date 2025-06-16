@@ -49,6 +49,8 @@
         <script src="js/owl.carousel.min.js"></script>
         <script src="js/effects.js"></script>
         <script src="js/page-transitions.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
         <script>
             $(document).ready(function () {
@@ -66,10 +68,6 @@
     </head>
 
     <body>
-        <!--[if lte IE 9]>
-                <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
-            <![endif]-->
-
         <!-- header-start -->
         <%
             String accType = (String) session.getAttribute("accType");

@@ -1,18 +1,28 @@
-<%-- 
-    Document   : single-blog
-    Created on : May 26, 2025, 5:39:13 PM
-    Author     : nguye
---%>
-
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html" pageEncoding="UTF-8" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page import="models.UserDTO, models.AdminDTO, models.GoogleAccount" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%
+    Object accObj = session.getAttribute("acc");
+    if (accObj == null || !(accObj instanceof UserDTO)) {
+        response.sendRedirect("./Login.jsp");
+        return;
+    }
+
+    UserDTO user = (UserDTO) accObj;
+    String success = request.getParameter("success");
+%>
+<c:if test="${not empty error}">
+    <div class="alert alert-danger">${error}</div>
+</c:if>
+
 <!doctype html>
 <html class="no-js" lang="zxx">
 
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>BadmintonHub</title>
+        <title>${post.title} - BadmintonHub</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -32,46 +42,60 @@
         <link rel="stylesheet" href="css/animate.css">
         <link rel="stylesheet" href="css/slicknav.css">
         <link rel="stylesheet" href="css/style.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <!-- <link rel="stylesheet" href="css/responsive.css"> -->
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script>
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        colors: {
+                            primary: '#78350f',
+                            secondary: '#78350f',
+                        }
+                    }
+                }
+            }
+        </script>
+        <link rel="stylesheet" href="css/owl.carousel.min.css">
+        <link rel="stylesheet" href="css/page-transitions.css">
+        <script src="js/jquery.min.js"></script>
+        <script src="js/owl.carousel.min.js"></script>
+        <script src="js/effects.js"></script>
+        <script src="js/page-transitions.js"></script>
     </head>
 
-    <link rel="stylesheet" href="css/owl.carousel.min.css">
-    <link rel="stylesheet" href="css/page-transitions.css">
-    <script src="js/jquery.min.js"></script>
-    <script src="js/owl.carousel.min.js"></script>
-    <script src="js/effects.js"></script>
-    <script src="js/page-transitions.js"></script>
 
     <body>
-        <!--[if lte IE 9]>
-                 <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
-             <![endif]-->
-
         <!-- header-start -->
-        <%
-            String accType = (String) session.getAttribute("accType");
-            if (accType == null) {
-        %>
+        <% String accType=(String) session.getAttribute("accType"); if (accType==null) { %>
         <jsp:include page="header.jsp" />
-        <%
-            } else if ("admin".equals(accType)) {
-        %>
+        <% } else if ("admin".equals(accType)) { %>
         <jsp:include page="header-auth.jsp" />
-        <%
-            } else if ("user".equals(accType) || "google".equals(accType)) {
-        %>
+        <% } else if ("user".equals(accType) || "google" .equals(accType)) { %>
         <jsp:include page="header-user.jsp" />
-        <%
-            }
-        %>
+        <% } %>
 
         <!-- header-end -->
 
         <!-- bradcam_area_start -->
-        <div class="bradcam_area breadcam_bg">
-            <h3>single blog</h3>
+        <div class="bradcam_area breadcam_bg_2">
+            <h3>${post.title}</h3>
         </div>
         <!-- bradcam_area_end -->
+
+        <%
+        String avatarUrl;
+        String gender = user.getGender();
+        if ("Male".equalsIgnoreCase(gender)) {
+        avatarUrl = "https://symbols.vn/wp-content/uploads/2021/11/Anh-avatar-de-thuong-cho-nam.jpg"; 
+            } else if ("Female".equalsIgnoreCase(gender)) {
+                avatarUrl = "https://img6.thuthuatphanmem.vn/uploads/2022/10/23/hinh-avatar-chibi-cute_031501070.jpg"; 
+            } else {
+                avatarUrl = "https://cdn-icons-png.flaticon.com/512/149/149071.png"; 
+            }
+        %>
 
         <!--================Blog Area =================-->
         <section class="blog_area single-post-area section-padding">
@@ -80,51 +104,27 @@
                     <div class="col-lg-8 posts-list">
                         <div class="single-post">
                             <div class="feature-img">
-                                <img class="img-fluid" src="img/blog/single_blog_1.png" alt="">
+                                <img class="img-fluid" src="${post.thumbnailUrl}" alt="">
                             </div>
                             <div class="blog_details">
-                                <h2>Second divided from form fish beast made every of seas
-                                    all gathered us saying he our
-                                </h2>
+                                <h2>${post.title}</h2>
                                 <ul class="blog-info-link mt-3 mb-4">
-                                    <li><a href="#"><i class="fa fa-user"></i> Travel, Lifestyle</a></li>
-                                    <li><a href="#"><i class="fa fa-comments"></i> 03 Comments</a></li>
+                                    <li><a href="#"><i class="fa fa-user"></i>
+                                            ${post.authorID}</a></li>
+                                    <li><a href="#"><i class="fa fa-comments"></i>
+                                            ${post.commentCount} Comments</a></li>
+                                    <li><a href="#"><i class="fa fa-eye"></i>
+                                            ${post.viewCount} Views</a></li>
                                 </ul>
-                                <p class="excert">
-                                    MCSE boot camps have its supporters and its detractors. Some people do not understand why you
-                                    should have to spend money on boot camp when you can get the MCSE study materials yourself at a
-                                    fraction of the camp price. However, who has the willpower
-                                </p>
-                                <p>
-                                    MCSE boot camps have its supporters and its detractors. Some people do not understand why you
-                                    should have to spend money on boot camp when you can get the MCSE study materials yourself at a
-                                    fraction of the camp price. However, who has the willpower to actually sit through a
-                                    self-imposed MCSE training. who has the willpower to actually
-                                </p>
-                                <div class="quote-wrapper">
-                                    <div class="quotes">
-                                        MCSE boot camps have its supporters and its detractors. Some people do not understand why you
-                                        should have to spend money on boot camp when you can get the MCSE study materials yourself at
-                                        a fraction of the camp price. However, who has the willpower to actually sit through a
-                                        self-imposed MCSE training.
-                                    </div>
+                                <div class="blog-content">
+                                    ${post.content}
                                 </div>
-                                <p>
-                                    MCSE boot camps have its supporters and its detractors. Some people do not understand why you
-                                    should have to spend money on boot camp when you can get the MCSE study materials yourself at a
-                                    fraction of the camp price. However, who has the willpower
-                                </p>
-                                <p>
-                                    MCSE boot camps have its supporters and its detractors. Some people do not understand why you
-                                    should have to spend money on boot camp when you can get the MCSE study materials yourself at a
-                                    fraction of the camp price. However, who has the willpower to actually sit through a
-                                    self-imposed MCSE training. who has the willpower to actually
-                                </p>
                             </div>
                         </div>
                         <div class="navigation-top">
                             <div class="d-sm-flex justify-content-between text-center">
-                                <p class="like-info"><span class="align-middle"><i class="fa fa-heart"></i></span> Lily and 4
+                                <p class="like-info"><span class="align-middle"><i
+                                            class="fa fa-heart"></i></span> Lily and 4
                                     people like this</p>
                                 <div class="col-sm-4 text-center my-2 my-sm-0">
                                     <!-- <p class="comment-count"><span class="align-middle"><i class="fa fa-comment"></i></span> 06 Comments</p> -->
@@ -142,12 +142,14 @@
                                         class="col-lg-6 col-md-6 col-12 nav-left flex-row d-flex justify-content-start align-items-center">
                                         <div class="thumb">
                                             <a href="#">
-                                                <img class="img-fluid" src="img/post/preview.png" alt="">
+                                                <img class="img-fluid"
+                                                     src="img/post/preview.png" alt="">
                                             </a>
                                         </div>
                                         <div class="arrow">
                                             <a href="#">
-                                                <span class="lnr text-white ti-arrow-left"></span>
+                                                <span
+                                                    class="lnr text-white ti-arrow-left"></span>
                                             </a>
                                         </div>
                                         <div class="detials">
@@ -167,12 +169,14 @@
                                         </div>
                                         <div class="arrow">
                                             <a href="#">
-                                                <span class="lnr text-white ti-arrow-right"></span>
+                                                <span
+                                                    class="lnr text-white ti-arrow-right"></span>
                                             </a>
                                         </div>
                                         <div class="thumb">
                                             <a href="#">
-                                                <img class="img-fluid" src="img/post/next.png" alt="">
+                                                <img class="img-fluid" src="img/post/next.png"
+                                                     alt="">
                                             </a>
                                         </div>
                                     </div>
@@ -186,297 +190,83 @@
                                     <a href="#">
                                         <h4>Harvard milan</h4>
                                     </a>
-                                    <p>Second divided from form fish beast made. Every of seas all gathered use saying you're, he
+                                    <p>Second divided from form fish beast made. Every of seas
+                                        all gathered use saying you're, he
                                         our dominion twon Second divided from</p>
                                 </div>
                             </div>
                         </div>
+                        <c:set var="userId" value="${userId}" />
                         <div class="comments-area">
-                            <h4>05 Comments</h4>
-                            <div class="comment-list">
-                                <div class="single-comment justify-content-between d-flex">
-                                    <div class="user justify-content-between d-flex">
-                                        <div class="thumb">
-                                            <img src="img/comment/comment_1.png" alt="">
-                                        </div>
-                                        <div class="desc">
-                                            <p class="comment">
-                                                Multiply sea night grass fourth day sea lesser rule open subdue female fill which them
-                                                Blessed, give fill lesser bearing multiply sea night grass fourth day sea lesser
-                                            </p>
-                                            <div class="d-flex justify-content-between">
-                                                <div class="d-flex align-items-center">
-                                                    <h5>
-                                                        <a href="#">Emilly Blunt</a>
-                                                    </h5>
-                                                    <p class="date">December 4, 2017 at 3:12 pm </p>
-                                                </div>
-                                                <div class="reply-btn">
-                                                    <a href="#" class="btn-reply text-uppercase">reply</a>
-                                                </div>
+                            <h4>${fn:length(comments)} Comments</h4>
+
+                            <!-- Add comment form -->
+                            <div class="comment-form mb-4">
+                                <h4>Leave a Comment</h4>
+                                <form method="post" class="form-contact comment_form">
+                                    <input type="hidden" name="postId" value="${post.postID}" />
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <textarea class="form-control w-100" name="content" cols="30" rows="9" placeholder="Write Comment"></textarea>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="comment-list">
-                                <div class="single-comment justify-content-between d-flex">
-                                    <div class="user justify-content-between d-flex">
-                                        <div class="thumb">
-                                            <img src="img/comment/comment_2.png" alt="">
-                                        </div>
-                                        <div class="desc">
-                                            <p class="comment">
-                                                Multiply sea night grass fourth day sea lesser rule open subdue female fill which them
-                                                Blessed, give fill lesser bearing multiply sea night grass fourth day sea lesser
-                                            </p>
-                                            <div class="d-flex justify-content-between">
-                                                <div class="d-flex align-items-center">
-                                                    <h5>
-                                                        <a href="#">Emilly Blunt</a>
-                                                    </h5>
-                                                    <p class="date">December 4, 2017 at 3:12 pm </p>
-                                                </div>
-                                                <div class="reply-btn">
-                                                    <a href="#" class="btn-reply text-uppercase">reply</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="comment-list">
-                                <div class="single-comment justify-content-between d-flex">
-                                    <div class="user justify-content-between d-flex">
-                                        <div class="thumb">
-                                            <img src="img/comment/comment_3.png" alt="">
-                                        </div>
-                                        <div class="desc">
-                                            <p class="comment">
-                                                Multiply sea night grass fourth day sea lesser rule open subdue female fill which them
-                                                Blessed, give fill lesser bearing multiply sea night grass fourth day sea lesser
-                                            </p>
-                                            <div class="d-flex justify-content-between">
-                                                <div class="d-flex align-items-center">
-                                                    <h5>
-                                                        <a href="#">Emilly Blunt</a>
-                                                    </h5>
-                                                    <p class="date">December 4, 2017 at 3:12 pm </p>
-                                                </div>
-                                                <div class="reply-btn">
-                                                    <a href="#" class="btn-reply text-uppercase">reply</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="comment-form">
-                            <h4>Leave a Reply</h4>
-                            <form class="form-contact comment_form" action="#" id="commentForm">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div class="form-group">
-                                            <textarea class="form-control w-100" name="comment" id="comment" cols="30" rows="9"
-                                                      placeholder="Write Comment"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <input class="form-control" name="name" id="name" type="text" placeholder="Name">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <input class="form-control" name="email" id="email" type="email" placeholder="Email">
-                                        </div>
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="form-group">
-                                            <input class="form-control" name="website" id="website" type="text" placeholder="Website">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <button type="submit" class="button button-contactForm btn_1 boxed-btn">Send Message</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="blog_right_sidebar">
-                            <aside class="single_sidebar_widget search_widget">
-                                <form action="#">
                                     <div class="form-group">
-                                        <div class="input-group mb-3">
-                                            <input type="text" class="form-control" placeholder='Search Keyword'
-                                                   onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search Keyword'">
-                                            <div class="input-group-append">
-                                                <button class="btn" type="button"><i class="ti-search"></i></button>
+                                        <button type="submit" class="button button-contactForm btn_1 boxed-btn">Send Message</button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <c:forEach var="comment" items="${comments}">
+                                <div class="comment-list">
+                                    <div class="single-comment justify-content-between d-flex">
+                                        <div class="user justify-content-between d-flex">
+                                            <div class="thumb">
+                                                <img src="${comment.userAvatar}" alt="">
+                                            </div>
+                                            <div class="desc">
+                                                <p class="comment">${comment.content}</p>
+                                                <div class="d-flex justify-content-between">
+                                                    <div class="d-flex align-items-center">
+                                                        <h5><a href="#">${comment.userName}</a>
+                                                        </h5>
+                                                        <p class="date">${comment.createdAt}</p>
+                                                    </div>
+                                                </div>
+                                                <c:if test="${comment.userID == userId}">
+                                                    <form method="post" style="display:inline;">
+                                                        <input type="hidden" name="action"
+                                                               value="delete" />
+                                                        <input type="hidden" name="commentId"
+                                                               value="${comment.commentID}" />
+                                                        <input type="hidden" name="postId"
+                                                               value="${post.postID}" />
+                                                        <button type="submit"
+                                                                class="btn btn-danger btn-sm">Delete</button>
+                                                    </form>
+
+                                                    <!-- Update form -->
+                                                    <form method="post" class="mt-2">
+                                                        <input type="hidden" name="action"
+                                                               value="update" />
+                                                        <input type="hidden" name="commentId"
+                                                               value="${comment.commentID}" />
+                                                        <input type="hidden" name="postId"
+                                                               value="${post.postID}" />
+                                                        <textarea name="content"
+                                                                  class="form-control">${comment.content}</textarea>
+                                                        <button type="submit"
+                                                                class="btn btn-warning btn-sm mt-1">Update</button>
+                                                    </form>
+                                                </c:if>
                                             </div>
                                         </div>
                                     </div>
-                                    <button class="button rounded-0 primary-bg text-white w-100 btn_1 boxed-btn"
-                                            type="submit">Search</button>
-                                </form>
-                            </aside>
-                            <aside class="single_sidebar_widget post_category_widget">
-                                <h4 class="widget_title">Category</h4>
-                                <ul class="list cat-list">
-                                    <li>
-                                        <a href="#" class="d-flex">
-                                            <p>Resaurant food</p>
-                                            <p>(37)</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="d-flex">
-                                            <p>Travel news</p>
-                                            <p>(10)</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="d-flex">
-                                            <p>Modern technology</p>
-                                            <p>(03)</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="d-flex">
-                                            <p>Product</p>
-                                            <p>(11)</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="d-flex">
-                                            <p>Inspiration</p>
-                                            <p>(21)</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="d-flex">
-                                            <p>Health Care</p>
-                                            <p>(21)</p>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </aside>
-                            <aside class="single_sidebar_widget popular_post_widget">
-                                <h3 class="widget_title">Recent Post</h3>
-                                <div class="media post_item">
-                                    <img src="img/post/post_1.png" alt="post">
-                                    <div class="media-body">
-                                        <a href="single-blog.jsp">
-                                            <h3>From life was you fish...</h3>
-                                        </a>
-                                        <p>January 12, 2019</p>
-                                    </div>
                                 </div>
-                                <div class="media post_item">
-                                    <img src="img/post/post_2.png" alt="post">
-                                    <div class="media-body">
-                                        <a href="single-blog.jsp">
-                                            <h3>The Amazing Hubble</h3>
-                                        </a>
-                                        <p>02 Hours ago</p>
-                                    </div>
-                                </div>
-                                <div class="media post_item">
-                                    <img src="img/post/post_3.png" alt="post">
-                                    <div class="media-body">
-                                        <a href="single-blog.jsp">
-                                            <h3>Astronomy Or Astrology</h3>
-                                        </a>
-                                        <p>03 Hours ago</p>
-                                    </div>
-                                </div>
-                                <div class="media post_item">
-                                    <img src="img/post/post_4.png" alt="post">
-                                    <div class="media-body">
-                                        <a href="single-blog.jsp">
-                                            <h3>Asteroids telescope</h3>
-                                        </a>
-                                        <p>01 Hours ago</p>
-                                    </div>
-                                </div>
-                            </aside>
-                            <aside class="single_sidebar_widget tag_cloud_widget">
-                                <h4 class="widget_title">Tag Clouds</h4>
-                                <ul class="list">
-                                    <li>
-                                        <a href="#">project</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">love</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">technology</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">travel</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">restaurant</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">life style</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">design</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">illustration</a>
-                                    </li>
-                                </ul>
-                            </aside>
-                            <aside class="single_sidebar_widget instagram_feeds">
-                                <h4 class="widget_title">Instagram Feeds</h4>
-                                <ul class="instagram_row flex-wrap">
-                                    <li>
-                                        <a href="#">
-                                            <img class="img-fluid" src="img/post/post_5.png" alt="">
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <img class="img-fluid" src="img/post/post_6.png" alt="">
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <img class="img-fluid" src="img/post/post_7.png" alt="">
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <img class="img-fluid" src="img/post/post_8.png" alt="">
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <img class="img-fluid" src="img/post/post_9.png" alt="">
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <img class="img-fluid" src="img/post/post_10.png" alt="">
-                                        </a>
-                                    </li>
-                                </ul>
-                            </aside>
-                            <aside class="single_sidebar_widget newsletter_widget">
-                                <h4 class="widget_title">Newsletter</h4>
-                                <form action="#">
-                                    <div class="form-group">
-                                        <input type="email" class="form-control" onfocus="this.placeholder = ''"
-                                               onblur="this.placeholder = 'Enter email'" placeholder='Enter email' required>
-                                    </div>
-                                    <button class="button rounded-0 primary-bg text-white w-100 btn_1 boxed-btn"
-                                            type="submit">Subscribe</button>
-                                </form>
-                            </aside>
+                            </c:forEach>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -484,7 +274,7 @@
         <!--================ Blog Area end =================-->
 
         <!-- footer -->
-        <footer class="footer" >
+        <footer class="footer">
             <div class="footer_top">
                 <div class="container">
                     <div class="row">
@@ -493,7 +283,7 @@
                                 <h3 class="footer_title">
                                     address
                                 </h3>
-                                <p class="footer_text" >  Khu công nghệ cao <br>
+                                <p class="footer_text"> Khu công nghệ cao <br>
                                     Hòa Lạc, Hà Nội</p>
                                 <a href="#" class="line-button">Get Direction</a>
                             </div>
@@ -503,7 +293,7 @@
                                 <h3 class="footer_title">
                                     Reservation
                                 </h3>
-                                <p class="footer_text" >+10 367 267 2678 <br>
+                                <p class="footer_text">+10 367 267 2678 <br>
                                     thanhnnhe186491@fpt.edu.vn</p>
                             </div>
                         </div>
@@ -527,9 +317,10 @@
                                 </h3>
                                 <form action="#" class="newsletter_form">
                                     <input type="text" placeholder="Enter your mail">
-                                    <button type="submit" >Sign Up</button>
+                                    <button type="submit">Sign Up</button>
                                 </form>
-                                <p class="newsletter_text">Subscribe newsletter to get updates</p>
+                                <p class="newsletter_text">Subscribe newsletter to get updates
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -542,7 +333,9 @@
                         <div class="col-xl-8 col-md-7 col-lg-9">
                             <p class="copy_right">
                                 <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                                Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved
+                                Copyright &copy;
+                                <script>document.write(new Date().getFullYear());</script> All
+                                rights reserved
                                 <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                             </p>
                         </div>
@@ -612,7 +405,8 @@
                                 </select>
                             </div>
                             <div class="col-xl-12">
-                                <button type="submit" class="boxed-btn3">Check Availability</button>
+                                <button type="submit" class="boxed-btn3">Check
+                                    Availability</button>
                             </div>
                         </div>
                     </form>
@@ -651,19 +445,19 @@
 
         <script src="js/main.js"></script>
         <script>
-                                    $('#datepicker').datepicker({
-                                        iconsLibrary: 'fontawesome',
-                                        icons: {
-                                            rightIcon: '<span class="fa fa-caret-down"></span>'
-                                        }
-                                    });
-                                    $('#datepicker2').datepicker({
-                                        iconsLibrary: 'fontawesome',
-                                        icons: {
-                                            rightIcon: '<span class="fa fa-caret-down"></span>'
-                                        }
+            $('#datepicker').datepicker({
+                iconsLibrary: 'fontawesome',
+                icons: {
+                    rightIcon: '<span class="fa fa-caret-down"></span>'
+                }
+            });
+            $('#datepicker2').datepicker({
+                iconsLibrary: 'fontawesome',
+                icons: {
+                    rightIcon: '<span class="fa fa-caret-down"></span>'
+                }
 
-                                    });
+            });
         </script>
 
 

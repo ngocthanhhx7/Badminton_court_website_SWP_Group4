@@ -6,14 +6,24 @@
             <file>file:/C:/SWP-project/src/java/utils/PasswordUtil.java</file>
             <file>file:/C:/SWP-project/src/java/controllerUser/Iconstant.java</file>
             <file>file:/C:/SWP-project/src/java/models/PostTagMapDTO.java</file>
+            <file>file:/C:/SWP-project/src/java/dao/BlogTagDAO.java</file>
+            <file>file:/C:/SWP-project/src/java/controllerUser/BlogDetailController.java</file>
+            <file>file:/C:/SWP-project/src/java/dao/OfferDAO.java</file>
             <file>file:/C:/SWP-project/src/java/controllerUser/CourtController.java</file>
+            <file>file:/C:/SWP-project/src/java/dao/BlogSubscriberDAO.java</file>
             <file>file:/C:/SWP-project/src/java/dao/VideoDAO.java</file>
+            <file>file:/C:/SWP-project/src/java/dao/AdminDAO.java</file>
             <file>file:/C:/SWP-project/src/java/dao/CourtDAO.java</file>
             <file>file:/C:/SWP-project/src/java/dao/InstagramFeedDAO.java</file>
+            <file>file:/C:/SWP-project/src/java/models/CourtDTO.java</file>
+            <file>file:/C:/SWP-project/src/java/models/AdminDTO.java</file>
+            <file>file:/C:/SWP-project/src/java/models/BlogSubscriberDTO.java</file>
             <file>file:/C:/SWP-project/src/java/controllerUser/UserLoginController.java</file>
             <file>file:/C:/SWP-project/src/java/controllerUser/LogoutController.java</file>
+            <file>file:/C:/SWP-project/src/java/models/BlogTagDTO.java</file>
             <file>file:/C:/SWP-project/src/java/controllerUser/UpdateProfileController.java</file>
             <file>file:/C:/SWP-project/src/java/dao/LoginGoogleDAO.java</file>
+            <file>file:/C:/SWP-project/src/java/dao/BlogPostDAO.java</file>
             <file>file:/C:/SWP-project/src/java/controllerUser/CourtDetailController.java</file>
             <file>file:/C:/SWP-project/src/java/utils/DBUtils.java</file>
             <file>file:/C:/SWP-project/src/java/controllerUser/ContactServlet.java</file>
@@ -22,6 +32,8 @@
             <file>file:/C:/SWP-project/src/java/dao/SliderDAO.java</file>
             <file>file:/C:/SWP-project/src/java/controllerUser/RegisterController.java</file>
             <file>file:/C:/SWP-project/src/java/models/EquipmentRentalDTO.java</file>
+            <file>file:/C:/SWP-project/src/java/filter/StaffAccessFilter.java</file>
+            <file>file:/C:/SWP-project/src/java/filter/ProfileCheckFilter.java</file>
             <file>file:/C:/SWP-project/src/java/controllerUser/CourtApiController.java</file>
             <file>file:/C:/SWP-project/src/java/models/UserDTO.java</file>
             <file>file:/C:/SWP-project/src/java/service/UserService.java</file>
@@ -29,6 +41,11 @@
             <file>file:/C:/SWP-project/src/java/controllerUser/HomepageController.java</file>
             <file>file:/C:/SWP-project/src/java/controllerUser/LoginGoogleController.java</file>
             <file>file:/C:/SWP-project/src/java/dao/AboutSectionDAO.java</file>
+            <file>file:/C:/SWP-project/src/java/dao/ContactInfoDAO.java</file>
+            <file>file:/C:/SWP-project/src/java/models/BlogPostDTO.java</file>
+            <file>file:/C:/SWP-project/src/java/models/BlogCommentDTO.java</file>
+            <file>file:/C:/SWP-project/src/java/dao/BlogCommentDAO.java</file>
+            <file>file:/C:/SWP-project/src/java/controllerUser/BlogController.java</file>
             <file>file:/C:/SWP-project/src/java/controllerUser/LoginController.java</file>
         </group>
     </open-files>

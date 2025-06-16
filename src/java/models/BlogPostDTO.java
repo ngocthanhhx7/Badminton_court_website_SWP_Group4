@@ -25,4 +25,13 @@ public class BlogPostDTO {
     private String Status;
     private Timestamp CreatedAt;
     private Timestamp UpdatedAt;
+    private int commentCount;
+
+    public int getCommentCount() {
+        return commentCount;
+    }
+
+    public void setCommentCount(int commentCount) {
+        this.commentCount = commentCount;
+    }
 }

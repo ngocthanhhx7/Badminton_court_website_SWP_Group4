@@ -47,6 +47,8 @@
         <script src="js/owl.carousel.min.js"></script>
         <script src="js/effects.js"></script>
         <script src="js/page-transitions.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
         <script>
             $(document).ready(function () {
@@ -131,32 +133,32 @@
             </div>
         </section>
 
-<!--        <section class="bg-light border-top py-4">
-            <div class="container">
-                <div class="col-lg-4">
-                    <div class="px-0 border rounded-2 shadow-0">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Các sân tương tự</h5>
-                                <c:forEach var="item" items="${similarCourts}">
-                                    <div class="d-flex mb-3">
-                                        <a href="court-detail?courtId=${item.courtId}" class="me-3">
-                                            <img src="${item.courtImage}" style="min-width: 96px; height: 96px;" class="img-md img-thumbnail" />
-                                        </a>
-                                        <div class="info">
-                                            <a href="court-detail?courtId=${item.courtId}" class="nav-link mb-1">
-                                                ${item.courtName}
-                                            </a>
-                                            <span class="text-muted small">${item.courtType}</span>
-                                        </div>
-                                    </div>
-                                </c:forEach>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>-->
+        <!--        <section class="bg-light border-top py-4">
+                    <div class="container">
+                        <div class="col-lg-4">
+                            <div class="px-0 border rounded-2 shadow-0">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Các sân tương tự</h5>
+        <c:forEach var="item" items="${similarCourts}">
+            <div class="d-flex mb-3">
+                <a href="court-detail?courtId=${item.courtId}" class="me-3">
+                    <img src="${item.courtImage}" style="min-width: 96px; height: 96px;" class="img-md img-thumbnail" />
+                </a>
+                <div class="info">
+                    <a href="court-detail?courtId=${item.courtId}" class="nav-link mb-1">
+            ${item.courtName}
+        </a>
+        <span class="text-muted small">${item.courtType}</span>
+    </div>
+</div>
+        </c:forEach>
+    </div>
+</div>
+</div>
+</div>
+</div>
+</section>-->
         <!-- footer -->
         <footer class="footer" >
             <div class="footer_top">
