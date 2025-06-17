@@ -134,7 +134,7 @@ public class LoginController extends HttpServlet {
                         response.sendRedirect("./home");
                         return;
                     case "staff":
-                        response.sendRedirect("./manage-page.jsp");
+                        response.sendRedirect("./page-manager");
                         return;
                     default:
                         response.sendRedirect("./home");

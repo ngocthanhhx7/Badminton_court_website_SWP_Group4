@@ -10,8 +10,10 @@ import org.json.JSONArray;
 
 @WebServlet("/ChatGPTServlet")
 public class ChatGPTServlet extends HttpServlet {
+    
+    private static final String OPENAI_API_KEY = "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";
 
-    private static final String OPENAI_API_KEY = System.getenv("OPENAI_API_KEY"); // Get API key from environment variable
+//    private static final String OPENAI_API_KEY = System.getenv("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"); // Get API key from environment variable
     private static final String API_URL = "https://api.openai.com/v1/chat/completions";
 
     @Override
@@ -20,21 +22,28 @@ public class ChatGPTServlet extends HttpServlet {
         resp.setCharacterEncoding("UTF-8");
         resp.setContentType("application/json; charset=UTF-8");
         
+        System.out.println("API Key: " + (OPENAI_API_KEY != null ? "Configured" : "Not configured"));
+        
         if (OPENAI_API_KEY == null || OPENAI_API_KEY.trim().isEmpty()) {
+            System.out.println("API Key is missing or empty");
             resp.getWriter().write("{\"error\":\"API key not configured\"}");
             return;
         }
 
         String userMessage = req.getParameter("message");
         if (userMessage == null || userMessage.trim().isEmpty()) {
+            System.out.println("User message is empty");
             resp.getWriter().write("{\"error\":\"Message is required\"}");
             return;
         }
 
         try {
+            System.out.println("Calling OpenAI API with message: " + userMessage);
             String response = callOpenAI(userMessage);
+            System.out.println("OpenAI API Response: " + response);
             resp.getWriter().write(response);
         } catch (Exception e) {
+            System.out.println("Error calling OpenAI API: " + e.getMessage());
             e.printStackTrace();
             resp.getWriter().write("{\"error\":\"Error processing request: " + e.getMessage() + "\"}");
         }
@@ -65,8 +74,19 @@ public class ChatGPTServlet extends HttpServlet {
         }
 
         int responseCode = conn.getResponseCode();
+        System.out.println("OpenAI API Response Code: " + responseCode);
+        
         if (responseCode != HttpURLConnection.HTTP_OK) {
-            throw new IOException("HTTP error code: " + responseCode);
+            String errorMessage = "";
+            try (BufferedReader br = new BufferedReader(
+                    new InputStreamReader(conn.getErrorStream(), "utf-8"))) {
+                String responseLine;
+                while ((responseLine = br.readLine()) != null) {
+                    errorMessage += responseLine.trim();
+                }
+            }
+            System.out.println("OpenAI API Error Response: " + errorMessage);
+            throw new IOException("HTTP error code: " + responseCode + ", Error message: " + errorMessage);
         }
 
         try (BufferedReader br = new BufferedReader(

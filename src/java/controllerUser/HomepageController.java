@@ -17,6 +17,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import models.AboutSectionDTO;
 import models.ContactInfoDTO;
@@ -61,15 +63,40 @@ public class HomepageController extends HttpServlet {
         InstagramFeedDAO dao = new InstagramFeedDAO();
 
         List<SliderDTO> sliders = sliderDAO.getAllActiveSliders();
-        List<AboutSectionDTO> aboutSections = aboutDAO.getAllActiveSections();
-        List<VideoDTO> videoList = videoDAO.getAllVideos();
-        List<OfferDTO> allOffers = offerDAO.getActiveOffers();
+        
+        // Fix: Handle SQLException for AboutSectionDAO calls
+        List<AboutSectionDTO> aboutSections = new ArrayList<>();
+        try {
+            aboutSections = aboutDAO.getAllActiveSections();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Log error but continue with empty list
+            aboutSections = new ArrayList<>();
+        }
+        
+        List<VideoDTO> videoList = new ArrayList<>();
+        try {
+            videoList = videoDAO.getAllVideos(0, 0, search, Boolean.FALSE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        List<OfferDTO> allOffers = new ArrayList<>();
+        try {
+            allOffers = offerDAO.getActiveOffers();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         List<ContactInfoDTO> contactInfos = contactDAO.getAllActiveContactInfo();
-        List<InstagramFeedDTO> visibleFeeds = dao.getAllFeeds()
-                .stream()
-                .filter(InstagramFeedDTO::getIsVisible)
-                .limit(5)
-                .toList();
+        List<InstagramFeedDTO> visibleFeeds = new ArrayList<>();
+        try {
+            List<InstagramFeedDTO> allFeeds = dao.getAllFeeds(1, 100, null, null);
+            visibleFeeds = allFeeds.stream()
+                    .filter(InstagramFeedDTO::getIsVisible)
+                    .limit(5)
+                    .toList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         if (videoList != null && !videoList.isEmpty()) {
             request.setAttribute("video", videoList.get(0)); 

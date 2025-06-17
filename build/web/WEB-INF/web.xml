@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd"
+         version="5.0">    
+    
+    <jsp-config>
+        <jsp-property-group>
+            <url-pattern>*.jsp</url-pattern>
+            <scripting-invalid>false</scripting-invalid>
+        </jsp-property-group>
+    </jsp-config>
     <servlet>
         <servlet-name>HomepageController</servlet-name>
         <servlet-class>controllerUser.HomepageController</servlet-class>
@@ -80,6 +90,23 @@
     <filter-mapping>
         <filter-name>StaffAccessFilter</filter-name>
         <url-pattern>/home</url-pattern>
+    </filter-mapping>
+    <!-- Manager Access Filter -->
+    <filter>
+        <filter-name>ManagerAccessFilter</filter-name>
+        <filter-class>filter.ManagerAccessFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>ManagerAccessFilter</filter-name>
+        <url-pattern>/*-manager</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>ManagerAccessFilter</filter-name>
+        <url-pattern>/*-manager.jsp</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>ManagerAccessFilter</filter-name>
+        <url-pattern>/pages/ui-manager/*</url-pattern>
     </filter-mapping>
     <filter>
         <filter-name>ProfileCheckFilter</filter-name>

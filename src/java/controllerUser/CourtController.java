@@ -16,6 +16,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 import models.ContactInfoDTO;
 import models.CourtDTO;
@@ -55,13 +56,23 @@ public class CourtController extends HttpServlet {
         ContactInfoDAO contactDAO = new ContactInfoDAO();
         
         List<ContactInfoDTO> contactInfos = contactDAO.getAllActiveContactInfo();
-        List<InstagramFeedDTO> visibleFeeds = dao.getAllFeeds()
-                .stream()
-                .filter(InstagramFeedDTO::getIsVisible)
-                .limit(5)
-                .toList();
+        List<InstagramFeedDTO> visibleFeeds = new ArrayList<>();
+        try {
+            List<InstagramFeedDTO> allFeeds = dao.getAllFeeds(1, 100, null, null);
+            visibleFeeds = allFeeds.stream()
+                    .filter(InstagramFeedDTO::getIsVisible)
+                    .limit(5)
+                    .toList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         
-        List<OfferDTO> allOffers = offerDAO.getActiveOffers();
+        List<OfferDTO> allOffers = new ArrayList<>();
+        try {
+            allOffers = offerDAO.getActiveOffers();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         
         int maxOffersToShow = 3;
         List<OfferDTO> displayedOffers = allOffers.size() > maxOffersToShow
@@ -122,10 +133,6 @@ public class CourtController extends HttpServlet {
         processRequest(request, response);
     }
 
-    /** 
-     * Returns a short description of the servlet.
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
         return "Short description";

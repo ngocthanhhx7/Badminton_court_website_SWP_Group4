@@ -3,13 +3,12 @@
 <%@ page import="models.UserDTO, models.AdminDTO, models.GoogleAccount" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%
+    // Optional: Check if user is logged in (for header display only)
     Object accObj = session.getAttribute("acc");
-    if (accObj == null || !(accObj instanceof UserDTO)) {
-        response.sendRedirect("./Login.jsp");
-        return;
+    UserDTO user = null;
+    if (accObj != null && accObj instanceof UserDTO) {
+        user = (UserDTO) accObj;
     }
-
-    UserDTO user = (UserDTO) accObj;
     String success = request.getParameter("success");
 %>
 <c:if test="${not empty error}">
@@ -80,21 +79,21 @@
         <!-- header-end -->
 
         <!-- bradcam_area_start -->
-        <div class="bradcam_area breadcam_bg_2">
+        <div class="bradcam_area breadcam_bg">
             <h3>${post.title}</h3>
         </div>
         <!-- bradcam_area_end -->
 
         <%
-        String avatarUrl;
-        String gender = user.getGender();
-        if ("Male".equalsIgnoreCase(gender)) {
-        avatarUrl = "https://symbols.vn/wp-content/uploads/2021/11/Anh-avatar-de-thuong-cho-nam.jpg"; 
+        String avatarUrl = "https://cdn-icons-png.flaticon.com/512/149/149071.png"; // Default avatar
+        if (user != null) {
+            String gender = user.getGender();
+            if ("Male".equalsIgnoreCase(gender)) {
+                avatarUrl = "https://symbols.vn/wp-content/uploads/2021/11/Anh-avatar-de-thuong-cho-nam.jpg"; 
             } else if ("Female".equalsIgnoreCase(gender)) {
                 avatarUrl = "https://img6.thuthuatphanmem.vn/uploads/2022/10/23/hinh-avatar-chibi-cute_031501070.jpg"; 
-            } else {
-                avatarUrl = "https://cdn-icons-png.flaticon.com/512/149/149071.png"; 
             }
+        }
         %>
 
         <!--================Blog Area =================-->
@@ -111,8 +110,6 @@
                                 <ul class="blog-info-link mt-3 mb-4">
                                     <li><a href="#"><i class="fa fa-user"></i>
                                             ${post.authorID}</a></li>
-                                    <li><a href="#"><i class="fa fa-comments"></i>
-                                            ${post.commentCount} Comments</a></li>
                                     <li><a href="#"><i class="fa fa-eye"></i>
                                             ${post.viewCount} Views</a></li>
                                 </ul>
@@ -140,45 +137,49 @@
                                 <div class="row">
                                     <div
                                         class="col-lg-6 col-md-6 col-12 nav-left flex-row d-flex justify-content-start align-items-center">
-                                        <div class="thumb">
-                                            <a href="#">
-                                                <img class="img-fluid"
-                                                     src="img/post/preview.png" alt="">
-                                            </a>
-                                        </div>
-                                        <div class="arrow">
-                                            <a href="#">
-                                                <span
-                                                    class="lnr text-white ti-arrow-left"></span>
-                                            </a>
-                                        </div>
-                                        <div class="detials">
-                                            <p>Prev Post</p>
-                                            <a href="#">
-                                                <h4>Space The Final Frontier</h4>
-                                            </a>
-                                        </div>
+                                        <c:if test="${not empty previousPost}">
+                                            <div class="thumb">
+                                                <a href="single-blog?postId=${previousPost.postID}">
+                                                    <img class="img-fluid"
+                                                         src="${previousPost.thumbnailUrl}" alt="">
+                                                </a>
+                                            </div>
+                                            <div class="arrow">
+                                                <a href="single-blog?postId=${previousPost.postID}">
+                                                    <span
+                                                        class="lnr text-white ti-arrow-left"></span>
+                                                </a>
+                                            </div>
+                                            <div class="detials">
+                                                <p>Prev Post</p>
+                                                <a href="single-blog?postId=${previousPost.postID}">
+                                                    <h4>${previousPost.title}</h4>
+                                                </a>
+                                            </div>
+                                        </c:if>
                                     </div>
                                     <div
                                         class="col-lg-6 col-md-6 col-12 nav-right flex-row d-flex justify-content-end align-items-center">
-                                        <div class="detials">
-                                            <p>Next Post</p>
-                                            <a href="#">
-                                                <h4>Telescopes 101</h4>
-                                            </a>
-                                        </div>
-                                        <div class="arrow">
-                                            <a href="#">
-                                                <span
-                                                    class="lnr text-white ti-arrow-right"></span>
-                                            </a>
-                                        </div>
-                                        <div class="thumb">
-                                            <a href="#">
-                                                <img class="img-fluid" src="img/post/next.png"
-                                                     alt="">
-                                            </a>
-                                        </div>
+                                        <c:if test="${not empty nextPost}">
+                                            <div class="detials">
+                                                <p>Next Post</p>
+                                                <a href="single-blog?postId=${nextPost.postID}">
+                                                    <h4>${nextPost.title}</h4>
+                                                </a>
+                                            </div>
+                                            <div class="arrow">
+                                                <a href="single-blog?postId=${nextPost.postID}">
+                                                    <span
+                                                        class="lnr text-white ti-arrow-right"></span>
+                                                </a>
+                                            </div>
+                                            <div class="thumb">
+                                                <a href="single-blog?postId=${nextPost.postID}">
+                                                    <img class="img-fluid" src="${nextPost.thumbnailUrl}"
+                                                         alt="">
+                                                </a>
+                                            </div>
+                                        </c:if>
                                     </div>
                                 </div>
                             </div>
@@ -195,76 +196,6 @@
                                         our dominion twon Second divided from</p>
                                 </div>
                             </div>
-                        </div>
-                        <c:set var="userId" value="${userId}" />
-                        <div class="comments-area">
-                            <h4>${fn:length(comments)} Comments</h4>
-
-                            <!-- Add comment form -->
-                            <div class="comment-form mb-4">
-                                <h4>Leave a Comment</h4>
-                                <form method="post" class="form-contact comment_form">
-                                    <input type="hidden" name="postId" value="${post.postID}" />
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <div class="form-group">
-                                                <textarea class="form-control w-100" name="content" cols="30" rows="9" placeholder="Write Comment"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <button type="submit" class="button button-contactForm btn_1 boxed-btn">Send Message</button>
-                                    </div>
-                                </form>
-                            </div>
-
-                            <c:forEach var="comment" items="${comments}">
-                                <div class="comment-list">
-                                    <div class="single-comment justify-content-between d-flex">
-                                        <div class="user justify-content-between d-flex">
-                                            <div class="thumb">
-                                                <img src="${comment.userAvatar}" alt="">
-                                            </div>
-                                            <div class="desc">
-                                                <p class="comment">${comment.content}</p>
-                                                <div class="d-flex justify-content-between">
-                                                    <div class="d-flex align-items-center">
-                                                        <h5><a href="#">${comment.userName}</a>
-                                                        </h5>
-                                                        <p class="date">${comment.createdAt}</p>
-                                                    </div>
-                                                </div>
-                                                <c:if test="${comment.userID == userId}">
-                                                    <form method="post" style="display:inline;">
-                                                        <input type="hidden" name="action"
-                                                               value="delete" />
-                                                        <input type="hidden" name="commentId"
-                                                               value="${comment.commentID}" />
-                                                        <input type="hidden" name="postId"
-                                                               value="${post.postID}" />
-                                                        <button type="submit"
-                                                                class="btn btn-danger btn-sm">Delete</button>
-                                                    </form>
-
-                                                    <!-- Update form -->
-                                                    <form method="post" class="mt-2">
-                                                        <input type="hidden" name="action"
-                                                               value="update" />
-                                                        <input type="hidden" name="commentId"
-                                                               value="${comment.commentID}" />
-                                                        <input type="hidden" name="postId"
-                                                               value="${post.postID}" />
-                                                        <textarea name="content"
-                                                                  class="form-control">${comment.content}</textarea>
-                                                        <button type="submit"
-                                                                class="btn btn-warning btn-sm mt-1">Update</button>
-                                                    </form>
-                                                </c:if>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </c:forEach>
                         </div>
 
                     </div>

@@ -1,8 +1,14 @@
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ page import="models.UserDTO, models.AdminDTO" %>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 <!-- partial:partials/_navbar.html -->
 <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
     <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-        <a class="navbar-brand brand-logo" href="manage-page.jsp"><img src="img/logo.svg" alt="logo"/></a>
-        <a class="navbar-brand brand-logo-mini" href="manage-page.jsp"><img src="img/logo-mini.svg" alt="logo"/></a>
+        <a class="navbar-brand brand-logo" href="./page-manager"><img src="img/logo.svg" alt="logo"/></a>
+        <a class="navbar-brand brand-logo-mini" href="./page-manager"><img src="img/logo-mini.svg" alt="logo"/></a>
         <button class="navbar-toggler navbar-toggler align-self-center d-none d-lg-flex" type="button" data-toggle="minimize">
             <span class="typcn typcn-th-menu"></span>
         </button>
@@ -31,115 +37,44 @@
                     Help
                 </a>
             </li>
-            <li class="nav-item dropdown d-flex">
-                <a class="nav-link count-indicator dropdown-toggle d-flex justify-content-center align-items-center" id="messageDropdown" href="#" data-toggle="dropdown">
-                    <i class="typcn typcn-message-typing"></i>
-                    <span class="count bg-success">2</span>
-                </a>
-                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="messageDropdown">
-                    <p class="mb-0 font-weight-normal float-left dropdown-header">Messages</p>
-                    <a class="dropdown-item preview-item">
-                        <div class="preview-thumbnail">
-                            <img src="img/faces/face4.jpg" alt="image" class="profile-pic">
-                        </div>
-                        <div class="preview-item-content flex-grow">
-                            <h6 class="preview-subject ellipsis font-weight-normal">David Grey
-                            </h6>
-                            <p class="font-weight-light small-text mb-0">
-                                The meeting is cancelled
-                            </p>
-                        </div>
-                    </a>
-                    <a class="dropdown-item preview-item">
-                        <div class="preview-thumbnail">
-                            <img src="img/faces/face2.jpg" alt="image" class="profile-pic">
-                        </div>
-                        <div class="preview-item-content flex-grow">
-                            <h6 class="preview-subject ellipsis font-weight-normal">Tim Cook
-                            </h6>
-                            <p class="font-weight-light small-text mb-0">
-                                New product launch
-                            </p>
-                        </div>
-                    </a>
-                    <a class="dropdown-item preview-item">
-                        <div class="preview-thumbnail">
-                            <img src="img/faces/face3.jpg" alt="image" class="profile-pic">
-                        </div>
-                        <div class="preview-item-content flex-grow">
-                            <h6 class="preview-subject ellipsis font-weight-normal"> Johnson
-                            </h6>
-                            <p class="font-weight-light small-text mb-0">
-                                Upcoming board meeting
-                            </p>
-                        </div>
-                    </a>
-                </div>
-            </li>
-            <li class="nav-item dropdown  d-flex">
-                <a class="nav-link count-indicator dropdown-toggle d-flex align-items-center justify-content-center" id="notificationDropdown" href="#" data-toggle="dropdown">
-                    <i class="typcn typcn-bell mr-0"></i>
-                    <span class="count bg-danger">2</span>
-                </a>
-                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
-                    <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
-                    <a class="dropdown-item preview-item">
-                        <div class="preview-thumbnail">
-                            <div class="preview-icon bg-success">
-                                <i class="typcn typcn-info-large mx-0"></i>
-                            </div>
-                        </div>
-                        <div class="preview-item-content">
-                            <h6 class="preview-subject font-weight-normal">Application Error</h6>
-                            <p class="font-weight-light small-text mb-0">
-                                Just now
-                            </p>
-                        </div>
-                    </a>
-                    <a class="dropdown-item preview-item">
-                        <div class="preview-thumbnail">
-                            <div class="preview-icon bg-warning">
-                                <i class="typcn typcn-cog mx-0"></i>
-                            </div>
-                        </div>
-                        <div class="preview-item-content">
-                            <h6 class="preview-subject font-weight-normal">Settings</h6>
-                            <p class="font-weight-light small-text mb-0">
-                                Private message
-                            </p>
-                        </div>
-                    </a>
-                    <a class="dropdown-item preview-item">
-                        <div class="preview-thumbnail">
-                            <div class="preview-icon bg-info">
-                                <i class="typcn typcn-user-outline mx-0"></i>
-                            </div>
-                        </div>
-                        <div class="preview-item-content">
-                            <h6 class="preview-subject font-weight-normal">New user registration</h6>
-                            <p class="font-weight-light small-text mb-0">
-                                2 days ago
-                            </p>
-                        </div>
-                    </a>
-                </div>
-            </li>
+            <%
+    Object accObj = session.getAttribute("acc");
+    String avatarUrl = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+    String username = "Guest";
+    if (accObj != null && accObj instanceof models.UserDTO) {
+        models.UserDTO user = (models.UserDTO) accObj;
+        username = user.getUsername();
+        String gender = user.getGender();
+        if ("Male".equalsIgnoreCase(gender)) {
+            avatarUrl = "https://symbols.vn/wp-content/uploads/2021/11/Anh-avatar-de-thuong-cho-nam.jpg";
+        } else if ("Female".equalsIgnoreCase(gender)) {
+            avatarUrl = "https://img6.thuthuatphanmem.vn/uploads/2022/10/23/hinh-avatar-chibi-cute_031501070.jpg";
+        }
+    }
+            %>
+
             <li class="nav-item nav-profile dropdown">
-                <a class="nav-link dropdown-toggle  pl-0 pr-0" href="#" data-toggle="dropdown" id="profileDropdown">
-                    <i class="typcn typcn-user-outline mr-0"></i>
-                    <span class="nav-profile-name">Evan Morales</span>
+                <a class="nav-link dropdown-toggle pl-0 pr-0 d-flex align-items-center" href="#" data-bs-toggle="dropdown" id="profileDropdown">
+                    <img src="<%= avatarUrl %>" alt="Avatar" class="rounded-circle" width="35" height="35">
+                    <span class="nav-profile-name ms-2 fw-bold text-white"><%= username %></span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
-                    <a class="dropdown-item">
-                        <i class="typcn typcn-cog text-primary"></i>
-                        Settings
+                    <a class="dropdown-item" href="view-profile.jsp">
+                        <i class="typcn typcn-user text-primary me-2"></i>
+                        View Profile
                     </a>
-                    <a class="dropdown-item">
-                        <i class="typcn typcn-power text-primary"></i>
+                    <a class="dropdown-item" href="change-password.jsp">
+                        <i class="typcn typcn-cog text-primary me-2"></i>
+                        Change Password
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item text-danger" href="./logout">
+                        <i class="typcn typcn-power text-danger me-2"></i>
                         Logout
                     </a>
                 </div>
             </li>
+
         </ul>
         <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
             <span class="typcn typcn-th-menu"></span>
@@ -181,18 +116,19 @@
             <li class="nav-item">
                 <div class="d-flex sidebar-profile">
                     <div class="sidebar-profile-image">
-                        <img src="img/faces/face29.png" alt="image">
+                        <img src="<%= avatarUrl %>" alt="image" class="rounded-circle" width="50" height="50">
                         <span class="sidebar-status-indicator"></span>
                     </div>
                     <div class="sidebar-profile-name">
                         <p class="sidebar-name">
-                            Kenneth Osborne
+                            <%= username %>
                         </p>
                         <p class="sidebar-designation">
                             Welcome
                         </p>
                     </div>
                 </div>
+
                 <div class="nav-search">
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="Type to search..." aria-label="search" aria-describedby="search">
@@ -206,7 +142,7 @@
                 <p class="sidebar-menu-title">Dash menu</p>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="manage-page.jsp">
+                <a class="nav-link" href="./page-manager">
                     <i class="typcn typcn-device-desktop menu-icon"></i>
                     <span class="menu-title">Dashboard <span class="badge badge-primary ml-3">New</span></span>
                 </a>
@@ -233,8 +169,12 @@
                 </a>
                 <div class="collapse" id="ui-basic">
                     <ul class="nav flex-column sub-menu">
-                        <li class="nav-item"> <a class="nav-link" href="pages/ui-manager/design-homepage.jsp">Homepage</a></li>
-                        <li class="nav-item"> <a class="nav-link" href="pages/ui-manager/design-blog.jsp">Blog</a></li>
+                        <li class="nav-item"> <a class="nav-link" href="./slider-manager">Slider</a></li>
+                        <li class="nav-item"> <a class="nav-link" href="./about-manager">About</a></li>
+                        <li class="nav-item"> <a class="nav-link" href="./offer-manager">Offer</a></li>
+                        <li class="nav-item"> <a class="nav-link" href="./video-manager">Video</a></li>
+                        <li class="nav-item"> <a class="nav-link" href="./contact-manager">Contact</a></li>
+                        <li class="nav-item"> <a class="nav-link" href="./instagram-manager">Instagram</a></li>
                     </ul>
                 </div>
             </li>

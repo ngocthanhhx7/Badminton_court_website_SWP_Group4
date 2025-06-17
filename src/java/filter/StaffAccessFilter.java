@@ -31,8 +31,8 @@ public class StaffAccessFilter implements Filter {
         // Kiểm tra nếu là Staff và đang cố truy cập trang home
         if (user != null && "staff".equalsIgnoreCase(user.getRole()) 
             && httpRequest.getRequestURI().endsWith("/home")) {
-            // Chuyển hướng Staff về trang manage-page.jsp
-            httpResponse.sendRedirect(httpRequest.getContextPath() + "/manage-page.jsp");
+            // Chuyển hướng Staff về trang page-manager
+            httpResponse.sendRedirect(httpRequest.getContextPath() + "/page-manager");
             return;
         }
 

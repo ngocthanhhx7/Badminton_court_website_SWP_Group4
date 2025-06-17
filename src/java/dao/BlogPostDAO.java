@@ -198,7 +198,7 @@ public class BlogPostDAO {
                         + "JOIN BlogTags pt ON p.PostID = pt.PostID "
                         + "WHERE p.PostID != ? AND pt.TagID IN ("
                         + String.join(",", Collections.nCopies(postTags.size(), "?")) + ") "
-                        + "ORDER BY p.PublishedAt DESC LIMIT ?";
+                        + "ORDER BY p.PublishedAt DESC OFFSET 0 ROWS FETCH NEXT ? ROWS ONLY";
 
                 try (Connection conn = DBUtils.getConnection();
                         PreparedStatement ps = conn.prepareStatement(getSimilarPostsQuery)) {
@@ -212,6 +212,19 @@ public class BlogPostDAO {
 
                     ps.setInt(paramIndex, limit);
 
+                    try (ResultSet rs = ps.executeQuery()) {
+                        while (rs.next()) {
+                            similarPosts.add(mapResultSetToPost(rs));
+                        }
+                    }
+                }
+            } else {
+                // If no tags, get recent posts instead
+                String getRecentPostsQuery = "SELECT * FROM BlogPosts WHERE PostID != ? ORDER BY PublishedAt DESC OFFSET 0 ROWS FETCH NEXT ? ROWS ONLY";
+                try (Connection conn = DBUtils.getConnection();
+                        PreparedStatement ps = conn.prepareStatement(getRecentPostsQuery)) {
+                    ps.setInt(1, postId);
+                    ps.setInt(2, limit);
                     try (ResultSet rs = ps.executeQuery()) {
                         while (rs.next()) {
                             similarPosts.add(mapResultSetToPost(rs));
@@ -385,6 +398,34 @@ public class BlogPostDAO {
             e.printStackTrace();
         }
         return posts;
+    }
+
+    public BlogPostDTO getPreviousPost(int currentPostId) {
+        String sql = "SELECT TOP 1 * FROM BlogPosts WHERE PostID < ? ORDER BY PostID DESC";
+        try (Connection conn = DBUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, currentPostId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return mapResultSetToPost(rs);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public BlogPostDTO getNextPost(int currentPostId) {
+        String sql = "SELECT TOP 1 * FROM BlogPosts WHERE PostID > ? ORDER BY PostID ASC";
+        try (Connection conn = DBUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, currentPostId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return mapResultSetToPost(rs);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

@@ -16,4 +16,8 @@ public class ContactInfoDTO {
     private String message;
     private String phoneNumber;
     private boolean isActive;
+    
+    public boolean isActive() {
+    return this.isActive;
+}
 }

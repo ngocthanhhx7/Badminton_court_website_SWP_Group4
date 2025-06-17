@@ -1,5 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="jakarta.tags.core" prefix="c" %>
 <%@ page import="models.UserDTO, models.AdminDTO, models.GoogleAccount" %>
 
 <!doctype html>
@@ -52,7 +52,6 @@
         <script src="js/effects.js"></script>
         <script src="js/page-transitions.js"></script>
 
-
         <script>
             $(document).ready(function () {
                 $('.about_active').owlCarousel({
@@ -95,7 +94,6 @@
         <!-- header-end -->
 
 
-        <jsp:include page="facebook-messenger.jsp" /> 
         <jsp:include page="chatbox.jsp" /> 
 
         <!-- slider_area_start -->

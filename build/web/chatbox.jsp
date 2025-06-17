@@ -33,84 +33,89 @@
                 cursor: pointer;
             }
             #chatbox-container { display: none; }
+            .message {
+                margin: 10px 0;
+                padding: 10px;
+                border-radius: 10px;
+                max-width: 80%;
+                word-wrap: break-word;
+            }
+            
+            .user-message {
+                background-color: #007bff;
+                color: white;
+                margin-left: auto;
+                text-align: right;
+            }
+            
+            .assistant-message {
+                background-color: #f8f9fa;
+                color: #333;
+                border: 1px solid #dee2e6;
+            }
+            
+            .loading-dots {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 4px;
+            }
+            
+            .loading-dots span {
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                background-color: #007bff;
+                animation: loading 1.4s infinite ease-in-out;
+            }
+            
+            .loading-dots span:nth-child(1) { animation-delay: -0.32s; }
+            .loading-dots span:nth-child(2) { animation-delay: -0.16s; }
+            
+            @keyframes loading {
+                0%, 80%, 100% {
+                    transform: scale(0);
+                    opacity: 0.5;
+                }
+                40% {
+                    transform: scale(1);
+                    opacity: 1;
+                }
+            }
         </style>
 
         <meta charset="UTF-8">
 
     </head>
     <body>
+        <!-- Chat Interface -->
+        <button id="chatbox-toggle-btn" onclick="showChatbox()" style="position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; border-radius: 50%; background: #007bff; color: #fff; border: none; box-shadow: 0 2px 8px rgba(0,0,0,0.2); font-size: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10000;">
+            <i class="fas fa-comments"></i>
+        </button>
 
-        <div id="chatbox-container" style="position: fixed; bottom: 30px; right: 30px; width: 350px; z-index: 9999;">
+        <div id="chatbox-container" style="position: fixed; bottom: 30px; right: 30px; width: 350px; z-index: 9999; display: none;">
             <div class="card shadow">
-                <div class="card-header bg-primary text-white">Chat với AI <span style="float:right; cursor:pointer;" onclick="hideChatbox()">&times;</span></div>
-                <div class="card-body" style="height: 300px; overflow-y: auto;" id="chatOutput"></div>
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    Chat với AI
+                    <span style="cursor:pointer;" onclick="hideChatbox()">&times;</span>
+                </div>
+                <div class="card-body" style="height: 300px; overflow-y: auto;" id="chat-messages"></div>
                 <div class="card-footer">
                     <div class="input-group">
-                        <input type="text" id="chatInput" class="form-control" placeholder="Nhập câu hỏi..." onkeydown="if(event.key==='Enter'){sendMessageToGPT();}">
-                        <button class="btn btn-primary" onclick="sendMessageToGPT()">Gửi</button>
+                        <input type="text" id="message-input" class="form-control" placeholder="Nhập câu hỏi...">
+                        <button class="btn btn-primary" onclick="sendMessage()">Gửi</button>
                     </div>
                 </div>
             </div>
         </div>
+
+        <script src="js/chat.js"></script>
         <script>
-            function showChatbox() {
-                document.getElementById('chatbox-container').style.display = 'block';
-                document.getElementById('chatbox-toggle-btn').style.display = 'none';
-            }
             function hideChatbox() {
                 document.getElementById('chatbox-container').style.display = 'none';
                 document.getElementById('chatbox-toggle-btn').style.display = 'flex';
             }
-            function sendMessageToGPT() {
-                var message = document.getElementById("chatInput").value;
-                if (!message.trim()) return;
-                
-                var chatOutput = document.getElementById("chatOutput");
-                chatOutput.innerHTML += `<div class='mb-2'><b>Bạn:</b> ${message}</div>`;
-                document.getElementById("chatInput").value = "";
-                
-                // Show loading indicator
-                chatOutput.innerHTML += `<div class='mb-2 text-muted'><i>Đang xử lý...</i></div>`;
-                
-                fetch('ChatGPTServlet', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                    body: 'message=' + encodeURIComponent(message)
-                })
-                .then(response => response.json())
-                .then(data => {
-                    // Remove loading indicator
-                    chatOutput.removeChild(chatOutput.lastChild);
-                    
-                    var reply = "";
-                    if (data.error) {
-                        reply = "Lỗi: " + data.error;
-                    } else {
-                        try {
-                            reply = data.choices[0].message.content;
-                        } catch (e) {
-                            reply = "Không thể xử lý phản hồi từ AI!";
-                            console.error("Error parsing response:", e);
-                        }
-                    }
-                    
-                    if (!reply || reply.trim() === "") {
-                        reply = "AI không có câu trả lời!";
-                    }
-                    
-                    chatOutput.innerHTML += `<div class='mb-2 text-primary'><b>AI:</b> ${reply}</div>`;
-                    chatOutput.scrollTop = chatOutput.scrollHeight;
-                })
-                .catch(error => {
-                    // Remove loading indicator
-                    chatOutput.removeChild(chatOutput.lastChild);
-                    
-                    console.error("Error:", error);
-                    chatOutput.innerHTML += `<div class='mb-2 text-danger'><b>AI:</b> Lỗi kết nối hoặc API! Vui lòng thử lại sau.</div>`;
-                    chatOutput.scrollTop = chatOutput.scrollHeight;
-                });
-            }
-        </script> 
+        </script>
 
     </body>
 </html>
