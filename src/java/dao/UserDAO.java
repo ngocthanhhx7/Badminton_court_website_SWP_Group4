@@ -21,17 +21,51 @@ public class UserDAO {
         this.conn = DBUtils.getConnection();
     }
 
-    public UserDTO login(String username, String password) {
-        String query = "SELECT * FROM Users WHERE Username = ? AND Password = ?";
-        try (Connection conn = DBUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setString(1, username);
-            ps.setString(2, password);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
+//    public UserDTO login(String username, String password) {
+//        String query = "SELECT * FROM Users WHERE Username = ? AND Password = ?";
+//        try (Connection conn = DBUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
+//            ps.setString(1, username);
+//            ps.setString(2, password);
+//            try (ResultSet rs = ps.executeQuery()) {
+//                if (rs.next()) {
+//                    return new UserDTO(
+//                            rs.getInt("UserID"),
+//                            rs.getString("Username"),
+//                            rs.getString("Password"),
+//                            rs.getString("Email"),
+//                            rs.getString("FullName"),
+//                            rs.getDate("Dob"),
+//                            rs.getString("Gender"),
+//                            rs.getString("Phone"),
+//                            rs.getString("Address"),
+//                            rs.getString("SportLevel"),
+//                            rs.getString("Role"),
+//                            rs.getString("Status"),
+//                            rs.getInt("CreatedBy"),
+//                            rs.getTimestamp("CreatedAt"),
+//                            rs.getTimestamp("UpdatedAt")
+//                    );
+//                }
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
+   public UserDTO login(String username, String password) {
+    String query = "SELECT * FROM Users WHERE Username = ?";
+    try (Connection conn = DBUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
+        ps.setString(1, username);
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                String hashedPassword = rs.getString("Password");
+
+                // Chỉ kiểm tra bằng BCrypt
+                if (BCrypt.checkpw(password, hashedPassword)) {
                     return new UserDTO(
                             rs.getInt("UserID"),
                             rs.getString("Username"),
-                            rs.getString("Password"),
+                            hashedPassword,
                             rs.getString("Email"),
                             rs.getString("FullName"),
                             rs.getDate("Dob"),
@@ -47,11 +81,12 @@ public class UserDAO {
                     );
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-        return null;
+    } catch (Exception e) {
+        e.printStackTrace();
     }
+    return null;
+}
 
     public boolean isEmailOrUsernameExists(String email, String username) throws SQLException {
         String sql = "SELECT COUNT(*) FROM users WHERE email = ? OR username = ?";

@@ -14,12 +14,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import models.AdminDTO;
 import models.UserDTO;
-import service.UserService;
 
 /**
  *
@@ -79,68 +75,63 @@ public class LoginController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        try {
-            String emailOrUsername = request.getParameter("emailOrUsername");
-            String password = request.getParameter("password");
+        String emailOrUsername = request.getParameter("emailOrUsername");
+        String password = request.getParameter("password");
 
-            // Kiểm tra đầu vào
-            if (emailOrUsername == null || emailOrUsername.trim().isEmpty()
-                    || password == null || password.trim().isEmpty()) {
-                request.setAttribute("error", "Email/Username và mật khẩu là bắt buộc.");
-                request.getRequestDispatcher("Login.jsp").forward(request, response);
-                return;
-            }
-
-            // Khởi tạo DAO
-            AdminDAO adminDao = new AdminDAO();
-            UserDAO userDao = new UserDAO();
-
-            // Thử đăng nhập với email hoặc username
-            AdminDTO admin = adminDao.loginWithEmailOrUsername(emailOrUsername, password);
-//        UserDTO user = userDao.loginWithEmailOrUsername(emailOrUsername, password);
-            UserService userService = new UserService();
-            UserDTO user = userService.authenticateUser(emailOrUsername, password);
-            if (admin != null) {
-                HttpSession session = request.getSession();
-                session.setAttribute("acc", admin);
-                session.setAttribute("accType", "admin");
-
-                handleRememberMe(request, response, emailOrUsername, password);
-
-                response.sendRedirect("./home");
-                return;
-            }
-
-            if (user != null) {
-                HttpSession session = request.getSession();
-                session.setAttribute("acc", user);
-                session.setAttribute("accType", "user");
-
-                // Kiểm tra profile đầy đủ chưa
-                if (user.getFullName() == null
-                        || user.getDob() == null
-                        || user.getGender() == null
-                        || user.getPhone() == null
-                        || user.getAddress() == null
-                        || user.getSportLevel() == null) {
-
-                    handleRememberMe(request, response, emailOrUsername, password);
-                    session.setAttribute("currentUser", user); // Lưu user để dùng trong CompleteProfile.jsp
-                    response.sendRedirect("completeProfile.jsp");
-                    return;
-                }
-
-                handleRememberMe(request, response, emailOrUsername, password);
-                response.sendRedirect("./home");
-                return;
-            }
-
-// Sai thông tin đăng nhập
-            request.setAttribute("error", "Sai email/username hoặc mật khẩu.");
+        // Kiểm tra đầu vào
+if (emailOrUsername == null || emailOrUsername.trim().isEmpty()
+                || password == null || password.trim().isEmpty()) {
+            request.setAttribute("error", "Email/Username và mật khẩu là bắt buộc.");
             request.getRequestDispatcher("Login.jsp").forward(request, response);
-        } catch (SQLException ex) {
-            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+            return;
         }
+
+        // Khởi tạo DAO
+        AdminDAO adminDao = new AdminDAO();
+        UserDAO userDao = new UserDAO();
+
+        // Thử đăng nhập với email hoặc username
+        AdminDTO admin = adminDao.loginWithEmailOrUsername(emailOrUsername, password);
+        UserDTO user = userDao.loginWithEmailOrUsername(emailOrUsername, password);
+
+        if (admin != null) {
+            HttpSession session = request.getSession();
+            session.setAttribute("acc", admin);
+            session.setAttribute("accType", "admin");
+
+            handleRememberMe(request, response, emailOrUsername, password);
+
+            response.sendRedirect("./home");
+            return;
+        }
+
+        if (user != null) {
+            HttpSession session = request.getSession();
+            session.setAttribute("acc", user);
+            session.setAttribute("accType", "user");
+
+            // Kiểm tra profile đầy đủ chưa
+            if (user.getFullName() == null
+                    || user.getDob() == null
+                    || user.getGender() == null
+                    || user.getPhone() == null
+                    || user.getAddress() == null
+                    || user.getSportLevel() == null) {
+
+                handleRememberMe(request, response, emailOrUsername, password);
+                session.setAttribute("currentUser", user); // Lưu user để dùng trong CompleteProfile.jsp
+                response.sendRedirect("completeProfile.jsp");
+                return;
+            }
+
+            handleRememberMe(request, response, emailOrUsername, password);
+            response.sendRedirect("./home");
+            return;
+        }
+
+        // Sai thông tin đăng nhập
+        request.setAttribute("error", "Sai email/username hoặc mật khẩu.");
+        request.getRequestDispatcher("Login.jsp").forward(request, response);
     }
 
     private void handleRememberMe(HttpServletRequest request, HttpServletResponse response, String identifier, String password) {
@@ -158,21 +149,6 @@ public class LoginController extends HttpServlet {
             // Xóa cookie nếu user không chọn Remember
             Cookie idCookie = new Cookie("loginIdentifier", "");
             Cookie pwCookie = new Cookie("loginPassword", "");
-            idCookie.setMaxAge(0);
-            pwCookie.setMaxAge(0);
-            response.addCookie(idCookie);
-            response.addCookie(pwCookie);
-        }
-    }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+        }}}
 
-}

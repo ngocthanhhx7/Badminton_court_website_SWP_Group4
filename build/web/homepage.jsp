@@ -574,4 +574,10 @@
 
     </body>
 
+<%@ page session="true" %>
+<%
+    String username = (String) session.getAttribute("username");
+%>
+
+
 </html>

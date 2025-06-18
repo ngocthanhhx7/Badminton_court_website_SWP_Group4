@@ -6,8 +6,13 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import dao.UserDAO;
+import java.security.MessageDigest;
 import models.UserDTO;
+import java.sql.Connection;
 import org.mindrot.jbcrypt.BCrypt;
+import utils.DBUtils;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 public class UserService {
 
@@ -136,6 +141,7 @@ public class UserService {
         if (phone != null && !phone.trim().isEmpty() && userDAO.isPhoneExists(phone)) {
             return false;
         }
+        
 
         // Map gender to match database values
         String mappedGender = gender;
@@ -179,41 +185,84 @@ public UserDTO getEmpolyeeByID(int userID) throws SQLException {
 public UserDTO getUserByEmail(String email) throws SQLException {
     return userDAO.findUserByEmailOrUsername(email); // Nếu bạn đã có hàm này trong DAO
 }
-  public boolean UpdateEmployee(UserDTO user) throws SQLException {
+public class MD5Utils {
+    public static String hash(String input) {
         try {
-            // Validate required fields
-            if (user.getFullName() == null || user.getFullName().trim().isEmpty()) {
-                throw new SQLException("Họ và tên không được để trống.");
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] messageDigest = md.digest(input.getBytes());
+            StringBuilder sb = new StringBuilder();
+            for (byte b : messageDigest) {
+                sb.append(String.format("%02x", b));
             }
-            if (user.getDob() == null) {
-                throw new SQLException("Ngày sinh không được để trống.");
-            }
-            if (user.getGender() == null || user.getGender().trim().isEmpty()) {
-                throw new SQLException("Giới tính không được để trống.");
-            }
-            if (user.getSportLevel() == null || user.getSportLevel().trim().isEmpty()) {
-                throw new SQLException("Chuyên khoa không được để trống.");
-            }
-            if (user.getStatus() == null || user.getStatus().trim().isEmpty()) {
-                throw new SQLException("Trạng thái không được để trống.");
-            }
-
-            // Map gender to match database values
-            String mappedGender = user.getGender().trim();
-            if (mappedGender.equals("Nam")) {
-                mappedGender = "Male";
-            } else if (mappedGender.equals("Nữ")) {
-                mappedGender = "Female";
-            } else if (mappedGender.equals("Khác")) {
-                mappedGender = "Other";
-            } else {
-                throw new SQLException("Giới tính không hợp lệ: " + user.getGender());
-            }
-            user.setGender(mappedGender);
-
-            return userDAO.UpdateEmployee(user); // Call the existing updateUser method in DAO
-        } catch (SQLException e) {
-            throw new SQLException("Lỗi khi cập nhật nhân viên: " + e.getMessage(), e);
+            return sb.toString();
+        } catch (Exception e) {
+            return null;
         }
     }
+}
+  public UserDTO loginWithEmailOrUsername(String emailOrUsername, String password) {
+    String query = "SELECT * FROM Users WHERE Username = ? OR Email = ?";
+    try (Connection conn = DBUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
+        ps.setString(1, emailOrUsername);
+        ps.setString(2, emailOrUsername);
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                String storedPassword = rs.getString("Password");
+                int userId = rs.getInt("UserID");
+
+                boolean match = false;
+                boolean isBCrypt = storedPassword.startsWith("$2a$") || storedPassword.startsWith("$2b$") || storedPassword.startsWith("$2y$");
+                boolean isMD5 = storedPassword.matches("^[a-fA-F0-9]{32}$");
+
+                // So sánh theo định dạng
+                if (isBCrypt) {
+                    match = BCrypt.checkpw(password, storedPassword);
+                } else if (isMD5) {
+                    // Kiểm tra bằng MD5
+                    String md5Input = utils.MD5Utils.hash(password); // Viết hàm hash MD5 nếu chưa có
+                    match = storedPassword.equals(md5Input);
+                } else {
+                    // Plaintext
+                    match = storedPassword.equals(password);
+                }
+
+                if (match) {
+                    // Nếu không phải BCrypt thì cập nhật lại
+                    if (!isBCrypt) {
+                        String newBCrypt = BCrypt.hashpw(password, BCrypt.gensalt(10));
+                        String update = "UPDATE Users SET Password = ? WHERE UserID = ?";
+                        try (PreparedStatement ps2 = conn.prepareStatement(update)) {
+                            ps2.setString(1, newBCrypt);
+                            ps2.setInt(2, userId);
+                            ps2.executeUpdate();
+                        }
+                    }
+
+                    // Trả về user
+                    return new UserDTO(
+                        rs.getInt("UserID"),
+                        rs.getString("Username"),
+                        storedPassword,
+                        rs.getString("Email"),
+                        rs.getString("FullName"),
+                        rs.getDate("Dob"),
+                        rs.getString("Gender"),
+                        rs.getString("Phone"),
+                        rs.getString("Address"),
+                        rs.getString("SportLevel"),
+                        rs.getString("Role"),
+                        rs.getString("Status"),
+                        rs.getInt("CreatedBy"),
+                        rs.getTimestamp("CreatedAt"),
+                        rs.getTimestamp("UpdatedAt")
+                    );
+                }
+            }
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return null;
+}
+  
 }
