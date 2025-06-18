@@ -6,6 +6,7 @@ import utils.DBUtils;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,11 +22,14 @@ public class CourtDAO {
 
             while (resultSet.next()) {
                 CourtDTO court = CourtDTO.builder()
-                        .courtId(resultSet.getLong("CourtID"))
+                        .courtId(resultSet.getInt("CourtID"))
                         .courtName(resultSet.getString("CourtName"))
                         .description(resultSet.getString("Description"))
                         .courtType(resultSet.getString("CourtType"))
                         .status(resultSet.getString("Status"))
+                        .createdBy(resultSet.getInt("CreatedBy"))
+                        .createdAt(resultSet.getTimestamp("CreatedAt"))
+                        .updatedAt(resultSet.getTimestamp("UpdatedAt"))
                         .courtImage(resultSet.getString("CourtImage"))
                         .build();
                 courts.add(court);
@@ -38,21 +42,24 @@ public class CourtDAO {
         }
     }
 
-    public CourtDTO getCourtById(Long courtId) {
+    public CourtDTO getCourtById(Integer courtId) {
         String sql = "SELECT * FROM Courts WHERE CourtID = ?";
         try (Connection connection = DBUtils.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
-            preparedStatement.setLong(1, courtId);
+            preparedStatement.setInt(1, courtId);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
                 return CourtDTO.builder()
-                        .courtId(resultSet.getLong("CourtID"))
+                        .courtId(resultSet.getInt("CourtID"))
                         .courtName(resultSet.getString("CourtName"))
                         .description(resultSet.getString("Description"))
                         .courtType(resultSet.getString("CourtType"))
                         .status(resultSet.getString("Status"))
+                        .createdBy(resultSet.getInt("CreatedBy"))
+                        .createdAt(resultSet.getTimestamp("CreatedAt"))
+                        .updatedAt(resultSet.getTimestamp("UpdatedAt"))
                         .courtImage(resultSet.getString("CourtImage"))
                         .build();
             }
@@ -65,7 +72,7 @@ public class CourtDAO {
     }
 
     public boolean addCourt(CourtDTO court) {
-        String sql = "INSERT INTO Courts (CourtName, Description, CourtType, Status, CourtImage, CreatedBy) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Courts (CourtName, Description, CourtType, Status, CourtImage, CreatedBy, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?, ?, GETDATE(), GETDATE())";
         try (Connection connection = DBUtils.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
@@ -74,7 +81,7 @@ public class CourtDAO {
             preparedStatement.setString(3, court.getCourtType());
             preparedStatement.setString(4, court.getStatus());
             preparedStatement.setString(5, court.getCourtImage());
-            preparedStatement.setLong(6, 1); // giả sử CreatedBy là userId = 1, bạn có thể sửa
+            preparedStatement.setInt(6, court.getCreatedBy() != null ? court.getCreatedBy() : 1);
 
             return preparedStatement.executeUpdate() > 0;
         } catch (Exception e) {
@@ -84,7 +91,7 @@ public class CourtDAO {
     }
 
     public boolean updateCourt(CourtDTO court) {
-        String sql = "UPDATE Courts SET CourtName = ?, Description = ?, CourtType = ?, Status = ?, CourtImage = ? WHERE CourtID = ?";
+        String sql = "UPDATE Courts SET CourtName = ?, Description = ?, CourtType = ?, Status = ?, CourtImage = ?, UpdatedAt = GETDATE() WHERE CourtID = ?";
         try (Connection connection = DBUtils.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
@@ -93,7 +100,7 @@ public class CourtDAO {
             preparedStatement.setString(3, court.getCourtType());
             preparedStatement.setString(4, court.getStatus());
             preparedStatement.setString(5, court.getCourtImage());
-            preparedStatement.setLong(6, court.getCourtId());
+            preparedStatement.setInt(6, court.getCourtId());
 
             return preparedStatement.executeUpdate() > 0;
         } catch (Exception e) {
@@ -102,12 +109,12 @@ public class CourtDAO {
         }
     }
 
-    public boolean deleteCourt(Long courtId) {
+    public boolean deleteCourt(Integer courtId) {
         String sql = "DELETE FROM Courts WHERE CourtID = ?";
         try (Connection connection = DBUtils.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
-            preparedStatement.setLong(1, courtId);
+            preparedStatement.setInt(1, courtId);
             return preparedStatement.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();
@@ -116,7 +123,7 @@ public class CourtDAO {
     }
 
     public List<CourtDTO> searchCourtsByNameOrTypeOrStatus(String keyword) {
-        String sql = "SELECT * FROM Courts WHERE CourtName LIKE ? OR CourtType LIKE ? OR Status LIKE ?";
+        String sql = "SELECT * FROM Courts WHERE CourtName LIKE ? OR CourtType LIKE ? OR Status LIKE ? ORDER BY CourtID DESC";
         try (Connection connection = DBUtils.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
@@ -129,11 +136,14 @@ public class CourtDAO {
 
             while (resultSet.next()) {
                 CourtDTO court = CourtDTO.builder()
-                        .courtId(resultSet.getLong("CourtID"))
+                        .courtId(resultSet.getInt("CourtID"))
                         .courtName(resultSet.getString("CourtName"))
                         .description(resultSet.getString("Description"))
                         .courtType(resultSet.getString("CourtType"))
                         .status(resultSet.getString("Status"))
+                        .createdBy(resultSet.getInt("CreatedBy"))
+                        .createdAt(resultSet.getTimestamp("CreatedAt"))
+                        .updatedAt(resultSet.getTimestamp("UpdatedAt"))
                         .courtImage(resultSet.getString("CourtImage"))
                         .build();
                 courts.add(court);
@@ -147,67 +157,74 @@ public class CourtDAO {
     }
     
     public List<CourtDTO> filterCourts(String search, String status, String courtType) {
-    List<CourtDTO> filteredCourts = new ArrayList<>();
-    String sql = "SELECT * FROM Courts WHERE 1=1";
+        List<CourtDTO> filteredCourts = new ArrayList<>();
+        String sql = "SELECT * FROM Courts WHERE 1=1";
 
-    if (search != null && !search.isEmpty()) {
-        sql += " AND (courtName LIKE ? OR description LIKE ?)";
-    }
-    if (status != null && !status.isEmpty()) {
-        sql += " AND status = ?";
-    }
-    if (courtType != null && !courtType.isEmpty()) {
-        sql += " AND courtType = ?";
-    }
-
-    try (Connection connection = DBUtils.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-        int index = 1;
         if (search != null && !search.isEmpty()) {
-            preparedStatement.setString(index++, "%" + search + "%");
-            preparedStatement.setString(index++, "%" + search + "%");
+            sql += " AND (CourtName LIKE ? OR Description LIKE ?)";
         }
         if (status != null && !status.isEmpty()) {
-            preparedStatement.setString(index++, status);
+            sql += " AND Status = ?";
         }
         if (courtType != null && !courtType.isEmpty()) {
-            preparedStatement.setString(index++, courtType);
+            sql += " AND CourtType = ?";
         }
 
-        ResultSet rs = preparedStatement.executeQuery();
-        while (rs.next()) {
-            CourtDTO court = new CourtDTO();
-            court.setCourtId(rs.getLong("courtId"));
-            court.setCourtName(rs.getString("courtName"));
-            court.setDescription(rs.getString("description"));
-            court.setCourtType(rs.getString("courtType"));
-            court.setStatus(rs.getString("status"));
-            court.setCourtImage(rs.getString("courtImage"));
-            filteredCourts.add(court);
+        try (Connection connection = DBUtils.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            int index = 1;
+            if (search != null && !search.isEmpty()) {
+                preparedStatement.setString(index++, "%" + search + "%");
+                preparedStatement.setString(index++, "%" + search + "%");
+            }
+            if (status != null && !status.isEmpty()) {
+                preparedStatement.setString(index++, status);
+            }
+            if (courtType != null && !courtType.isEmpty()) {
+                preparedStatement.setString(index++, courtType);
+            }
+
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                CourtDTO court = CourtDTO.builder()
+                        .courtId(rs.getInt("CourtID"))
+                        .courtName(rs.getString("CourtName"))
+                        .description(rs.getString("Description"))
+                        .courtType(rs.getString("CourtType"))
+                        .status(rs.getString("Status"))
+                        .createdBy(rs.getInt("CreatedBy"))
+                        .createdAt(rs.getTimestamp("CreatedAt"))
+                        .updatedAt(rs.getTimestamp("UpdatedAt"))
+                        .courtImage(rs.getString("CourtImage"))
+                        .build();
+                filteredCourts.add(court);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    } catch (Exception e) {
-        e.printStackTrace();
+
+        return filteredCourts;
     }
 
-    return filteredCourts;
-}
-
-
-    public List<CourtDTO> getSimilarCourts(Long excludeCourtId, int limit) {
-        String sql = "SELECT * FROM Courts WHERE CourtID <> ? ORDER BY RAND() LIMIT ?";
+    public List<CourtDTO> getSimilarCourts(Integer excludeCourtId, int limit) {
+        String sql = "SELECT TOP (?) * FROM Courts WHERE CourtID <> ? ORDER BY NEWID()";
         List<CourtDTO> similarCourts = new ArrayList<>();
         try (Connection connection = DBUtils.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setLong(1, excludeCourtId);
-            preparedStatement.setInt(2, limit);
+            preparedStatement.setInt(1, limit);
+            preparedStatement.setInt(2, excludeCourtId);
             ResultSet resultSet = preparedStatement.executeQuery();
+
             while (resultSet.next()) {
                 CourtDTO court = CourtDTO.builder()
-                        .courtId(resultSet.getLong("CourtID"))
+                        .courtId(resultSet.getInt("CourtID"))
                         .courtName(resultSet.getString("CourtName"))
                         .description(resultSet.getString("Description"))
                         .courtType(resultSet.getString("CourtType"))
                         .status(resultSet.getString("Status"))
+                        .createdBy(resultSet.getInt("CreatedBy"))
+                        .createdAt(resultSet.getTimestamp("CreatedAt"))
+                        .updatedAt(resultSet.getTimestamp("UpdatedAt"))
                         .courtImage(resultSet.getString("CourtImage"))
                         .build();
                 similarCourts.add(court);
@@ -217,14 +234,17 @@ public class CourtDAO {
         }
         return similarCourts;
     }
-
+    
     public static void main(String[] args) {
-        CourtDAO dao = new CourtDAO();
-        List<CourtDTO> list = dao.getAllCourts();
-        if (list != null) {
-            list.forEach(System.out::println);
-        } else {
-            System.out.println("No courts found.");
+        CourtDAO courtDAO = new CourtDAO();
+        System.out.println("\n=== Test getAllCourts ===");
+        try {
+            List<CourtDTO> courts = courtDAO.getAllCourts();
+            for (CourtDTO c : courts) {
+                System.out.println(c.getCourtId() + " - " + c.getCourtName() + " - " + c.getCourtType());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

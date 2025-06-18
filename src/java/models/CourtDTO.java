@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.sql.Timestamp;
 
 /**
  *
@@ -18,11 +19,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CourtDTO {
-    private Long courtId;
+    private Integer courtId;
     private String courtName;
     private String description;
     private String courtType;
     private String status;
+    private Integer createdBy;
+    private Timestamp createdAt;
+    private Timestamp updatedAt;
     private String courtImage;
 }
 

@@ -1,7 +1,7 @@
 package controllerUser;
 
 import com.google.gson.JsonObject;
-import comVnpayCommon.Config;
+import com.vnpay.common.Config;
 import dao.BookingDAO;
 import dao.CourtDAO;
 import dao.CourtScheduleDAO;
@@ -92,7 +92,7 @@ public class BookingController extends HttpServlet {
 
         if (courtIdParam != null) {
             try {
-                Long courtId = Long.parseLong(courtIdParam);
+                Integer courtId = Integer.parseInt(courtIdParam);
                 CourtDTO court = courtDAO.getCourtById(courtId);
                 request.setAttribute("court", court);
 
@@ -166,7 +166,7 @@ public class BookingController extends HttpServlet {
 
         if (courtIdParam != null) {
             try {
-                Long courtId = Long.parseLong(courtIdParam);
+                Integer courtId = Integer.parseInt(courtIdParam);
                 CourtDTO court = courtDAO.getCourtById(courtId);
                 request.setAttribute("court", court);
 
@@ -208,7 +208,7 @@ public class BookingController extends HttpServlet {
         }
 
         try {
-            Long courtId = Long.parseLong(request.getParameter("courtId"));
+            Integer courtId = Integer.parseInt(request.getParameter("courtId"));
             String dateStr = request.getParameter("bookingDate");
             String startTimeStr = request.getParameter("startTime");
             String endTimeStr = request.getParameter("endTime");
@@ -242,7 +242,7 @@ public class BookingController extends HttpServlet {
 
                 BookingDetailDTO detail = BookingDetailDTO.builder()
                         .bookingId(bookingId)
-                        .courtId(courtId)
+                        .courtId(courtId.longValue())
                         .startTime(startDateTime)
                         .endTime(endDateTime)
                         .hourlyRate(new BigDecimal("100000"))

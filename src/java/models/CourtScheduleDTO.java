@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class CourtScheduleDTO {
     private Long scheduleId;
-    private Long courtId;
+    private Integer courtId;
     private LocalDate scheduleDate;
     private LocalTime startTime;
     private LocalTime endTime;

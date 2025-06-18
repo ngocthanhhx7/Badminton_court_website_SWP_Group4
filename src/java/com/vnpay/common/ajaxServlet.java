@@ -55,7 +55,7 @@ public class ajaxServlet extends HttpServlet {
             return;
         }
         try {
-            Long courtId = Long.parseLong(req.getParameter("courtId"));
+            Integer courtId = Integer.parseInt(req.getParameter("courtId"));
             String dateStr = req.getParameter("bookingDate");
             String startTimeStr = req.getParameter("startTime");
             String endTimeStr = req.getParameter("endTime");
@@ -86,7 +86,7 @@ public class ajaxServlet extends HttpServlet {
                 
                 BookingDetailDTO detail = BookingDetailDTO.builder()
                     .bookingId(bookingId)
-                    .courtId(courtId)
+                    .courtId(courtId.longValue())
                     .startTime(startDateTime)
                     .endTime(endDateTime)
                     .hourlyRate(new BigDecimal("100000"))
@@ -185,7 +185,7 @@ public class ajaxServlet extends HttpServlet {
         
         if (courtIdParam != null) {
             try {
-                Long courtId = Long.parseLong(courtIdParam);
+                Integer courtId = Integer.parseInt(courtIdParam);
                 CourtDTO court = courtDAO.getCourtById(courtId);
                 request.setAttribute("court", court);
 

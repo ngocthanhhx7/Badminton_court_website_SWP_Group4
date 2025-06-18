@@ -1,18 +1,13 @@
 package dao;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import models.UserDTO;
-import org.mindrot.jbcrypt.BCrypt;
-import utils.DBUtils;
+
 import models.UserDTO;
 import utils.DBUtils;
+
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import org.mindrot.jbcrypt.BCrypt;
-import static utils.PasswordUtil.hashPassword;
+
 public class UserDAO {
 
     private Connection conn;
@@ -21,51 +16,17 @@ public class UserDAO {
         this.conn = DBUtils.getConnection();
     }
 
-//    public UserDTO login(String username, String password) {
-//        String query = "SELECT * FROM Users WHERE Username = ? AND Password = ?";
-//        try (Connection conn = DBUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
-//            ps.setString(1, username);
-//            ps.setString(2, password);
-//            try (ResultSet rs = ps.executeQuery()) {
-//                if (rs.next()) {
-//                    return new UserDTO(
-//                            rs.getInt("UserID"),
-//                            rs.getString("Username"),
-//                            rs.getString("Password"),
-//                            rs.getString("Email"),
-//                            rs.getString("FullName"),
-//                            rs.getDate("Dob"),
-//                            rs.getString("Gender"),
-//                            rs.getString("Phone"),
-//                            rs.getString("Address"),
-//                            rs.getString("SportLevel"),
-//                            rs.getString("Role"),
-//                            rs.getString("Status"),
-//                            rs.getInt("CreatedBy"),
-//                            rs.getTimestamp("CreatedAt"),
-//                            rs.getTimestamp("UpdatedAt")
-//                    );
-//                }
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
-   public UserDTO login(String username, String password) {
-    String query = "SELECT * FROM Users WHERE Username = ?";
-    try (Connection conn = DBUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
-        ps.setString(1, username);
-        try (ResultSet rs = ps.executeQuery()) {
-            if (rs.next()) {
-                String hashedPassword = rs.getString("Password");
-
-                // Chỉ kiểm tra bằng BCrypt
-                if (BCrypt.checkpw(password, hashedPassword)) {
+    public UserDTO login(String username, String password) {
+        String query = "SELECT * FROM Users WHERE Username = ? AND Password = ?";
+        try (Connection conn = DBUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, username);
+            ps.setString(2, password);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
                     return new UserDTO(
                             rs.getInt("UserID"),
                             rs.getString("Username"),
-                            hashedPassword,
+                            rs.getString("Password"),
                             rs.getString("Email"),
                             rs.getString("FullName"),
                             rs.getDate("Dob"),
@@ -81,12 +42,11 @@ public class UserDAO {
                     );
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    } catch (Exception e) {
-        e.printStackTrace();
+        return null;
     }
-    return null;
-}
 
     public boolean isEmailOrUsernameExists(String email, String username) throws SQLException {
         String sql = "SELECT COUNT(*) FROM users WHERE email = ? OR username = ?";
@@ -167,19 +127,7 @@ public class UserDAO {
         }
     }
 
-//    public UserDTO findUserByEmailOrUsername(String input) throws SQLException {
-//        String sql = "SELECT * FROM users WHERE email = ? OR username = ?";
-//        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-//            ps.setString(1, input);
-//            ps.setString(2, input);
-//            ResultSet rs = ps.executeQuery();
-//            if (rs.next()) {
-//                return mapResultSetToUser(rs);
-//            }
-//        }
-//        return null;
-//    }
-public UserDTO findUserByEmailOrUsername(String input) throws SQLException {
+    public UserDTO findUserByEmailOrUsername(String input) throws SQLException {
         String sql = "SELECT * FROM users WHERE email = ? OR username = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, input);
@@ -191,26 +139,12 @@ public UserDTO findUserByEmailOrUsername(String input) throws SQLException {
         }
         return null;
     }
-//    public void updateUserProfile(UserDTO user) throws SQLException {
-//        String sql = "UPDATE users SET full_name = ?, password = ?, dob = ?, gender = ?, phone = ?, address = ?, sport_level = ?, role = ? WHERE id = ?";
-//        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-//            ps.setString(1, user.getFullName());
-//            ps.setString(2, user.getPassword());
-//            ps.setDate(3, new java.sql.Date(user.getDob().getTime()));
-//            ps.setString(4, user.getGender());
-//            ps.setString(5, user.getPhone());
-//            ps.setString(6, user.getAddress());
-//            ps.setString(7, user.getSportLevel());
-//            ps.setString(8, user.getRole());
-//            ps.setInt(9, user.getUserID());
-//            ps.executeUpdate();
-//        }
-//    }
-public void updateUserProfile(UserDTO user) throws SQLException {
-        String sql = "UPDATE users SET full_name = ?, password = ?, dob = ?, gender = ?, phone = ?, address = ?, sport_level = ?, role = ? WHERE id = ?";
+
+    public void updateUserProfile(UserDTO user) throws SQLException {
+        String sql = "UPDATE users SET FullName = ?, Password = ?, Dob = ?, Gender = ?, Phone = ?, Address = ?, SportLevel = ?, Role = ? WHERE UserID = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, user.getFullName());
-            ps.setString(2, BCrypt.hashpw(user.getPassword(), BCrypt.gensalt())); // BCrypt
+            ps.setString(2, user.getPassword());
             ps.setDate(3, new java.sql.Date(user.getDob().getTime()));
             ps.setString(4, user.getGender());
             ps.setString(5, user.getPhone());
@@ -221,24 +155,18 @@ public void updateUserProfile(UserDTO user) throws SQLException {
             ps.executeUpdate();
         }
     }
-//    public boolean updatePassword(String email, String hashedPassword) throws SQLException {
-//        String sql = "UPDATE users SET password = ? WHERE email = ?";
-//        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-//            ps.setString(1, hashedPassword);
-//            ps.setString(2, email);
-//            return ps.executeUpdate() > 0;
-//        }
-//    }
-public boolean updatePassword(String email, String newPassword) throws SQLException {
+
+    public boolean updatePassword(String email, String hashedPassword) throws SQLException {
         String sql = "UPDATE users SET password = ? WHERE email = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, BCrypt.hashpw(newPassword, BCrypt.gensalt())); // BCrypt
+            ps.setString(1, hashedPassword);
             ps.setString(2, email);
             return ps.executeUpdate() > 0;
         }
     }
+
     public UserDTO getUserByID(int userID) throws SQLException {
-        String sql = "SELECT * FROM users WHERE id = ?";
+        String sql = "SELECT * FROM users WHERE UserID = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, userID);
             ResultSet rs = ps.executeQuery();
@@ -250,12 +178,12 @@ public boolean updatePassword(String email, String newPassword) throws SQLExcept
     }
 
     public boolean addUser(UserDTO user, int createdBy) throws SQLException {
-        String sql = "INSERT INTO users (full_name, gender, dob, specialization, role, status, email, phone, address, username, password, created_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO users (FullName, Gender, Dob, SportLevel, Role, Status, Email, Phone, Address, Username, Password, CreatedBy) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, user.getFullName());
             ps.setString(2, user.getGender());
             ps.setDate(3, new java.sql.Date(user.getDob().getTime()));
-            ps.setString(4, user.getSportLevel()); // lưu sportLevel tương ứng với specialization
+            ps.setString(4, user.getSportLevel());
             ps.setString(5, user.getRole());
             ps.setString(6, user.getStatus());
             ps.setString(7, user.getEmail());
@@ -281,7 +209,7 @@ public boolean updatePassword(String email, String newPassword) throws SQLExcept
     }
 
     public UserDTO getEmployeeByID(int userID) throws SQLException {
-        String sql = "SELECT * FROM users WHERE id = ? AND role = 'Employee'";
+        String sql = "SELECT * FROM users WHERE UserID = ? AND Role = 'Employee'";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, userID);
             ResultSet rs = ps.executeQuery();
@@ -293,7 +221,7 @@ public boolean updatePassword(String email, String newPassword) throws SQLExcept
     }
 
     public boolean UpdateEmployee(UserDTO user) throws SQLException {
-        String sql = "UPDATE users SET full_name = ?, gender = ?, dob = ?, specialization = ?, status = ?, phone = ?, address = ? WHERE id = ?";
+        String sql = "UPDATE users SET FullName = ?, Gender = ?, Dob = ?, SportLevel = ?, Status = ?, Phone = ?, Address = ? WHERE UserID = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, user.getFullName());
             ps.setString(2, user.getGender());
@@ -306,27 +234,27 @@ public boolean updatePassword(String email, String newPassword) throws SQLExcept
             return ps.executeUpdate() > 0;
         }
     }
-//
+
     private UserDTO mapResultSetToUser(ResultSet rs) throws SQLException {
         UserDTO user = new UserDTO();
-        user.setUserID(rs.getInt("userID"));
-        user.setUsername(rs.getString("username"));
-        user.setEmail(rs.getString("email"));
-        user.setPassword(rs.getString("password"));
-        user.setRole(rs.getString("role"));
-        user.setPhone(rs.getString("phone"));
-        user.setFullName(rs.getString("fullname"));
-        user.setGender(rs.getString("gender"));
-        user.setDob(rs.getDate("dob"));
-        user.setSportLevel(rs.getString("sportlevel"));
-        user.setStatus(rs.getString("status"));
-        user.setAddress(rs.getString("address"));
-        user.setCreatedAt(rs.getTimestamp("createdat"));
-        user.setCreatedBy(rs.getInt("createdby"));
-        user.setUpdatedAt(rs.getTimestamp("updatedat"));
+        user.setUserID(rs.getInt("UserID"));
+        user.setUsername(rs.getString("Username"));
+        user.setEmail(rs.getString("Email"));
+        user.setPassword(rs.getString("Password"));
+        user.setRole(rs.getString("Role"));
+        user.setPhone(rs.getString("Phone"));
+        user.setFullName(rs.getString("FullName"));
+        user.setGender(rs.getString("Gender"));
+        user.setDob(rs.getDate("Dob"));
+        user.setSportLevel(rs.getString("SportLevel"));
+        user.setStatus(rs.getString("Status"));
+        user.setAddress(rs.getString("Address"));
+        user.setCreatedAt(rs.getTimestamp("CreatedAt"));
+        user.setCreatedBy(rs.getInt("CreatedBy"));
+        user.setUpdatedAt(rs.getTimestamp("UpdatedAt"));
         return user;
     }
-//
+
     public void updateUser(UserDTO user) {
         String selectSql = "SELECT UpdatedAt FROM Users WHERE Email = ?";
         String updateSql = "UPDATE Users SET FullName = ?, Dob = ?, Gender = ?, Phone = ?, Address = ?, SportLevel = ?, Password = ?, CreatedAt = ?, UpdatedAt = ? WHERE Email = ?";
@@ -370,13 +298,13 @@ public boolean updatePassword(String email, String newPassword) throws SQLExcept
             e.printStackTrace();
         }
     }
-//
+
     public boolean registerUser(UserDTO user) throws SQLException {
-        String sql = "INSERT INTO Users (Username, [Password], Email, FullName, Dob, Gender, Phone, [Address], SportLevel, [Role], [Status], CreatedBy, CreatedAt, UpdatedAt, verify_code) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Active', ?, GETDATE(), GETDATE(), ?)";
+        String sql = "INSERT INTO Users (Username, [Password], Email, FullName, Dob, Gender, Phone, [Address], SportLevel, [Role], [Status], CreatedBy, CreatedAt, UpdatedAt) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Active', ?, GETDATE(), GETDATE())";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, user.getUsername());
-            ps.setString(2, user.getPassword());
+            ps.setString(2, user.getPassword()); // Mật khẩu đã hash bên ngoài
             ps.setString(3, user.getEmail());
 
             if (user.getFullName() != null && !user.getFullName().isEmpty()) {
@@ -423,75 +351,27 @@ public boolean updatePassword(String email, String newPassword) throws SQLExcept
                 ps.setNull(11, Types.INTEGER);
             }
 
-            // Thêm dòng này để set verify_code
-            ps.setString(12, user.getVerifyCode());
-
             return ps.executeUpdate() > 0;
         }
     }
-//
-    public static void main(String[] args) {
-        UserDAO userDAO = new UserDAO();
 
+    // Hàm hash password đơn giản bằng MD5, giống trong servlet hoặc DAO
+    private static String hashPassword(String password) {
         try {
-            // Tạo đối tượng UserDTO test
-            UserDTO newUser = new UserDTO();
-            newUser.setUsername("testuser123");
-            newUser.setPassword(hashPassword("123456")); // Hash mật khẩu trước khi lưu
-            newUser.setEmail("testuser123@example.com");
-            newUser.setFullName("Test User");
-            // Chuyển String sang Date
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            newUser.setDob(sdf.parse("1990-01-01"));
-            newUser.setGender("Male");
-            newUser.setPhone("0123456789");
-            newUser.setAddress("123 ABC Street");
-            newUser.setSportLevel("Intermediate");
-            newUser.setRole("Customer");
-            newUser.setCreatedBy(null); // null nếu không có admin tạo
-
-            boolean result = userDAO.registerUser(newUser);
-            if (result) {
-                System.out.println("Đăng ký thành công!");
-            } else {
-                System.out.println("Đăng ký thất bại!");
+            java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
+            md.update(password.getBytes());
+            byte[] digest = md.digest();
+            StringBuilder sb = new StringBuilder();
+            for (byte b : digest) {
+                sb.append(String.format("%02x", b & 0xff));
             }
-
+            return sb.toString();
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
-//
-//    // Hàm hash password đơn giản bằng MD5, giống trong servlet hoặc DAO
-//    private static String hashPassword(String password) {
-//        try {
-//            java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
-//            md.update(password.getBytes());
-//            byte[] digest = md.digest();
-//            StringBuilder sb = new StringBuilder();
-//            for (byte b : digest) {
-//                sb.append(String.format("%02x", b & 0xff));
-//            }
-//            return sb.toString();
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-//    
-//    // trong UserDAO.java
-
-public class PasswordUtil {
-
-    // Mã hóa mật khẩu bằng BCrypt
-    public static String hashPassword(String plainPassword) {
-        return BCrypt.hashpw(plainPassword, BCrypt.gensalt(10));
-    }
-
-    // Kiểm tra mật khẩu với hash đã lưu
-    public static boolean checkPassword(String plainPassword, String hashedPassword) {
-        return BCrypt.checkpw(plainPassword, hashedPassword);
-    }
-}
+    
+    // trong UserDAO.java
 public boolean updateUserProfile1(UserDTO user) throws SQLException {
     String sql = "UPDATE Users "
                + "SET FullName = ?, Dob = ?, Gender = ?, Phone = ?, Address = ?, SportLevel = ? "
@@ -512,41 +392,88 @@ public boolean updateUserProfile1(UserDTO user) throws SQLException {
         return ps.executeUpdate() > 0;
     }
 }
-public boolean insertUser(String email, String password, String code) {
-        String sql = "INSERT INTO users (email, password, verify_code , is_verified) VALUES (?, ?, ?,false)";
-        try (Connection conn = DBUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, email);
-            ps.setString(2, password);
-            ps.setString(3, code);
-            ps.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            e.printStackTrace(); // Log lỗi để dễ debug
-            return false;
+
+    // Lấy tất cả user
+    public List<UserDTO> getAllUsers() throws SQLException {
+        List<UserDTO> list = new ArrayList<>();
+        String sql = "SELECT * FROM users ORDER BY UserID DESC";
+        try (PreparedStatement ps = DBUtils.getConnection().prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(mapResultSetToUser(rs));
+            }
+        }
+        return list;
+    }
+
+    // Tìm kiếm user theo username, email, fullname
+    public List<UserDTO> searchUsers(String keyword) throws SQLException {
+        List<UserDTO> list = new ArrayList<>();
+        String sql = "SELECT * FROM users WHERE username LIKE ? OR email LIKE ? OR FullName LIKE ? ORDER BY UserID DESC";
+        try (PreparedStatement ps = DBUtils.getConnection().prepareStatement(sql)) {
+            String kw = "%" + keyword + "%";
+            ps.setString(1, kw);
+            ps.setString(2, kw);
+            ps.setString(3, kw);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(mapResultSetToUser(rs));
+            }
+        }
+        return list;
+    }
+
+    // Thêm user đơn giản (dùng cho admin thêm user)
+    public boolean addUserSimple(UserDTO user) throws SQLException {
+        String sql = "INSERT INTO users (username, email, password, FullName, role, status, phone, address, SportLevel) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement ps = DBUtils.getConnection().prepareStatement(sql)) {
+            ps.setString(1, user.getUsername());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getPassword());
+            ps.setString(4, user.getFullName());
+            ps.setString(5, user.getRole());
+            ps.setString(6, user.getStatus());
+            ps.setString(7, user.getPhone());
+            ps.setString(8, user.getAddress());
+            ps.setString(9, user.getSportLevel());
+            return ps.executeUpdate() > 0;
         }
     }
-//
-    public boolean verifyCode(String email, String code) {
-        String sql = "SELECT * FROM users WHERE email=? AND verify_code=?";
-        try (Connection conn = DBUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setString(1, email.trim());
-            ps.setString(2, code.trim());
-
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    String updateSql = "UPDATE users SET is_verified=1, verify_code=NULL WHERE email=? AND verify_code=?";
-                    try (PreparedStatement update = conn.prepareStatement(updateSql)) {
-                        update.setString(1, email.trim());
-                        update.setString(2, code.trim());
-                        int rows = update.executeUpdate();
-                        return rows > 0;
-                    }
-                }
+    // Cập nhật user đơn giản (dùng cho admin sửa user)
+    public boolean updateUserSimple(UserDTO user) throws SQLException {
+        String sql = "UPDATE users SET FullName=?, role=?, status=?, phone=?, address=? WHERE UserID=?";
+        try (PreparedStatement ps = DBUtils.getConnection().prepareStatement(sql)) {
+            ps.setString(1, user.getFullName());
+            ps.setString(2, user.getRole());
+            ps.setString(3, user.getStatus());
+            ps.setString(4, user.getPhone());
+            ps.setString(5, user.getAddress());
+            ps.setInt(6, user.getUserID());
+            return ps.executeUpdate() > 0;
+        }
+    }
+    
+     public static void main(String[] args) {
+        UserDAO userDAO = new UserDAO();
+        System.out.println("\n=== Test getAllUsers ===");
+        try {
+            List<UserDTO> users = userDAO.getAllUsers();
+            for (UserDTO u : users) {
+                System.out.println(u.getUserID() + " - " + u.getUsername() + " - " + u.getEmail());
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return false;
     }
+
+    // Xóa user theo UserID
+    public boolean deleteUser(int userID) throws SQLException {
+        String sql = "DELETE FROM users WHERE UserID = ?";
+        try (PreparedStatement ps = DBUtils.getConnection().prepareStatement(sql)) {
+            ps.setInt(1, userID);
+            return ps.executeUpdate() > 0;
+        }
+    }
+
 }

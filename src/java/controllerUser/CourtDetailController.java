@@ -22,11 +22,6 @@ import java.util.List;
 import models.CourtDTO;
 import models.CourtScheduleDTO;
 
-/**
- *
- * @author Admin
- */
-@WebServlet(name="CourtDetailController", urlPatterns={"/court-detail"})
 public class CourtDetailController extends HttpServlet {
    
     
@@ -43,7 +38,7 @@ public class CourtDetailController extends HttpServlet {
             }
             
             CourtDAO courtDAO = new CourtDAO();
-            Long courtId = Long.parseLong(courtIdParam);
+            Integer courtId = Integer.parseInt(courtIdParam);
             CourtDTO court = courtDAO.getCourtById(courtId);
             
             if (court == null) {
