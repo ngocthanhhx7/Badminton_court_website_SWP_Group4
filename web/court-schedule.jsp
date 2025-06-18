@@ -18,10 +18,10 @@
         <link rel="stylesheet" href="css/bootstrap.min.css">
         <link rel="stylesheet" href="css/font-awesome.min.css">
         <link rel="stylesheet" href="css/style.css">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
         <script src="https://cdn.tailwindcss.com"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
         <style>
             .schedule-container {
@@ -274,10 +274,12 @@
             }
         %>
         <!-- header-end -->
-        
-        <div class="bradcam_area breadcam_bg_2">
-            <h3>Court Schedule</h3>
+
+        <!-- bradcam_area_start -->
+        <div class="bradcam_area breadcam_bg">
+            <h3>Lịch</h3>
         </div>
+        <!-- bradcam_area_end -->
 
         <!-- Schedule Section -->
         <div class="schedule-container">

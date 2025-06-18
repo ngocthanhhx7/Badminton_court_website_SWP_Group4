@@ -578,6 +578,7 @@
 
             });
         </script>
+        <div id="chat-icon" onclick="window.location.href='chatRoomServer.jsp'" title="Chuyển sang trang chat">💬</div>
 
 
 

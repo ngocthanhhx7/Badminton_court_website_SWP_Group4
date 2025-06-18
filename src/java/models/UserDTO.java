@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 public class UserDTO {
+
     private int UserID;
     private String Username;
     private String Password;
@@ -19,13 +20,23 @@ public class UserDTO {
     private Integer CreatedBy;
     private Timestamp CreatedAt;
     private Timestamp UpdatedAt;
+    private String verifyCode;
+    private boolean isVerified;
+
+    public String getVerifyCode() {
+        return verifyCode;
+    }
+
+    public void setVerifyCode(String verifyCode) {
+        this.verifyCode = verifyCode;
+    }
 
     public UserDTO() {
     }
 
     public UserDTO(int UserID, String Username, String Password, String Email, String FullName, Date Dob,
-                 String Gender, String Phone, String Address, String SportLevel, String Role, String Status,
-                 int CreatedBy, Timestamp CreatedAt, Timestamp UpdatedAt) {
+            String Gender, String Phone, String Address, String SportLevel, String Role, String Status,
+            int CreatedBy, Timestamp CreatedAt, Timestamp UpdatedAt) {
         this.UserID = UserID;
         this.Username = Username;
         this.Password = Password;
@@ -44,7 +55,6 @@ public class UserDTO {
     }
 
     // Getters and Setters
-
     public int getUserID() {
         return UserID;
     }
@@ -164,26 +174,25 @@ public class UserDTO {
     public void setUpdatedAt(Timestamp updatedAt) {
         this.UpdatedAt = updatedAt;
     }
-    
 
     @Override
     public String toString() {
-        return "UserDTO{" +
-                "UserID=" + UserID +
-                ", Username='" + Username + '\'' +
-                ", Password='" + Password + '\'' +
-                ", Email='" + Email + '\'' +
-                ", FullName='" + FullName + '\'' +
-                ", Dob=" + Dob +
-                ", Gender='" + Gender + '\'' +
-                ", Phone='" + Phone + '\'' +
-                ", Address='" + Address + '\'' +
-                ", SportLevel='" + SportLevel + '\'' +
-                ", Role='" + Role + '\'' +
-                ", Status='" + Status + '\'' +
-                ", CreatedBy=" + CreatedBy +
-                ", CreatedAt=" + CreatedAt +
-                ", UpdatedAt=" + UpdatedAt +
-                '}';
+        return "UserDTO{"
+                + "UserID=" + UserID
+                + ", Username='" + Username + '\''
+                + ", Password='" + Password + '\''
+                + ", Email='" + Email + '\''
+                + ", FullName='" + FullName + '\''
+                + ", Dob=" + Dob
+                + ", Gender='" + Gender + '\''
+                + ", Phone='" + Phone + '\''
+                + ", Address='" + Address + '\''
+                + ", SportLevel='" + SportLevel + '\''
+                + ", Role='" + Role + '\''
+                + ", Status='" + Status + '\''
+                + ", CreatedBy=" + CreatedBy
+                + ", CreatedAt=" + CreatedAt
+                + ", UpdatedAt=" + UpdatedAt
+                + '}';
     }
 }

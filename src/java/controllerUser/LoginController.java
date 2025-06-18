@@ -98,6 +98,7 @@ public class LoginController extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("acc", admin);
             session.setAttribute("accType", "admin");
+            session.setAttribute("username", admin.getUsername());
 
             handleRememberMe(request, response, emailOrUsername, password);
 
@@ -109,6 +110,7 @@ public class LoginController extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("acc", user);
             session.setAttribute("accType", "user");
+            session.setAttribute("username", user.getUsername());
 
             // Kiểm tra profile đầy đủ chưa
             if (user.getFullName() == null

@@ -47,7 +47,7 @@
             }
 
             .booking-header {
-                background: linear-gradient(45deg, #78350f, #a0522d);
+                background: linear-gradient(45deg, #fcedc9, #dbaa32);
                 color: white;
                 padding: 30px;
                 text-align: center;
@@ -185,10 +185,12 @@
             }
         %>
         <!-- header-end -->
-        
-        <div class="bradcam_area breadcam_bg">
-            <h3>Booking Form</h3>
+
+        <!-- bradcam_area_start -->
+        <div class="bradcam_area breadcam_bg_2">
+            <h3>Book Your Court</h3>
         </div>
+        <!-- bradcam_area_end -->
 
         <!-- Booking Form Section -->
         <div class="booking-container mt-10">
