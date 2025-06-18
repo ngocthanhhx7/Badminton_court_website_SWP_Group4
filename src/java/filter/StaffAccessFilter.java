@@ -4,6 +4,7 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import java.io.IOException;
 import models.UserDTO;
+import models.AdminDTO;
 
 public class StaffAccessFilter implements Filter {
     
@@ -26,14 +27,29 @@ public class StaffAccessFilter implements Filter {
         }
 
         // Lấy thông tin user từ session
-        UserDTO user = (UserDTO) session.getAttribute("acc");
+        Object sessionUser = session.getAttribute("acc");
         
         // Kiểm tra nếu là Staff và đang cố truy cập trang home
-        if (user != null && "staff".equalsIgnoreCase(user.getRole()) 
-            && httpRequest.getRequestURI().endsWith("/home")) {
-            // Chuyển hướng Staff về trang page-manager
-            httpResponse.sendRedirect(httpRequest.getContextPath() + "/page-manager");
-            return;
+        if (sessionUser != null) {
+            String userRole = null;
+            
+            // Kiểm tra loại object và lấy role tương ứng
+            if (sessionUser instanceof UserDTO) {
+                UserDTO user = (UserDTO) sessionUser;
+                userRole = user.getRole();
+            } else if (sessionUser instanceof AdminDTO) {
+                // Admin không có role field, nhưng có thể coi như có quyền cao nhất
+                // Không cần chuyển hướng admin khỏi trang home
+                chain.doFilter(request, response);
+                return;
+            }
+            
+            // Chỉ kiểm tra chuyển hướng cho Staff (UserDTO với role = "Staff")
+            if ("staff".equalsIgnoreCase(userRole) && httpRequest.getRequestURI().endsWith("/home")) {
+                // Chuyển hướng Staff về trang page-manager
+                httpResponse.sendRedirect(httpRequest.getContextPath() + "/page-manager");
+                return;
+            }
         }
 
         // Cho phép request tiếp tục nếu không phải Staff hoặc không phải trang home

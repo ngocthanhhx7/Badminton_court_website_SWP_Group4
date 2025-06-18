@@ -11,7 +11,7 @@ import java.util.UUID;
 public class FileUploadUtil {
     
     private static final String UPLOAD_DIRECTORY = "img/carousel";
-    private static final long MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+    private static final long MAX_FILE_SIZE = 5 * 1024 * 1024; 
     private static final String[] ALLOWED_EXTENSIONS = {".jpg", ".jpeg", ".png", ".gif", ".webp"};
     
     public static String uploadFile(Part filePart, String contextPath) throws IOException {
@@ -19,35 +19,28 @@ public class FileUploadUtil {
             return null;
         }
         
-        // Validate file size
         if (filePart.getSize() > MAX_FILE_SIZE) {
             throw new IOException("File size exceeds maximum limit of 5MB");
         }
         
-        // Get file extension
         String fileName = getSubmittedFileName(filePart);
         String fileExtension = getFileExtension(fileName);
         
-        // Validate file extension
         if (!isValidExtension(fileExtension)) {
             throw new IOException("Invalid file type. Allowed types: " + String.join(", ", ALLOWED_EXTENSIONS));
         }
         
-        // Generate unique filename
         String uniqueFileName = generateUniqueFileName(fileExtension);
         
-        // Create upload directory if it doesn't exist
         String uploadPath = contextPath + File.separator + UPLOAD_DIRECTORY;
         File uploadDir = new File(uploadPath);
         if (!uploadDir.exists()) {
             uploadDir.mkdirs();
         }
         
-        // Save file
         String filePath = uploadPath + File.separator + uniqueFileName;
         filePart.write(filePath);
         
-        // Return relative path for database storage
         return "/" + UPLOAD_DIRECTORY + "/" + uniqueFileName;
     }
     
@@ -88,7 +81,7 @@ public class FileUploadUtil {
     
     public static boolean deleteFile(String filePath, String contextPath) {
         if (filePath == null || filePath.isEmpty() || filePath.startsWith("http")) {
-            return false; // Don't delete external URLs
+            return false; 
         }
         
         try {
@@ -106,12 +99,10 @@ public class FileUploadUtil {
             return false;
         }
         
-        // Check file size
         if (filePart.getSize() > MAX_FILE_SIZE) {
             return false;
         }
         
-        // Check file extension
         String fileName = getSubmittedFileName(filePart);
         String fileExtension = getFileExtension(fileName);
         return isValidExtension(fileExtension);

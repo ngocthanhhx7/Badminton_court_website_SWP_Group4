@@ -17,12 +17,9 @@ public class ManagerAccessFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
-        // Kiểm tra quyền truy cập sử dụng AccessControlUtil
         if (AccessControlUtil.hasManagerAccess(httpRequest)) {
-            // Cho phép truy cập
             chain.doFilter(request, response);
         } else {
-            // Không có quyền, chuyển hướng về trang lỗi
             httpResponse.sendRedirect(httpRequest.getContextPath() + "/access-denied.jsp");
         }
     }

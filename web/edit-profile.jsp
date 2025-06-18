@@ -1,12 +1,23 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="models.UserDTO" %>
+<%@ page import="models.UserDTO, models.AdminDTO" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%
-    UserDTO user = (UserDTO) session.getAttribute("acc");
+    Object accObj = session.getAttribute("acc");
+    UserDTO user = null;
+    
+    // Chỉ xử lý cho UserDTO, không xử lý cho AdminDTO
+    if (accObj instanceof UserDTO) {
+        user = (UserDTO) accObj;
+    } else {
+        response.sendRedirect("./Login");
+        return;
+    }
+    
     if (user == null) {
         response.sendRedirect("./Login");
         return;
     }
+    
     String dobFormatted = "";
     if (user.getDob() != null) {
         dobFormatted = new SimpleDateFormat("yyyy-MM-dd").format(user.getDob());

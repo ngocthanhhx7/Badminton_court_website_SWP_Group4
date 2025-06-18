@@ -94,9 +94,21 @@
 
         <div class="container">
             <h2>Đăng ký tài khoản</h2>
-            <c:if test="${not empty message}">
-                <div class="message">${message}</div>
-            </c:if>
+            
+            <!-- Hiển thị thông báo lỗi -->
+            <% if (request.getAttribute("error") != null) { %>
+                <div class="alert alert-danger" role="alert">
+                    <%= request.getAttribute("error") %>
+                </div>
+            <% } %>
+            
+            <!-- Hiển thị thông báo thành công -->
+            <% if (request.getAttribute("message") != null) { %>
+                <div class="alert alert-success" role="alert">
+                    <%= request.getAttribute("message") %>
+                </div>
+            <% } %>
+            
             <form action="register" method="post">
                 <div class="form-group">
                     <label for="username">Username <span style="color:red">*</span></label>

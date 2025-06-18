@@ -75,6 +75,10 @@
         <url-pattern>/update-profile</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>UpdateProfileController</servlet-name>
+        <url-pattern>/update-profile-admin</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>ChatServlet</servlet-name>
         <url-pattern>/chat</url-pattern>
     </servlet-mapping>

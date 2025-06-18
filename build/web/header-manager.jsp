@@ -59,7 +59,7 @@
                     <span class="nav-profile-name ms-2 fw-bold text-white"><%= username %></span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
-                    <a class="dropdown-item" href="view-profile.jsp">
+                    <a class="dropdown-item" href="./view-profile">
                         <i class="typcn typcn-user text-primary me-2"></i>
                         View Profile
                     </a>
@@ -150,20 +150,6 @@
             <li class="nav-item">
                 <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
                     <i class="typcn typcn-briefcase menu-icon"></i>
-                    <span class="menu-title">UI Elements</span>
-                    <i class="typcn typcn-chevron-right menu-arrow"></i>
-                </a>
-                <div class="collapse" id="ui-basic">
-                    <ul class="nav flex-column sub-menu">
-                        <li class="nav-item"> <a class="nav-link" href="pages/ui-features/buttons.html">Buttons</a></li>
-                        <li class="nav-item"> <a class="nav-link" href="pages/ui-features/dropdowns.html">Dropdowns</a></li>
-                        <li class="nav-item"> <a class="nav-link" href="pages/ui-features/typography.html">Typography</a></li>
-                    </ul>
-                </div>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
-                    <i class="typcn typcn-briefcase menu-icon"></i>
                     <span class="menu-title">UI Manager</span>
                     <i class="typcn typcn-chevron-right menu-arrow"></i>
                 </a>
@@ -181,23 +167,27 @@
             <li class="nav-item">
                 <a class="nav-link" data-toggle="collapse" href="#form-elements" aria-expanded="false" aria-controls="form-elements">
                     <i class="typcn typcn-film menu-icon"></i>
-                    <span class="menu-title">Form elements</span>
+                    <span class="menu-title">Account & Court Hub</span>
                     <i class="menu-arrow"></i>
                 </a>
                 <div class="collapse" id="form-elements">
                     <ul class="nav flex-column sub-menu">
-                        <li class="nav-item"><a class="nav-link" href="pages/forms/basic_elements.html">Basic Elements</a></li>
+                        <li class="nav-item"><a class="nav-link" href="./user-manager">User Account</a></li>
+                        <li class="nav-item"><a class="nav-link" href="./admin-manager">Admin Account</a></li>
+                        <li class="nav-item"><a class="nav-link" href="./court-manager">Court Manager</a></li>
+                        <li class="nav-item"> <a class="nav-link" href="sevice-manaer">Sevice Manager</a></li>
                     </ul>
                 </div>
             </li>
             <li class="nav-item">
                 <a class="nav-link" data-toggle="collapse" href="#charts" aria-expanded="false" aria-controls="charts">
                     <i class="typcn typcn-chart-pie-outline menu-icon"></i>
-                    <span class="menu-title">Charts</span>
+                    <span class="menu-title">Sales</span>
                     <i class="menu-arrow"></i>
                 </a>
                 <div class="collapse" id="charts">
                     <ul class="nav flex-column sub-menu">
+                        <li class="nav-item"> <a class="nav-link" href="pages/charts/chartjs.html">ChartJs</a></li>
                         <li class="nav-item"> <a class="nav-link" href="pages/charts/chartjs.html">ChartJs</a></li>
                     </ul>
                 </div>
@@ -205,12 +195,13 @@
             <li class="nav-item">
                 <a class="nav-link" data-toggle="collapse" href="#tables" aria-expanded="false" aria-controls="tables">
                     <i class="typcn typcn-th-small-outline menu-icon"></i>
-                    <span class="menu-title">Tables</span>
+                    <span class="menu-title">Statitics</span>
                     <i class="menu-arrow"></i>
                 </a>
                 <div class="collapse" id="tables">
                     <ul class="nav flex-column sub-menu">
-                        <li class="nav-item"> <a class="nav-link" href="pages/tables/basic-table.html">Basic table</a></li>
+                        <li class="nav-item"> <a class="nav-link" href="booking-manager">Booking</a></li>
+                        <li class="nav-item"> <a class="nav-link" href="invoices-manager">Invoices</a></li>
                     </ul>
                 </div>
             </li>
@@ -226,40 +217,5 @@
                     </ul>
                 </div>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
-                    <i class="typcn typcn-user-add-outline menu-icon"></i>
-                    <span class="menu-title">User Pages</span>
-                    <i class="menu-arrow"></i>
-                </a>
-                <div class="collapse" id="auth">
-                    <ul class="nav flex-column sub-menu">
-                        <li class="nav-item"> <a class="nav-link" href="pages/samples/login.html"> Login </a></li>
-                        <li class="nav-item"> <a class="nav-link" href="pages/samples/register.html"> Register </a></li>
-                    </ul>
-                </div>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" data-toggle="collapse" href="#error" aria-expanded="false" aria-controls="error">
-                    <i class="typcn typcn-globe-outline menu-icon"></i>
-                    <span class="menu-title">Error pages</span>
-                    <i class="menu-arrow"></i>
-                </a>
-                <div class="collapse" id="error">
-                    <ul class="nav flex-column sub-menu">
-                        <li class="nav-item"> <a class="nav-link" href="pages/samples/error-404.html"> 404 </a></li>
-                        <li class="nav-item"> <a class="nav-link" href="pages/samples/error-500.html"> 500 </a></li>
-                    </ul>
-                </div>
-            </li>
-
-        </ul>
-        <ul class="sidebar-legend">
-            <li>
-                <p class="sidebar-menu-title">Category</p>
-            </li>
-            <li class="nav-item"><a href="#" class="nav-link">#Sales</a></li>
-            <li class="nav-item"><a href="#" class="nav-link">#Marketing</a></li>
-            <li class="nav-item"><a href="#" class="nav-link">#Growth</a></li>
         </ul>
     </nav>

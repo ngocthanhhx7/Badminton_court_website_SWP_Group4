@@ -3,41 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/SWP-project/src/java/controllerAdmin/PageManagerController.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerUser/Iconstant.java</file>
-            <file>file:/C:/SWP-project/src/java/models/SliderDTO.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerAdmin/VideoManagerController.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerAdmin/AboutManagerController.java</file>
-            <file>file:/C:/SWP-project/src/java/dao/BlogTagDAO.java</file>
-            <file>file:/C:/SWP-project/src/java/filter/ManagerAccessFilter.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerUser/BlogDetailController.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerUser/CourtController.java</file>
-            <file>file:/C:/SWP-project/src/java/dao/BlogSubscriberDAO.java</file>
-            <file>file:/C:/SWP-project/src/java/dao/InstagramFeedDAO.java</file>
-            <file>file:/C:/SWP-project/src/java/models/AboutSectionDTO.java</file>
-            <file>file:/C:/SWP-project/src/java/utils/AccessControlUtil.java</file>
             <file>file:/C:/SWP-project/src/java/controllerAdmin/SliderManagerController.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerUser/LogoutController.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerUser/UpdateProfileController.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerAdmin/InstagramManagerController.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerAdmin/OfferManagerController.java</file>
-            <file>file:/C:/SWP-project/src/java/dao/BlogPostDAO.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerUser/ContactServlet.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerUser/CourtDetailController.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerUser/AboutController.java</file>
-            <file>file:/C:/SWP-project/src/java/dao/SliderDAO.java</file>
+            <file>file:/C:/SWP-project/src/java/controllerAdmin/AboutManagerController.java</file>
             <file>file:/C:/SWP-project/src/java/controllerAdmin/ContactManagerController.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerUser/RegisterController.java</file>
-            <file>file:/C:/SWP-project/src/java/filter/StaffAccessFilter.java</file>
-            <file>file:/C:/SWP-project/src/java/dao/UserDAO.java</file>
-            <file>file:/C:/SWP-project/src/java/utils/FileUploadUtil.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerUser/HomepageController.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerUser/LoginGoogleController.java</file>
-            <file>file:/C:/SWP-project/src/java/dao/AboutSectionDAO.java</file>
-            <file>file:/C:/SWP-project/src/java/models/ContactInfoDTO.java</file>
-            <file>file:/C:/SWP-project/src/java/dao/ContactInfoDAO.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerUser/RegistrationController.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerUser/LoginController.java</file>
         </group>
     </open-files>
 </project-private>

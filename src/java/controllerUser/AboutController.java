@@ -61,7 +61,7 @@ public class AboutController extends HttpServlet {
         InstagramFeedDAO dao = new InstagramFeedDAO();
 
         List<SliderDTO> sliders = sliderDAO.getAllActiveSliders();
-        
+
         // Fix: Handle SQLException for AboutSectionDAO calls
         List<AboutSectionDTO> aboutSections = new ArrayList<>();
         try {
@@ -71,12 +71,13 @@ public class AboutController extends HttpServlet {
             // Log error but continue with empty list
             aboutSections = new ArrayList<>();
         }
-        
+
         List<VideoDTO> videoList = new ArrayList<>();
         try {
-            videoList = videoDAO.getAllVideos(0, 0, search, Boolean.FALSE);
+            videoList = videoDAO.getAllVideos(1, 100, null, null);
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("Error loading videos: " + e.getMessage());
         }
         List<OfferDTO> allOffers = new ArrayList<>();
         try {
@@ -97,7 +98,10 @@ public class AboutController extends HttpServlet {
         }
 
         if (videoList != null && !videoList.isEmpty()) {
-            request.setAttribute("video", videoList.get(0)); // chỉ lấy video đầu tiên
+            request.setAttribute("video", videoList.get(0)); // Lấy video đầu tiên
+            System.out.println("Video loaded: " + videoList.get(0).getTitle());
+        } else {
+            System.out.println("No videos found in database");
         }
 
         int maxOffersToShow = 3;
@@ -116,7 +120,6 @@ public class AboutController extends HttpServlet {
             }
         }
 
-        
         List<CourtDTO> courts = courtDAO.filterCourts(search, status, courtType);
 
         if (courts == null || courts.isEmpty()) {

@@ -239,7 +239,7 @@ public class SliderManagerController extends HttpServlet {
                 String finalImagePath = backgroundImage;
                 if (filePart != null && filePart.getSize() > 0) {
                     try {
-                        String uploadedPath = FileUploadUtil.uploadFile(filePart, request.getServletContext().getRealPath(""));
+                        String uploadedPath = FileUploadUtil.uploadFile(filePart, request.getServletContext().getRealPath("/img/carousel"));
                         if (uploadedPath != null) {
                             finalImagePath = uploadedPath;
                         }

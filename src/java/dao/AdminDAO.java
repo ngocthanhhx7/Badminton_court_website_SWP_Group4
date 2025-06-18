@@ -157,4 +157,17 @@ public class AdminDAO {
         }
         return admins;
     }
+
+    public boolean updateAdmin(AdminDTO admin) throws SQLException {
+        String sql = "UPDATE Admins SET Username = ?, Password = ?, FullName = ?, Email = ?, Status = ?, UpdatedAt = GETDATE() WHERE AdminID = ?";
+        try (Connection conn = new DBUtils().getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, admin.getUsername());
+            stmt.setString(2, admin.getPassword());
+            stmt.setString(3, admin.getFullName());
+            stmt.setString(4, admin.getEmail());
+            stmt.setString(5, admin.getStatus());
+            stmt.setInt(6, admin.getAdminID());
+            return stmt.executeUpdate() > 0;
+        }
+    }
 }

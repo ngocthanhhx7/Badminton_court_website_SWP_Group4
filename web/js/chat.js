@@ -31,13 +31,58 @@ function sendMessage() {
         },
         body: 'message=' + encodeURIComponent(message)
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
     .then(data => {
         // Remove loading message
         removeLoadingMessage();
         
         if (data.error) {
-            addMessageToChat('assistant', 'Lỗi: ' + data.error);
+            // Handle different error types
+            let errorMessage = 'Lỗi: ' + data.error;
+            
+            if (data.error_type === 'quota_exceeded') {
+                errorMessage = '⚠️ Hạn mức API đã hết. Vui lòng thử lại sau hoặc liên hệ hỗ trợ.';
+                if (data.suggestion) {
+                    errorMessage += '\n\n💡 Gợi ý: ' + data.suggestion;
+                }
+            } else if (data.error_type === 'unauthorized') {
+                errorMessage = '🔐 Lỗi xác thực API. Vui lòng liên hệ hỗ trợ.';
+                if (data.suggestion) {
+                    errorMessage += '\n\n💡 Gợi ý: ' + data.suggestion;
+                }
+            } else if (data.error_type === 'bad_request') {
+                errorMessage = '❌ Yêu cầu không hợp lệ. Vui lòng kiểm tra lại tin nhắn.';
+                if (data.suggestion) {
+                    errorMessage += '\n\n💡 Gợi ý: ' + data.suggestion;
+                }
+            } else if (data.error_type === 'server_error') {
+                errorMessage = '🔧 Lỗi máy chủ. Vui lòng thử lại sau.';
+                if (data.suggestion) {
+                    errorMessage += '\n\n💡 Gợi ý: ' + data.suggestion;
+                }
+            } else if (data.error_type === 'configuration_error') {
+                errorMessage = '⚙️ Lỗi cấu hình hệ thống. Vui lòng liên hệ hỗ trợ.';
+                if (data.suggestion) {
+                    errorMessage += '\n\n💡 Gợi ý: ' + data.suggestion;
+                }
+            } else if (data.error_type === 'validation_error') {
+                errorMessage = '📝 ' + data.error;
+                if (data.suggestion) {
+                    errorMessage += '\n\n💡 Gợi ý: ' + data.suggestion;
+                }
+            } else if (data.error_type === 'internal_error') {
+                errorMessage = '💥 Lỗi hệ thống. Vui lòng thử lại sau.';
+                if (data.suggestion) {
+                    errorMessage += '\n\n💡 Gợi ý: ' + data.suggestion;
+                }
+            }
+            
+            addMessageToChat('assistant', errorMessage);
         } else if (data.choices && data.choices.length > 0) {
             const assistantMessage = data.choices[0].message.content;
             addMessageToChat('assistant', assistantMessage);
@@ -48,7 +93,18 @@ function sendMessage() {
     .catch(error => {
         console.error('Error:', error);
         removeLoadingMessage();
-        addMessageToChat('assistant', 'Lỗi kết nối. Vui lòng thử lại.');
+        
+        let errorMessage = 'Lỗi kết nối. Vui lòng thử lại.';
+        
+        if (error.message.includes('HTTP error! status: 503')) {
+            errorMessage = '🔧 Dịch vụ tạm thời không khả dụng. Vui lòng thử lại sau.';
+        } else if (error.message.includes('HTTP error! status: 500')) {
+            errorMessage = '💥 Lỗi máy chủ. Vui lòng thử lại sau hoặc liên hệ hỗ trợ.';
+        } else if (error.message.includes('HTTP error! status: 400')) {
+            errorMessage = '📝 Yêu cầu không hợp lệ. Vui lòng kiểm tra lại tin nhắn.';
+        }
+        
+        addMessageToChat('assistant', errorMessage);
     });
 }
 
@@ -61,7 +117,12 @@ function addMessageToChat(role, message, isLoading = false) {
         messageDiv.id = 'loading-message';
         messageDiv.innerHTML = '<div class="loading-dots"><span></span><span></span><span></span></div>';
     } else {
-        messageDiv.textContent = message;
+        // Handle multiline messages (especially for error messages with suggestions)
+        if (message.includes('\n')) {
+            messageDiv.innerHTML = message.replace(/\n/g, '<br>');
+        } else {
+            messageDiv.textContent = message;
+        }
     }
     
     chatMessages.appendChild(messageDiv);

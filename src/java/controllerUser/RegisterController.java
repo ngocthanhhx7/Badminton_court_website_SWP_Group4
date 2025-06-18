@@ -38,10 +38,15 @@ public class RegisterController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            // Chỉ lấy 3 trường bắt buộc
-            String username = request.getParameter("username").trim();
-            String email = request.getParameter("email").trim();
-            String rawPwd = request.getParameter("password").trim();
+            // Lấy các tham số từ form với xử lý null an toàn
+            String username = request.getParameter("username");
+            String email = request.getParameter("email");
+            String rawPwd = request.getParameter("password");
+
+            // Xử lý null values
+            username = (username != null) ? username.trim() : "";
+            email = (email != null) ? email.trim() : "";
+            rawPwd = (rawPwd != null) ? rawPwd.trim() : "";
 
             // Validate bắt buộc
             if (username.isEmpty() || email.isEmpty() || rawPwd.isEmpty()) {
@@ -77,9 +82,10 @@ public class RegisterController extends HttpServlet {
 
             boolean success = userDAO.registerUser(user);
             if (success) {
-                response.sendRedirect("./Login"); // sau đăng ký, chuyển sang login
+                request.setAttribute("message", "Đăng ký thành công! Vui lòng đăng nhập.");
+                response.sendRedirect("Login.jsp");
             } else {
-                request.setAttribute("message", "Đăng ký thất bại, vui lòng thử lại.");
+                request.setAttribute("message", "Đăng ký thất bại! Vui lòng thử lại.");
                 request.getRequestDispatcher("register.jsp").forward(request, response);
             }
         } catch (Exception e) {
@@ -87,7 +93,6 @@ public class RegisterController extends HttpServlet {
             request.setAttribute("message", "Lỗi hệ thống: " + e.getMessage());
             request.getRequestDispatcher("register.jsp").forward(request, response);
         }
-
     }
 
     @Override

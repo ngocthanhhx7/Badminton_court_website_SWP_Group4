@@ -5,6 +5,7 @@
 package controllerUser;
 
 import dao.UserDAO;
+import dao.AdminDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -16,20 +17,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import models.UserDTO;
+import models.AdminDTO;
 
 public class UpdateProfileController extends HttpServlet {
 
     private UserDAO userDAO = new UserDAO();
+    private AdminDAO adminDAO = new AdminDAO();
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -63,26 +57,40 @@ public class UpdateProfileController extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
 
         HttpSession session = request.getSession();
-        UserDTO user = (UserDTO) session.getAttribute("acc");
-
-        if (user == null) {
-            response.sendRedirect("login.jsp");
-            return;
+        Object sessionUser = session.getAttribute("acc");
+        String accType = (String) session.getAttribute("accType");
+        
+        // Xử lý cho User
+        if ("user".equals(accType) && sessionUser instanceof UserDTO) {
+            handleUserUpdate(request, response, (UserDTO) sessionUser);
         }
+        // Xử lý cho Admin
+        else if ("admin".equals(accType) && sessionUser instanceof AdminDTO) {
+            handleAdminUpdate(request, response, (AdminDTO) sessionUser);
+        }
+        else {
+            response.sendRedirect("Login.jsp");
+        }
+    }
+
+    private void handleUserUpdate(HttpServletRequest request, HttpServletResponse response, UserDTO user)
+            throws ServletException, IOException {
+        
         String password = request.getParameter("password");
 
         String specialCharRegex = ".*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?].*";
         String upperCaseRegex = ".*[A-Z].*";
 
-        if (password.length() <= 6
-                || !password.matches(upperCaseRegex)
-                || !password.matches(specialCharRegex)) {
+        if (password != null && password.length() > 0) {
+            if (password.length() <= 6
+                    || !password.matches(upperCaseRegex)
+                    || !password.matches(specialCharRegex)) {
 
-            request.setAttribute("error", "Mật khẩu phải nhiều hơn 6 ký tự, chứa ít nhất 1 chữ in hoa và 1 ký tự đặc biệt.");
-            request.getRequestDispatcher("edit-profile.jsp").forward(request, response);
-            return;
-        }
-        if (password == null || password.isEmpty()) {
+                request.setAttribute("error", "Mật khẩu phải nhiều hơn 6 ký tự, chứa ít nhất 1 chữ in hoa và 1 ký tự đặc biệt.");
+                request.getRequestDispatcher("edit-profile.jsp").forward(request, response);
+                return;
+            }
+        } else {
             password = user.getPassword(); 
         }
 
@@ -96,7 +104,7 @@ public class UpdateProfileController extends HttpServlet {
         String sportLevel = request.getParameter("sportLevel");
 
         String phoneRegex = "^(01|03|04|06|07|08|09)\\d{8}$";
-        if (!phone.matches(phoneRegex)) {
+        if (phone != null && !phone.matches(phoneRegex)) {
             request.setAttribute("error", "Số điện thoại không hợp lệ! Phải bắt đầu bằng 09 hoặc 03 và có đúng 10 chữ số.");
             request.getRequestDispatcher("edit-profile.jsp").forward(request, response);
             return;
@@ -104,27 +112,22 @@ public class UpdateProfileController extends HttpServlet {
 
         java.util.Date dob = null;
 
-        try {
-            dob = new SimpleDateFormat("yyyy-MM-dd").parse(dobStr);
-        } catch (ParseException e) {
-            request.setAttribute("error", "Ngày sinh không hợp lệ! Định dạng phải là yyyy-MM-dd.");
-            request.getRequestDispatcher("edit-profile.jsp").forward(request, response);
-            return;
-        }
-        try {
-            dob = new SimpleDateFormat("yyyy-MM-dd").parse(dobStr);
+        if (dobStr != null && !dobStr.isEmpty()) {
+            try {
+                dob = new SimpleDateFormat("yyyy-MM-dd").parse(dobStr);
 
-            Date currentDate = new Date();
-            if (dob.after(currentDate)) {
-                request.setAttribute("error", "Ngày sinh không được vượt quá ngày hiện tại.");
+                Date currentDate = new Date();
+                if (dob.after(currentDate)) {
+                    request.setAttribute("error", "Ngày sinh không được vượt quá ngày hiện tại.");
+                    request.getRequestDispatcher("edit-profile.jsp").forward(request, response);
+                    return;
+                }
+
+            } catch (ParseException e) {
+                request.setAttribute("error", "Ngày sinh không hợp lệ! Định dạng phải là yyyy-MM-dd.");
                 request.getRequestDispatcher("edit-profile.jsp").forward(request, response);
                 return;
             }
-
-        } catch (ParseException e) {
-            request.setAttribute("error", "Ngày sinh không hợp lệ! Định dạng phải là yyyy-MM-dd.");
-            request.getRequestDispatcher("edit-profile.jsp").forward(request, response);
-            return;
         }
 
         user.setFullName(fullName);
@@ -135,15 +138,80 @@ public class UpdateProfileController extends HttpServlet {
         user.setSportLevel(sportLevel);
 
         new UserDAO().updateUser(user);
-        session.setAttribute("currentUser", user);
+        request.getSession().setAttribute("currentUser", user);
 
         response.sendRedirect("view-profile.jsp?success=true");
+    }
+
+    private void handleAdminUpdate(HttpServletRequest request, HttpServletResponse response, AdminDTO admin)
+            throws ServletException, IOException {
+        
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        String fullName = request.getParameter("fullName");
+        String email = request.getParameter("email");
+        String status = request.getParameter("status");
+
+        // Validation
+        if (username == null || username.trim().isEmpty()) {
+            request.setAttribute("error", "Username không được để trống.");
+            request.getRequestDispatcher("edit-profile-admin.jsp").forward(request, response);
+            return;
+        }
+
+        if (password == null || password.trim().isEmpty()) {
+            request.setAttribute("error", "Password không được để trống.");
+            request.getRequestDispatcher("edit-profile-admin.jsp").forward(request, response);
+            return;
+        }
+
+        if (fullName == null || fullName.trim().isEmpty()) {
+            request.setAttribute("error", "Full Name không được để trống.");
+            request.getRequestDispatcher("edit-profile-admin.jsp").forward(request, response);
+            return;
+        }
+
+        if (email == null || email.trim().isEmpty()) {
+            request.setAttribute("error", "Email không được để trống.");
+            request.getRequestDispatcher("edit-profile-admin.jsp").forward(request, response);
+            return;
+        }
+
+        // Update admin information
+        admin.setUsername(username);
+        admin.setPassword(password);
+        admin.setFullName(fullName);
+        admin.setEmail(email);
+        admin.setStatus(status);
+
+        try {
+            boolean updated = adminDAO.updateAdmin(admin);
+            if (updated) {
+                request.getSession().setAttribute("acc", admin);
+                response.sendRedirect("view-profile-admin.jsp?success=true");
+            } else {
+                request.setAttribute("error", "Cập nhật thất bại, vui lòng thử lại.");
+                request.getRequestDispatcher("edit-profile-admin.jsp").forward(request, response);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("error", "Lỗi hệ thống: " + e.getMessage());
+            request.getRequestDispatcher("edit-profile-admin.jsp").forward(request, response);
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        UserDTO user = (UserDTO) request.getSession().getAttribute("currentUser");
+        Object sessionUser = request.getSession().getAttribute("currentUser");
+        
+        // Chỉ xử lý cho UserDTO, không xử lý cho AdminDTO
+        if (!(sessionUser instanceof UserDTO)) {
+            response.sendRedirect("./Login");
+            return;
+        }
+        
+        UserDTO user = (UserDTO) sessionUser;
         if (user == null) {
             response.sendRedirect("./Login");
             return;

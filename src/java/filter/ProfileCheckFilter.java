@@ -4,6 +4,7 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import java.io.IOException;
 import models.UserDTO;
+import models.AdminDTO;
 
 public class ProfileCheckFilter implements Filter {
     
@@ -19,11 +20,13 @@ public class ProfileCheckFilter implements Filter {
         HttpSession session = httpRequest.getSession();
 
         // Lấy thông tin user từ session
-        UserDTO user = (UserDTO) session.getAttribute("acc");
+        Object sessionUser = session.getAttribute("acc");
         String accType = (String) session.getAttribute("accType");
 
-        // Nếu là user và chưa hoàn thiện profile
-        if ("user".equals(accType) && user != null) {
+        // Chỉ kiểm tra profile cho UserDTO, không kiểm tra cho AdminDTO
+        if ("user".equals(accType) && sessionUser instanceof UserDTO) {
+            UserDTO user = (UserDTO) sessionUser;
+            
             if (user.getFullName() == null
                     || user.getDob() == null
                     || user.getGender() == null

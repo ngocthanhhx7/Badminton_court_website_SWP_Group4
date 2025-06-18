@@ -51,6 +51,7 @@
         <script src="js/owl.carousel.min.js"></script>
         <script src="js/effects.js"></script>
         <script src="js/page-transitions.js"></script>
+        <script src="js/main.js"></script>
 
         <script>
             $(document).ready(function () {

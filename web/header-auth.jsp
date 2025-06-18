@@ -24,15 +24,10 @@
                                     <li><a href="./home">home</a></li>
                                     <li><a href="./court">Courts</a></li>
                                     <li><a href="./about">About</a></li>
-                                    <li><a href="./blog">blog <i class="ti-angle-down"></i></a>
-                                        <ul class="submenu">
-                                            <li><a href="./blog">blog</a></li>
-                                            <li><a href="single-blog.jsp">single-blog</a></li>
-                                        </ul>
-                                    </li>
+                                    <li><a href="./blog">blog</a></li>
                                     <li><a href="#">pages <i class="ti-angle-down"></i></a>
                                         <ul class="submenu">
-                                            <li><a href="./court-manager">Page Management</a></li>
+                                            <li><a href="./page-manager">Page Management</a></li>
                                         </ul>
                                     </li>
                                 </ul>
@@ -48,19 +43,6 @@
                     </div>
                     <div class="col-xl-5 col-lg-4 d-none d-lg-block">
                         <div class="book_court d-flex align-items-center justify-content-end">
-                            <div class="socail_links mb-3">
-                                <ul class="list-inline mb-0 d-flex gap-3 justify-content-end">
-                                    <li class="list-inline-item">
-                                        <a href="https://www.facebook.com/ngocthanh552004/" class="text-primary fs-4"><i class="fa fa-facebook-square"></i></a>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <a href="https://www.facebook.com/ngocthanh552004/" class="text-info fs-4"><i class="fa fa-twitter"></i></a>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <a href="https://www.facebook.com/ngocthanh552004/" class="text-danger fs-4"><i class="fa fa-instagram"></i></a>
-                                    </li>
-                                </ul>
-                            </div>
                             <!-- Welcome, Name, Avatar, Dropdown -->
                             <div class="dropdown d-flex align-items-center gap-3 mb-2">
                                 <span class="me-2" style="color: #fff;">Welcome,</span>
@@ -85,7 +67,7 @@
                                         </div>
                                     </li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="view-profile.jsp"><i class="fa fa-user me-2"></i>View Profile</a></li>
+                                    <li><a class="dropdown-item" href="./view-profile"><i class="fa fa-user me-2"></i>View Profile</a></li>
                                     <li><a class="dropdown-item" href="change-password.jsp"><i class="fa fa-key me-2"></i>Change Password</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item text-danger" href="./logout"><i class="fa fa-sign-out me-2"></i>Logout</a></li>
