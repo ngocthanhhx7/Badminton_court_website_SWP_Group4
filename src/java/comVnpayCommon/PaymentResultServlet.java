@@ -1,4 +1,4 @@
-package com.vnpay.common;
+package comVnpayCommon;
 
 import dao.CourtScheduleDAO;
 import dao.InvoiceDAO;

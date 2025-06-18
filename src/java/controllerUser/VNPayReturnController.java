@@ -1,6 +1,6 @@
 package controllerUser;
 
-import com.vnpay.common.Config;
+import comVnpayCommon.Config;
 import dao.BookingDAO;
 import dao.InvoiceDAO;
 import models.BookingDTO;

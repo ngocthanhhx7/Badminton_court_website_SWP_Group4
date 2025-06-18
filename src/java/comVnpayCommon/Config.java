@@ -1,4 +1,4 @@
-package com.vnpay.common;
+package comVnpayCommon;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
