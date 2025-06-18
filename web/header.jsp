@@ -34,7 +34,7 @@
                                     <li><a href="#">pages <i class="ti-angle-down"></i></a>
                                         <ul class="submenu">
                                             <li><a href="elements.jsp">elements</a></li>
-                                            <li><a href="contact.jsp">Contact</a></li>
+                                            <li><a href="/contact">Contact</a></li>
                                         </ul>
                                     </li>
                                     

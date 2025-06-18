@@ -1,71 +1,49 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controllerUser;
 
 import dao.UserDAO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.text.SimpleDateFormat;
+import jakarta.servlet.http.HttpSession;
 import models.UserDTO;
+import utils.EmailUtils;
 import utils.PasswordUtil;
 
-/**
- *
- * @author nguye
- */
 public class RegisterController extends HttpServlet {
 
     private UserDAO userDAO = new UserDAO();
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //processRequest(request, response);
         doPost(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            // Lấy các tham số từ form với xử lý null an toàn
-            String username = request.getParameter("username");
-            String email = request.getParameter("email");
-            String rawPwd = request.getParameter("password");
+            String username = request.getParameter("username").trim();
+            String email = request.getParameter("email").trim();
+            String rawPwd = request.getParameter("password").trim();
 
-            // Xử lý null values
-            username = (username != null) ? username.trim() : "";
-            email = (email != null) ? email.trim() : "";
-            rawPwd = (rawPwd != null) ? rawPwd.trim() : "";
-
-            // Validate bắt buộc
             if (username.isEmpty() || email.isEmpty() || rawPwd.isEmpty()) {
                 request.setAttribute("message", "Username, Email và Password là bắt buộc!");
                 request.getRequestDispatcher("register.jsp").forward(request, response);
                 return;
             }
 
-            // Kiểm tra tồn tại
             if (userDAO.isEmailOrUsernameExists(email, username)) {
                 request.setAttribute("message", "Username hoặc Email đã tồn tại!");
                 request.getRequestDispatcher("register.jsp").forward(request, response);
                 return;
             }
+String hashedPwd = PasswordUtil.hashPassword(rawPwd);
+            
+            String verify_code = generateVerifyCode();
 
-            // Mã hoá mật khẩu
-            String hashedPwd = PasswordUtil.hashMD5(rawPwd);
-
-            // Tạo DTO với chỉ 3 trường, các trường khác để null
             UserDTO user = new UserDTO();
             user.setUsername(username);
             user.setEmail(email);
@@ -79,15 +57,32 @@ public class RegisterController extends HttpServlet {
             user.setRole("Customer");
             user.setStatus("Active");
             user.setCreatedBy(null);
+            user.setVerifyCode(verify_code);
 
             boolean success = userDAO.registerUser(user);
+
             if (success) {
-                request.setAttribute("message", "Đăng ký thành công! Vui lòng đăng nhập.");
-                response.sendRedirect("Login.jsp");
+                try {
+                    EmailUtils.sendVerificationEmail(email, verify_code);
+
+                    // Lưu vào session để verify.jsp dùng lại
+                    HttpSession session = request.getSession();
+                    session.setAttribute("PENDING_USER", user);
+                    session.setAttribute("VERIFY_EMAIL", email);
+
+                    request.setAttribute("message", "Đăng ký thành công! Vui lòng kiểm tra email để xác minh tài khoản.");
+                    request.setAttribute("email", email);
+                    request.getRequestDispatcher("verify.jsp").forward(request, response);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    request.setAttribute("message", "Đăng ký thành công nhưng gửi email xác minh thất bại.");
+                    request.getRequestDispatcher("register.jsp").forward(request, response);
+                }
             } else {
-                request.setAttribute("message", "Đăng ký thất bại! Vui lòng thử lại.");
+                request.setAttribute("message", "Đăng ký thất bại, vui lòng thử lại.");
                 request.getRequestDispatcher("register.jsp").forward(request, response);
             }
+
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("message", "Lỗi hệ thống: " + e.getMessage());
@@ -95,9 +90,13 @@ public class RegisterController extends HttpServlet {
         }
     }
 
+    private String generateVerifyCode() {
+        int code = (int)(Math.random() * 900000) + 100000;
+        return String.valueOf(code);
+    }
+
     @Override
     public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
-}
+        return "Đăng ký người dùng với xác minh email";
+    }
+} 
