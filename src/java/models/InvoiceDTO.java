@@ -1,26 +1,33 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package models;
 
-import java.sql.Timestamp;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import java.time.LocalDateTime;
+import java.math.BigDecimal;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class InvoiceDTO {
-    private int InvoiceID;
-    private int BookingID;
-    private int CustomerID;
-    private double TotalAmount;
-    private String Status;
-    private double Discount;
-    private double Tax;
-    private String PaymentMethod;
-    private Integer CreatedBy;
-    private Timestamp CreatedAt;
-    private Timestamp UpdatedAt;
+    private Long invoiceId;
+    private Long bookingId;
+    private Long customerId;
+    private BigDecimal totalAmount;
+    private BigDecimal discount;
+    private BigDecimal tax;
+    private BigDecimal finalAmount;
+    private String paymentMethod;
+    private String status;
+    private Long createdBy;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    
+    // VNPay fields
+    private String vnpTxnRef;
+    private String vnpOrderInfo;
+    private String vnpResponseCode;
+    private String vnpTransactionNo;
 }

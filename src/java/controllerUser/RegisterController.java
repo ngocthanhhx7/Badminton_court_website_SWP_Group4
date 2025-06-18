@@ -75,7 +75,7 @@ public class RegisterController extends HttpServlet {
             user.setGender(null);
             user.setPhone(null);
             user.setAddress(null);
-            user.setSportLevel(null);
+            user.setSportLevel("Beginner");
             user.setRole("Customer");
             user.setStatus("Active");
             user.setCreatedBy(null);

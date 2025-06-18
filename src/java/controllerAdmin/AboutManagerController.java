@@ -464,10 +464,6 @@ public class AboutManagerController extends HttpServlet {
         response.sendRedirect("about-manager");
     }
 
-    /** 
-     * Returns a short description of the servlet.
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
         return "Short description";

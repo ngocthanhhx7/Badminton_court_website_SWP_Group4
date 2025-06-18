@@ -113,7 +113,7 @@
                     </tr>
                     <tr>
                         <td>Sport Level:</td>
-                        <td><%= user.getSportLevel() %></td>
+                        <td><input type="text" name="sportlevel" value="Beginner" readonly style="background:#e9ecef;cursor:not-allowed;"></td>
                     </tr>
                     <tr>
                         <td>Role:</td>
