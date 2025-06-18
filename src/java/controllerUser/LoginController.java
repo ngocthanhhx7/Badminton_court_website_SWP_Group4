@@ -98,6 +98,7 @@ if (emailOrUsername == null || emailOrUsername.trim().isEmpty()
             HttpSession session = request.getSession();
             session.setAttribute("acc", admin);
             session.setAttribute("accType", "admin");
+             session.setAttribute("username", admin.getUsername()); // ✅ thêm dòng này
 
             handleRememberMe(request, response, emailOrUsername, password);
 
@@ -109,6 +110,7 @@ if (emailOrUsername == null || emailOrUsername.trim().isEmpty()
             HttpSession session = request.getSession();
             session.setAttribute("acc", user);
             session.setAttribute("accType", "user");
+             session.setAttribute("username", user.getUsername()); // ✅ thêm dòng này
 
             // Kiểm tra profile đầy đủ chưa
             if (user.getFullName() == null

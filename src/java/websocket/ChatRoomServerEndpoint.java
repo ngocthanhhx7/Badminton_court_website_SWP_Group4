@@ -1,4 +1,13 @@
 package websocket;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import dao.ChatDAO;
+
+import jakarta.websocket.*;
+import jakarta.websocket.server.ServerEndpoint;
+
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;

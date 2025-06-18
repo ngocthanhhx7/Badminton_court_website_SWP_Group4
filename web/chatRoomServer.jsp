@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Demo websocket</title>
+<title>Chat Room</title>
 </head>
 <body>  
-    <h1>Demo WebSocket</h1>
+    <h1>Chat Room</h1>
     <input id="textMessage" type="text" />
     <input onclick="sendMessage()" value="Send Message" type="button" /> <br/><br/>
     
