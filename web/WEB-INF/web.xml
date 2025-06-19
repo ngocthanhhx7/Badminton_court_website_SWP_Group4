@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd"
-         version="5.0">    
-    
+<web-app version="5.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd">
     <jsp-config>
         <jsp-property-group>
             <url-pattern>*.jsp</url-pattern>
@@ -12,31 +8,31 @@
     </jsp-config>
     <servlet>
         <servlet-name>HomepageController</servlet-name>
-        <servlet-class>controllerUser.HomepageController</servlet-class>
+        <servlet-class>controller.user.HomepageController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>LoginController</servlet-name>
-        <servlet-class>controllerUser.LoginController</servlet-class>
+        <servlet-class>controller.user.LoginController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>LoginGoogleController</servlet-name>
-        <servlet-class>controllerUser.LoginGoogleController</servlet-class>
+        <servlet-class>controller.user.LoginGoogleController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>LogoutController</servlet-name>
-        <servlet-class>controllerUser.LogoutController</servlet-class>
+        <servlet-class>controller.user.LogoutController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>RegisterController</servlet-name>
-        <servlet-class>controllerUser.RegisterController</servlet-class>
+        <servlet-class>controller.user.RegisterController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>RegistrationController</servlet-name>
-        <servlet-class>controllerUser.RegistrationController</servlet-class>
+        <servlet-class>controller.user.RegistrationController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>UpdateProfileController</servlet-name>
-        <servlet-class>controllerUser.UpdateProfileController</servlet-class>
+        <servlet-class>controller.user.UpdateProfileController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ChatServlet</servlet-name>
@@ -44,7 +40,7 @@
     </servlet>
     <servlet>
         <servlet-name>CourtDetailController</servlet-name>
-        <servlet-class>controllerUser.CourtDetailController</servlet-class>
+        <servlet-class>controller.user.CourtDetailController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>HomepageController</servlet-name>

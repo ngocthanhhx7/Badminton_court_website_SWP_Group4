@@ -1,0 +1,141 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ */
+
+package controller.user;
+
+import dao.ContactInfoDAO;
+import dao.CourtDAO;
+import dao.InstagramFeedDAO;
+import dao.OfferDAO;
+import java.io.IOException;
+import java.io.PrintWriter;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
+import models.ContactInfoDTO;
+import models.CourtDTO;
+import models.InstagramFeedDTO;
+import models.OfferDTO;
+
+@WebServlet(name="CourtController", urlPatterns={"/court"})
+public class CourtController extends HttpServlet {
+   
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+    throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet CourtController</title>");  
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet CourtController at " + request.getContextPath () + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
+    } 
+
+   @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        CourtDAO courtDAO = new CourtDAO();
+        String search = request.getParameter("search");
+        String pageParam = request.getParameter("page");
+        String status = request.getParameter("status");
+        String courtType = request.getParameter("courtType");
+        OfferDAO offerDAO = new OfferDAO();
+        InstagramFeedDAO dao = new InstagramFeedDAO();
+        ContactInfoDAO contactDAO = new ContactInfoDAO();
+        
+        List<ContactInfoDTO> contactInfos = contactDAO.getAllActiveContactInfo();
+        List<InstagramFeedDTO> visibleFeeds = new ArrayList<>();
+        try {
+            List<InstagramFeedDTO> allFeeds = dao.getAllFeeds(1, 100, null, null);
+            visibleFeeds = allFeeds.stream()
+                    .filter(InstagramFeedDTO::getIsVisible)
+                    .limit(5)
+                    .toList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        List<OfferDTO> allOffers = new ArrayList<>();
+        try {
+            allOffers = offerDAO.getActiveOffers();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        int maxOffersToShow = 3;
+        List<OfferDTO> displayedOffers = allOffers.size() > maxOffersToShow
+                ? allOffers.subList(0, maxOffersToShow)
+                : allOffers;
+
+        int page = 1;
+        int courtsPerPage = 2;
+
+        if (pageParam != null) {
+            try {
+                page = Integer.parseInt(pageParam);
+            } catch (NumberFormatException e) {
+                page = 1;
+            }
+        }
+
+        
+        List<CourtDTO> courts = courtDAO.filterCourts(search, status, courtType);
+
+        if (courts == null || courts.isEmpty()) {
+            request.setAttribute("message", "No court found");
+        } else {
+            int totalCourts = courts.size();
+            int totalPages = (int) Math.ceil((double) totalCourts / courtsPerPage);
+
+            if (page < 1) {
+                page = 1;
+            }
+            if (page > totalPages) {
+                page = totalPages;
+            }
+
+            int start = (page - 1) * courtsPerPage;
+            int end = Math.min(start + courtsPerPage, totalCourts);
+            List<CourtDTO> pagedCourts = courts.subList(start, end);
+
+            request.setAttribute("courts", pagedCourts);
+            request.setAttribute("currentPage", page);
+            request.setAttribute("totalPages", totalPages);
+        }
+
+        
+        request.setAttribute("search", search);
+        request.setAttribute("status", status);
+        request.setAttribute("courtType", courtType);
+        request.setAttribute("offers", displayedOffers);
+        request.setAttribute("instagramFeeds", visibleFeeds);
+        request.setAttribute("contactInfos", contactInfos);
+
+        request.getRequestDispatcher("courts.jsp").forward(request, response);
+    }
+
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }// </editor-fold>
+
+}
