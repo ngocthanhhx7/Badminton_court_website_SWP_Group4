@@ -1,129 +1,241 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
-
 package controllerAdmin;
 
 import dao.CourtDAO;
+import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import models.CourtDTO;
-import java.io.IOException;
+import jakarta.servlet.http.Part;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
+import models.CourtDTO;
+import utils.AccessControlUtil;
+import utils.FileUploadUtil;
 
 /**
  *
  * @author nguye
  */
-@WebServlet(name = "CourtManagerController", urlPatterns = {"/court-manager"})
+@WebServlet(name="CourtManagerController", urlPatterns={"/court-manager"})
+@MultipartConfig(
+    fileSizeThreshold = 1024 * 1024, // 1 MB
+    maxFileSize = 1024 * 1024 * 5,   // 5 MB
+    maxRequestSize = 1024 * 1024 * 10 // 10 MB
+)
 public class CourtManagerController extends HttpServlet {
-
-    private CourtDAO courtDAO;
-
+   
     @Override
-    public void init() {
-        courtDAO = new CourtDAO();
+    public void init() throws ServletException {
+        super.init();
+        // Check and create table if needed
+        try {
+            CourtDAO courtDAO = new CourtDAO();
+            courtDAO.checkAndCreateTable();
+        } catch (Exception e) {
+            System.err.println("Error initializing CourtManagerController: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String action = request.getParameter("action");
-        
-        if (action == null) {
-            action = "list";
-        }
-
-        switch (action) {
-            case "list":
-                listCourts(request, response);
-                break;
-            case "edit":
-                showEditForm(request, response);
-                break;
-            case "delete":
-                deleteCourt(request, response);
-                break;
-            case "toggleStatus":
-                toggleStatus(request, response);
-                break;
-            case "search":
-                searchCourts(request, response);
-                break;
-            default:
-                listCourts(request, response);
-                break;
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+    throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet CourtManagerController</title>");  
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet CourtManagerController at " + request.getContextPath () + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
         }
     } 
 
-    /** 
-     * Handles the HTTP <code>POST</code> method.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Expires", "0");
+        
+        // Kiểm tra phân quyền
+        if (!AccessControlUtil.hasManagerAccess(request)) {
+            response.sendRedirect(request.getContextPath() + "/access-denied.jsp");
+            return;
+        }
+        
+        try {
+            // Get messages from session and remove them
+            HttpSession session = request.getSession();
+            String successMessage = (String) session.getAttribute("successMessage");
+            String errorMessage = (String) session.getAttribute("errorMessage");
+            
+            if (successMessage != null) {
+                request.setAttribute("successMessage", successMessage);
+                session.removeAttribute("successMessage");
+            }
+            if (errorMessage != null) {
+                request.setAttribute("errorMessage", errorMessage);
+                session.removeAttribute("errorMessage");
+            }
+            
+            // Get filter and pagination parameters
+            String searchName = request.getParameter("searchName");
+            String statusFilter = request.getParameter("statusFilter");
+            String courtTypeFilter = request.getParameter("courtTypeFilter");
+            String sortBy = request.getParameter("sortBy");
+            String sortOrder = request.getParameter("sortOrder");
+            String pageStr = request.getParameter("page");
+            String pageSizeStr = request.getParameter("pageSize");
+            
+            // Set default values
+            int page = 1;
+            int pageSize = 10;
+            String status = null;
+            String courtType = null;
+            
+            // Parse pagination parameters
+            if (pageStr != null && !pageStr.trim().isEmpty()) {
+                try {
+                    page = Integer.parseInt(pageStr);
+                    if (page < 1) page = 1;
+                } catch (NumberFormatException e) {
+                    page = 1;
+                }
+            }
+            
+            if (pageSizeStr != null && !pageSizeStr.trim().isEmpty()) {
+                try {
+                    pageSize = Integer.parseInt(pageSizeStr);
+                    if (pageSize < 1) pageSize = 10;
+                    if (pageSize > 100) pageSize = 100; // Limit maximum page size
+                } catch (NumberFormatException e) {
+                    pageSize = 10;
+                }
+            }
+            
+            // Parse status filter
+            if (statusFilter != null && !statusFilter.trim().isEmpty()) {
+                status = statusFilter;
+            }
+            
+            // Parse court type filter
+            if (courtTypeFilter != null && !courtTypeFilter.trim().isEmpty()) {
+                courtType = courtTypeFilter;
+            }
+            
+            // Validate sort parameters
+            if (sortBy == null || sortBy.trim().isEmpty()) {
+                sortBy = "CourtID";
+            }
+            if (sortOrder == null || sortOrder.trim().isEmpty()) {
+                sortOrder = "DESC";
+            }
+            
+            // Validate sortBy to prevent SQL injection
+            String[] allowedSortFields = {"CourtID", "CourtName", "CourtType", "Status", "CreatedAt"};
+            boolean isValidSortField = false;
+            for (String field : allowedSortFields) {
+                if (field.equals(sortBy)) {
+                    isValidSortField = true;
+                    break;
+                }
+            }
+            if (!isValidSortField) {
+                sortBy = "CourtID";
+            }
+            
+            // Validate sortOrder
+            if (!"ASC".equalsIgnoreCase(sortOrder) && !"DESC".equalsIgnoreCase(sortOrder)) {
+                sortOrder = "DESC";
+            }
+            
+            CourtDAO courtDAO = new CourtDAO();
+            
+            // Get filtered courts with pagination
+            List<CourtDTO> courts = courtDAO.getCourtsWithFilters(status, courtType, searchName, sortBy, sortOrder, page, pageSize);
+            
+            // Get total count for pagination
+            int totalCourts = courtDAO.getFilteredCourtsCount(status, courtType, searchName);
+            int totalPages = (int) Math.ceil((double) totalCourts / pageSize);
+            
+            // Set attributes for JSP
+            request.setAttribute("courts", courts);
+            request.setAttribute("currentPage", page);
+            request.setAttribute("pageSize", pageSize);
+            request.setAttribute("totalCourts", totalCourts);
+            request.setAttribute("totalPages", totalPages);
+            request.setAttribute("searchName", searchName);
+            request.setAttribute("statusFilter", statusFilter);
+            request.setAttribute("courtTypeFilter", courtTypeFilter);
+            request.setAttribute("sortBy", sortBy);
+            request.setAttribute("sortOrder", sortOrder);
+            
+            // Calculate pagination info
+            int startRecord = (page - 1) * pageSize + 1;
+            int endRecord = Math.min(page * pageSize, totalCourts);
+            request.setAttribute("startRecord", startRecord);
+            request.setAttribute("endRecord", endRecord);
+            
+            request.getRequestDispatcher("court-manager.jsp").forward(request, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An error occurred: " + e.getMessage());
+        }
+    } 
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    throws ServletException, IOException {
+        // Kiểm tra phân quyền
+        if (!AccessControlUtil.hasManagerAccess(request)) {
+            response.sendRedirect(request.getContextPath() + "/access-denied.jsp");
+            return;
+        }
+        
         String action = request.getParameter("action");
-
-        switch (action) {
-            case "add":
-                addCourt(request, response);
-                break;
-            case "update":
-                updateCourt(request, response);
-                break;
-            case "search":
-                searchCourts(request, response);
-                break;
-            default:
-                response.sendRedirect("court-manager");
-                break;
-        }
-    }
-
-    private void listCourts(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        List<CourtDTO> courts = courtDAO.getAllCourts();
-        request.setAttribute("courtList", courts);
-        request.getRequestDispatcher("/court-manager.jsp").forward(request, response);
-    }
-
-    private void showEditForm(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String courtIdStr = request.getParameter("id");
-        if (courtIdStr != null && !courtIdStr.isEmpty()) {
-            try {
-                Integer courtId = Integer.parseInt(courtIdStr);
-                CourtDTO court = courtDAO.getCourtById(courtId);
-                if (court != null) {
-                    request.setAttribute("court", court);
-                    request.getRequestDispatcher("/court-edit.jsp").forward(request, response);
-                    return;
-                }
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
+        
+        try {
+            CourtDAO courtDAO = new CourtDAO();
+            
+            switch (action) {
+                case "add":
+                    handleAddCourt(request, response, courtDAO);
+                    break;
+                case "edit":
+                    handleEditCourt(request, response, courtDAO);
+                    break;
+                case "delete":
+                    handleDeleteCourt(request, response, courtDAO);
+                    break;
+                case "toggleStatus":
+                    handleToggleStatus(request, response, courtDAO);
+                    break;
+                default:
+                    response.sendRedirect("court-manager");
+                    break;
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            HttpSession session = request.getSession();
+            session.setAttribute("errorMessage", "An error occurred: " + e.getMessage());
+            response.sendRedirect("court-manager");
         }
-        response.sendRedirect("court-manager");
     }
 
-    private void addCourt(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    private void handleAddCourt(HttpServletRequest request, HttpServletResponse response, CourtDAO courtDAO) 
+            throws ServletException, IOException, SQLException {
+        
         try {
             String courtName = request.getParameter("courtName");
             String description = request.getParameter("description");
@@ -131,37 +243,58 @@ public class CourtManagerController extends HttpServlet {
             String status = request.getParameter("status");
             String courtImage = request.getParameter("courtImage");
             
-            // Lấy thông tin người tạo từ session
-            HttpSession session = request.getSession();
-            Integer createdBy = 1; // Mặc định là admin ID = 1, có thể thay đổi theo logic của bạn
+            System.out.println("Add Court - Parameters: " + 
+                "courtName=" + courtName + 
+                ", description=" + description + 
+                ", courtType=" + courtType + 
+                ", status=" + status + 
+                ", courtImage=" + courtImage);
             
-            CourtDTO court = CourtDTO.builder()
-                    .courtName(courtName)
-                    .description(description)
-                    .courtType(courtType)
-                    .status(status != null ? status : "Active")
-                    .courtImage(courtImage)
-                    .createdBy(createdBy)
-                    .build();
-
-            if (courtDAO.addCourt(court)) {
-                request.setAttribute("message", "Thêm sân thành công!");
-                request.setAttribute("messageType", "success");
-            } else {
-                request.setAttribute("message", "Thêm sân thất bại!");
-                request.setAttribute("messageType", "error");
+            // Validate required fields
+            if (courtName == null || courtName.trim().isEmpty()) {
+                setErrorMessage(request, "Tên sân không được để trống");
+                response.sendRedirect("court-manager");
+                return;
             }
+            
+            if (courtType == null || courtType.trim().isEmpty()) {
+                setErrorMessage(request, "Loại sân không được để trống");
+                response.sendRedirect("court-manager");
+                return;
+            }
+            
+            // Create court object
+            String statusVal = (status != null && (status.equals("Available") || status.equals("Unavailable") || status.equals("Maintenance"))) ? status : "Available";
+            CourtDTO court = CourtDTO.builder()
+                    .courtName(courtName.trim())
+                    .description(description != null ? description.trim() : null)
+                    .courtType(courtType.trim())
+                    .status(statusVal)
+                    .courtImage(courtImage != null ? courtImage.trim() : null)
+                    .createdBy(1) // Default admin ID
+                    .build();
+            
+            // Save to database
+            boolean success = courtDAO.addCourt(court);
+            
+            if (success) {
+                setSuccessMessage(request, "Thêm sân thành công!");
+            } else {
+                setErrorMessage(request, "Thêm sân thất bại! Vui lòng kiểm tra lại thông tin.");
+            }
+            
         } catch (Exception e) {
+            System.err.println("Error in handleAddCourt: " + e.getMessage());
             e.printStackTrace();
-            request.setAttribute("message", "Có lỗi xảy ra: " + e.getMessage());
-            request.setAttribute("messageType", "error");
+            setErrorMessage(request, "Lỗi: " + e.getMessage());
         }
         
-        listCourts(request, response);
+        response.sendRedirect("court-manager");
     }
 
-    private void updateCourt(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    private void handleEditCourt(HttpServletRequest request, HttpServletResponse response, CourtDAO courtDAO) 
+            throws ServletException, IOException, SQLException {
+        
         try {
             String courtIdStr = request.getParameter("courtId");
             String courtName = request.getParameter("courtName");
@@ -169,116 +302,176 @@ public class CourtManagerController extends HttpServlet {
             String courtType = request.getParameter("courtType");
             String status = request.getParameter("status");
             String courtImage = request.getParameter("courtImage");
-
-            if (courtIdStr != null && !courtIdStr.isEmpty()) {
-                Integer courtId = Integer.parseInt(courtIdStr);
-                
-                CourtDTO court = CourtDTO.builder()
-                        .courtId(courtId)
-                        .courtName(courtName)
-                        .description(description)
-                        .courtType(courtType)
-                        .status(status)
-                        .courtImage(courtImage)
-                        .build();
-
-                if (courtDAO.updateCourt(court)) {
-                    request.setAttribute("message", "Cập nhật sân thành công!");
-                    request.setAttribute("messageType", "success");
-                } else {
-                    request.setAttribute("message", "Cập nhật sân thất bại!");
-                    request.setAttribute("messageType", "error");
-                }
+            
+            System.out.println("Edit Court - Parameters: " + 
+                "courtId=" + courtIdStr + 
+                ", courtName=" + courtName + 
+                ", description=" + description + 
+                ", courtType=" + courtType + 
+                ", status=" + status + 
+                ", courtImage=" + courtImage);
+            
+            // Validate required fields
+            if (courtIdStr == null || courtIdStr.trim().isEmpty()) {
+                setErrorMessage(request, "ID sân không hợp lệ");
+                response.sendRedirect("court-manager");
+                return;
             }
+            
+            if (courtName == null || courtName.trim().isEmpty()) {
+                setErrorMessage(request, "Tên sân không được để trống");
+                response.sendRedirect("court-manager");
+                return;
+            }
+            
+            if (courtType == null || courtType.trim().isEmpty()) {
+                setErrorMessage(request, "Loại sân không được để trống");
+                response.sendRedirect("court-manager");
+                return;
+            }
+            
+            Integer courtId = Integer.parseInt(courtIdStr);
+            
+            // Get existing court
+            CourtDTO existingCourt = courtDAO.getCourtById(courtId);
+            if (existingCourt == null) {
+                setErrorMessage(request, "Không tìm thấy sân!");
+                response.sendRedirect("court-manager");
+                return;
+            }
+            
+            // Update court object
+            String statusVal2 = (status != null && (status.equals("Available") || status.equals("Unavailable") || status.equals("Maintenance"))) ? status : "Available";
+            CourtDTO court = CourtDTO.builder()
+                    .courtId(courtId)
+                    .courtName(courtName.trim())
+                    .description(description != null ? description.trim() : null)
+                    .courtType(courtType.trim())
+                    .status(statusVal2)
+                    .courtImage(courtImage != null ? courtImage.trim() : null)
+                    .createdBy(existingCourt.getCreatedBy())
+                    .createdAt(existingCourt.getCreatedAt())
+                    .build();
+            
+            // Update in database
+            boolean success = courtDAO.updateCourt(court);
+            
+            if (success) {
+                setSuccessMessage(request, "Cập nhật sân thành công!");
+            } else {
+                setErrorMessage(request, "Cập nhật sân thất bại! Vui lòng kiểm tra lại thông tin.");
+            }
+            
+        } catch (NumberFormatException e) {
+            setErrorMessage(request, "ID sân không hợp lệ");
         } catch (Exception e) {
+            System.err.println("Error in handleEditCourt: " + e.getMessage());
             e.printStackTrace();
-            request.setAttribute("message", "Có lỗi xảy ra: " + e.getMessage());
-            request.setAttribute("messageType", "error");
+            setErrorMessage(request, "Lỗi: " + e.getMessage());
         }
         
-        listCourts(request, response);
+        response.sendRedirect("court-manager");
     }
 
-    private void deleteCourt(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    private void handleDeleteCourt(HttpServletRequest request, HttpServletResponse response, CourtDAO courtDAO) 
+            throws ServletException, IOException, SQLException {
+        
         try {
-            String courtIdStr = request.getParameter("id");
-            if (courtIdStr != null && !courtIdStr.isEmpty()) {
-                Integer courtId = Integer.parseInt(courtIdStr);
-                if (courtDAO.deleteCourt(courtId)) {
-                    request.setAttribute("message", "Xóa sân thành công!");
-                    request.setAttribute("messageType", "success");
-                } else {
-                    request.setAttribute("message", "Xóa sân thất bại!");
-                    request.setAttribute("messageType", "error");
-                }
+            String courtIdStr = request.getParameter("courtId");
+            
+            System.out.println("Delete Court - Parameters: courtId=" + courtIdStr);
+            
+            if (courtIdStr == null || courtIdStr.trim().isEmpty()) {
+                setErrorMessage(request, "ID sân không hợp lệ");
+                response.sendRedirect("court-manager");
+                return;
             }
+            
+            Integer courtId = Integer.parseInt(courtIdStr);
+            
+            // Check if court exists
+            CourtDTO court = courtDAO.getCourtById(courtId);
+            if (court == null) {
+                setErrorMessage(request, "Không tìm thấy sân!");
+                response.sendRedirect("court-manager");
+                return;
+            }
+            
+            // Delete court
+            boolean success = courtDAO.deleteCourt(courtId);
+            
+            if (success) {
+                setSuccessMessage(request, "Xóa sân thành công!");
+            } else {
+                setErrorMessage(request, "Xóa sân thất bại! Vui lòng thử lại.");
+            }
+            
+        } catch (NumberFormatException e) {
+            setErrorMessage(request, "ID sân không hợp lệ");
         } catch (Exception e) {
+            System.err.println("Error in handleDeleteCourt: " + e.getMessage());
             e.printStackTrace();
-            request.setAttribute("message", "Có lỗi xảy ra: " + e.getMessage());
-            request.setAttribute("messageType", "error");
+            setErrorMessage(request, "Lỗi: " + e.getMessage());
         }
         
-        listCourts(request, response);
+        response.sendRedirect("court-manager");
     }
 
-    private void toggleStatus(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    private void handleToggleStatus(HttpServletRequest request, HttpServletResponse response, CourtDAO courtDAO) 
+            throws ServletException, IOException, SQLException {
+        
+        String courtIdStr = request.getParameter("courtId");
+        
+        if (courtIdStr == null || courtIdStr.trim().isEmpty()) {
+            setErrorMessage(request, "ID sân không hợp lệ");
+            response.sendRedirect("court-manager");
+            return;
+        }
+        
         try {
-            String courtIdStr = request.getParameter("id");
-            if (courtIdStr != null && !courtIdStr.isEmpty()) {
-                Integer courtId = Integer.parseInt(courtIdStr);
-                CourtDTO court = courtDAO.getCourtById(courtId);
-                
-                if (court != null) {
-                    String newStatus = "Active".equals(court.getStatus()) ? "Inactive" : "Active";
-                    court.setStatus(newStatus);
-                    
-                    if (courtDAO.updateCourt(court)) {
-                        request.setAttribute("message", "Cập nhật trạng thái thành công!");
-                        request.setAttribute("messageType", "success");
-                    } else {
-                        request.setAttribute("message", "Cập nhật trạng thái thất bại!");
-                        request.setAttribute("messageType", "error");
-                    }
-                }
+            Integer courtId = Integer.parseInt(courtIdStr);
+            
+            // Get existing court
+            CourtDTO court = courtDAO.getCourtById(courtId);
+            if (court == null) {
+                setErrorMessage(request, "Không tìm thấy sân!");
+                response.sendRedirect("court-manager");
+                return;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            request.setAttribute("message", "Có lỗi xảy ra: " + e.getMessage());
-            request.setAttribute("messageType", "error");
+            
+            // Toggle status
+            String newStatus = "Available".equals(court.getStatus()) ? "Unavailable" : "Available";
+            court.setStatus(newStatus);
+            
+            // Update in database
+            boolean success = courtDAO.updateCourt(court);
+            
+            if (success) {
+                setSuccessMessage(request, "Cập nhật trạng thái sân thành công!");
+            } else {
+                setErrorMessage(request, "Cập nhật trạng thái sân thất bại!");
+            }
+            
+        } catch (NumberFormatException e) {
+            setErrorMessage(request, "ID sân không hợp lệ");
         }
         
-        listCourts(request, response);
+        response.sendRedirect("court-manager");
     }
 
-    private void searchCourts(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String keyword = request.getParameter("keyword");
-        String status = request.getParameter("status");
-        String courtType = request.getParameter("courtType");
-        
-        List<CourtDTO> courts;
-        
-        if (keyword != null && !keyword.isEmpty()) {
-            courts = courtDAO.searchCourtsByNameOrTypeOrStatus(keyword);
-        } else {
-            courts = courtDAO.filterCourts(keyword, status, courtType);
-        }
-        
-        request.setAttribute("courtList", courts);
-        request.setAttribute("keyword", keyword);
-        request.setAttribute("status", status);
-        request.setAttribute("courtType", courtType);
-        request.getRequestDispatcher("/court-manager.jsp").forward(request, response);
+    private void setSuccessMessage(HttpServletRequest request, String message) {
+        HttpSession session = request.getSession();
+        session.setAttribute("successMessage", message);
     }
 
-    /** 
-     * Returns a short description of the servlet.
-     * @return a String containing servlet description
-     */
+    private void setErrorMessage(HttpServletRequest request, String message) {
+        HttpSession session = request.getSession();
+        session.setAttribute("errorMessage", message);
+    }
+
     @Override
     public String getServletInfo() {
-        return "Court CRUD";
-    }
-}
+        return "Short description";
+    }// </editor-fold>
+
+} 

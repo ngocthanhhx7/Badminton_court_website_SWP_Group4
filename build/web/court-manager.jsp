@@ -6,7 +6,7 @@
         <!-- Required meta tags -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>Quản lý Sân</title>
+        <title>Court Manager</title>
         <!-- base:css -->
         <link rel="stylesheet" href="vendors/typicons.font/font/typicons.css">
         <link rel="stylesheet" href="vendors/css/vendor.bundle.base.css">
@@ -61,6 +61,21 @@
             .search-box {
                 max-width: 300px;
             }
+            .court-image {
+                max-width: 80px;
+                max-height: 60px;
+                border-radius: 4px;
+            }
+            .description-cell {
+                max-width: 200px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            .description-cell:hover {
+                white-space: normal;
+                word-wrap: break-word;
+            }
         </style>
     </head>
     <body>
@@ -70,7 +85,7 @@
             <div class="main-panel">
                 <div class="content-wrapper">
                     <div class="row">
-                        <!-- User Table -->
+                        <!-- Court Table -->
                         <div class="col-lg-12 grid-margin stretch-card">
                             <div class="card">
                                 <div class="card-body">
@@ -78,99 +93,258 @@
                                     
                                     <!-- Success/Error Messages -->
                                     <c:if test="${not empty successMessage}">
-                                        <div class="alert alert-success">${successMessage}</div>
+                                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                            ${successMessage}
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
                                     </c:if>
                                     <c:if test="${not empty errorMessage}">
-                                        <div class="alert alert-danger">${errorMessage}</div>
+                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                            ${errorMessage}
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
                                     </c:if>
                                     
                                     <!-- Filter and Search Section -->
-                                    <form method="get" action="court-manager" class="row mb-3">
-                                        <div class="col-md-4">
-                                            <input type="text" class="form-control" name="search" placeholder="Tìm kiếm tên, loại, trạng thái..." value="${param.search}">
-                                        </div>
-                                        <div class="col-md-2">
-                                            <select class="form-control" name="courtType">
-                                                <option value="">Tất cả loại sân</option>
-                                                <option value="VIP" ${courtType == 'VIP' ? 'selected' : ''}>VIP</option>
-                                                <option value="Double" ${courtType == 'Double' ? 'selected' : ''}>Double</option>
-                                                <option value="Single" ${courtType == 'Single' ? 'selected' : ''}>Single</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
-                                            <a href="court-manager" class="btn btn-secondary">Làm mới</a>
-                                        </div>
-                                        <div class="col-md-6 text-end">
-                                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addCourtModal">Thêm Sân</button>
-                                        </div>
-                                    </form>
+                                    <div class="filter-section">
+                                        <form method="get" action="court-manager" class="row">
+                                            <div class="col-md-3">
+                                                <label for="searchName">Tìm kiếm theo tên:</label>
+                                                <input type="text" class="form-control search-box" id="searchName" name="searchName" 
+                                                       value="${searchName}" placeholder="Nhập tên sân...">
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="statusFilter">Lọc theo trạng thái:</label>
+                                                <select class="form-control" id="statusFilter" name="statusFilter">
+                                                    <option value="">Tất cả</option>
+                                                    <option value="Available" ${statusFilter == 'Available' ? 'selected' : ''}>Hoạt động</option>
+                                                    <option value="Unavailable" ${statusFilter == 'Unavailable' ? 'selected' : ''}>Không hoạt động</option>
+                                                    <option value="Maintenance" ${statusFilter == 'Maintenance' ? 'selected' : ''}>Bảo trì</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="courtTypeFilter">Lọc theo loại sân:</label>
+                                                <select class="form-control" id="courtTypeFilter" name="courtTypeFilter">
+                                                    <option value="">Tất cả</option>
+                                                    <option value="VIP" ${courtTypeFilter == 'VIP' ? 'selected' : ''}>VIP</option>
+                                                    <option value="Double" ${courtTypeFilter == 'Double' ? 'selected' : ''}>Double</option>
+                                                    <option value="Single" ${courtTypeFilter == 'Single' ? 'selected' : ''}>Single</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="pageSize">Số lượng hiển thị:</label>
+                                                <select class="form-control" id="pageSize" name="pageSize">
+                                                    <option value="5" ${pageSize == 5 ? 'selected' : ''}>5</option>
+                                                    <option value="10" ${pageSize == 10 ? 'selected' : ''}>10</option>
+                                                    <option value="20" ${pageSize == 20 ? 'selected' : ''}>20</option>
+                                                    <option value="50" ${pageSize == 50 ? 'selected' : ''}>50</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label>&nbsp;</label>
+                                                <div>
+                                                    <button type="submit" class="btn btn-primary">
+                                                        <i class="typcn typcn-zoom"></i> Tìm kiếm
+                                                    </button>
+                                                    <a href="court-manager" class="btn btn-secondary">
+                                                        <i class="typcn typcn-refresh"></i> Làm mới
+                                                    </a>
+                                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addCourtModal">
+                                                        <i class="typcn typcn-plus"></i> Thêm sân
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    
+                                    <!-- Pagination Info -->
+                                    <div class="pagination-info">
+                                        Hiển thị ${startRecord} - ${endRecord} của ${totalCourts} sân
+                                        <c:if test="${not empty searchName or not empty statusFilter or not empty courtTypeFilter}">
+                                            (đã lọc)
+                                        </c:if>
+                                    </div>
                                     
                                     <div class="table-responsive">
-                                        <table class="table table-bordered">
+                                        <table class="table">
                                             <thead>
                                                 <tr>
-                                                    <th>ID</th>
-                                                    <th>Tên sân</th>
+                                                    <th class="sort-header" onclick="sortTable('CourtID')">
+                                                        ID
+                                                        <c:choose>
+                                                            <c:when test="${sortBy == 'CourtID' and sortOrder == 'ASC'}">
+                                                                <i class="typcn typcn-arrow-sorted-up sort-icon"></i>
+                                                            </c:when>
+                                                            <c:when test="${sortBy == 'CourtID' and sortOrder == 'DESC'}">
+                                                                <i class="typcn typcn-arrow-sorted-down sort-icon"></i>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <i class="typcn typcn-arrow-unsorted sort-icon"></i>
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </th>
+                                                    <th class="sort-header" onclick="sortTable('CourtName')">
+                                                        Tên sân
+                                                        <c:choose>
+                                                            <c:when test="${sortBy == 'CourtName' and sortOrder == 'ASC'}">
+                                                                <i class="typcn typcn-arrow-sorted-up sort-icon"></i>
+                                                            </c:when>
+                                                            <c:when test="${sortBy == 'CourtName' and sortOrder == 'DESC'}">
+                                                                <i class="typcn typcn-arrow-sorted-down sort-icon"></i>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <i class="typcn typcn-arrow-unsorted sort-icon"></i>
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </th>
+                                                    <th class="sort-header" onclick="sortTable('CourtType')">
+                                                        Loại sân
+                                                        <c:choose>
+                                                            <c:when test="${sortBy == 'CourtType' and sortOrder == 'ASC'}">
+                                                                <i class="typcn typcn-arrow-sorted-up sort-icon"></i>
+                                                            </c:when>
+                                                            <c:when test="${sortBy == 'CourtType' and sortOrder == 'DESC'}">
+                                                                <i class="typcn typcn-arrow-sorted-down sort-icon"></i>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <i class="typcn typcn-arrow-unsorted sort-icon"></i>
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </th>
                                                     <th>Mô tả</th>
-                                                    <th>Loại sân</th>
-                                                    <th>Trạng thái</th>
                                                     <th>Hình ảnh</th>
+                                                    <th class="sort-header" onclick="sortTable('Status')">
+                                                        Trạng thái
+                                                        <c:choose>
+                                                            <c:when test="${sortBy == 'Status' and sortOrder == 'ASC'}">
+                                                                <i class="typcn typcn-arrow-sorted-up sort-icon"></i>
+                                                            </c:when>
+                                                            <c:when test="${sortBy == 'Status' and sortOrder == 'DESC'}">
+                                                                <i class="typcn typcn-arrow-sorted-down sort-icon"></i>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <i class="typcn typcn-arrow-unsorted sort-icon"></i>
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </th>
                                                     <th>Người tạo</th>
-                                                    <th>Ngày tạo</th>
-                                                    <th>Ngày cập nhật</th>
-                                                    <th>Action</th>
+                                                    <th class="sort-header" onclick="sortTable('CreatedAt')">
+                                                        Ngày tạo
+                                                        <c:choose>
+                                                            <c:when test="${sortBy == 'CreatedAt' and sortOrder == 'ASC'}">
+                                                                <i class="typcn typcn-arrow-sorted-up sort-icon"></i>
+                                                            </c:when>
+                                                            <c:when test="${sortBy == 'CreatedAt' and sortOrder == 'DESC'}">
+                                                                <i class="typcn typcn-arrow-sorted-down sort-icon"></i>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <i class="typcn typcn-arrow-unsorted sort-icon"></i>
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </th>
+                                                    <th>Thao tác</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <c:forEach var="c" items="${courtList}">
+                                                <c:forEach var="court" items="${courts}">
                                                     <tr>
-                                                        <td>${c.courtId}</td>
-                                                        <td>${c.courtName}</td>
-                                                        <td>${c.description}</td>
-                                                        <td>${c.courtType}</td>
+                                                        <td>${court.courtId}</td>
+                                                        <td>${court.courtName}</td>
                                                         <td>
-                                                            <form method="get" action="court-manager" style="display:inline">
+                                                            <span class="badge badge-${court.courtType == 'VIP' ? 'danger' : court.courtType == 'Double' ? 'warning' : 'info'}">
+                                                                ${court.courtType}
+                                                            </span>
+                                                        </td>
+                                                        <td class="description-cell" title="${court.description}">
+                                                            <c:if test="${not empty court.description}">
+                                                                ${court.description}
+                                                            </c:if>
+                                                        </td>
+                                                        <td>
+                                                            <c:if test="${not empty court.courtImage}">
+                                                                <img src="${court.courtImage}" alt="Court Image" class="court-image">
+                                                            </c:if>
+                                                        </td>
+                                                        <td>
+                                                            <form method="post" action="court-manager" style="display:inline">
                                                                 <input type="hidden" name="action" value="toggleStatus">
-                                                                <input type="hidden" name="id" value="${c.courtId}">
-                                                                <button type="submit" class="btn btn-link p-0 m-0 align-baseline" style="color: ${c.status == 'Active' ? '#28a745' : '#dc3545'}; text-decoration: underline;">
-                                                                    ${c.status}
+                                                                <input type="hidden" name="courtId" value="${court.courtId}">
+                                                                <button type="submit" class="btn btn-link p-0 m-0 align-baseline" 
+                                                                        style="color: ${court.status == 'Available' ? '#28a745' : (court.status == 'Unavailable' ? '#dc3545' : '#ffc107')}; text-decoration: underline;">
+                                                                    ${court.status == 'Available' ? 'Hoạt động' : (court.status == 'Unavailable' ? 'Không hoạt động' : 'Bảo trì')}
                                                                 </button>
                                                             </form>
                                                         </td>
+                                                        <td>${court.createdBy}</td>
                                                         <td>
-                                                            <c:if test="${not empty c.courtImage}">
-                                                                <img src="${c.courtImage}" alt="court image" style="max-width:80px;max-height:60px;">
-                                                            </c:if>
-                                                        </td>
-                                                        <td>${c.createdBy}</td>
-                                                        <td>
-                                                            <c:if test="${not empty c.createdAt}">
-                                                                ${c.createdAt}
+                                                            <c:if test="${not empty court.createdAt}">
+                                                                ${court.createdAt}
                                                             </c:if>
                                                         </td>
                                                         <td>
-                                                            <c:if test="${not empty c.updatedAt}">
-                                                                ${c.updatedAt}
-                                                            </c:if>
-                                                        </td>
-                                                        <td>
-                                                            <form method="get" action="court-manager" style="display:inline">
-                                                                <input type="hidden" name="action" value="edit">
-                                                                <input type="hidden" name="id" value="${c.courtId}">
-                                                                <button type="submit" class="btn btn-warning btn-sm">Sửa</button>
-                                                            </form>
-                                                            <form method="get" action="court-manager" style="display:inline" onsubmit="return confirm('Bạn có chắc chắn muốn xóa sân này?');">
-                                                                <input type="hidden" name="action" value="delete">
-                                                                <input type="hidden" name="id" value="${c.courtId}">
-                                                                <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
-                                                            </form>
+                                                            <button type="button" class="btn btn-warning btn-sm" 
+                                                                    onclick="editCourt(${court.courtId}, '${court.courtName}', '${court.courtType}', '${court.description}', '${court.status}', '${court.courtImage}')">
+                                                                <i class="typcn typcn-edit"></i> Sửa
+                                                            </button>
+                                                            <button type="button" class="btn btn-danger btn-sm" 
+                                                                    onclick="deleteCourt(${court.courtId}, '${court.courtName}')">
+                                                                <i class="typcn typcn-delete"></i> Xóa
+                                                            </button>
                                                         </td>
                                                     </tr>
                                                 </c:forEach>
                                             </tbody>
                                         </table>
                                     </div>
+                                    
+                                    <!-- Pagination -->
+                                    <c:if test="${totalPages > 1}">
+                                        <nav aria-label="Court pagination">
+                                            <ul class="pagination justify-content-center">
+                                                <!-- Previous page -->
+                                                <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
+                                                    <a class="page-link" href="court-manager?page=${currentPage - 1}&pageSize=${pageSize}&searchName=${searchName}&statusFilter=${statusFilter}&courtTypeFilter=${courtTypeFilter}&sortBy=${sortBy}&sortOrder=${sortOrder}">
+                                                        <i class="typcn typcn-chevron-left"></i>
+                                                    </a>
+                                                </li>
+                                                
+                                                <!-- Page numbers -->
+                                                <c:forEach begin="1" end="${totalPages}" var="i">
+                                                    <c:choose>
+                                                        <c:when test="${i == currentPage}">
+                                                            <li class="page-item active">
+                                                                <span class="page-link">${i}</span>
+                                                            </li>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <li class="page-item">
+                                                                <a class="page-link" href="court-manager?page=${i}&pageSize=${pageSize}&searchName=${searchName}&statusFilter=${statusFilter}&courtTypeFilter=${courtTypeFilter}&sortBy=${sortBy}&sortOrder=${sortOrder}">
+                                                                    ${i}
+                                                                </a>
+                                                            </li>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </c:forEach>
+                                                
+                                                <!-- Next page -->
+                                                <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
+                                                    <a class="page-link" href="court-manager?page=${currentPage + 1}&pageSize=${pageSize}&searchName=${searchName}&statusFilter=${statusFilter}&courtTypeFilter=${courtTypeFilter}&sortBy=${sortBy}&sortOrder=${sortOrder}">
+                                                        <i class="typcn typcn-chevron-right"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                    </c:if>
+                                    
+                                    <c:if test="${empty courts}">
+                                        <div class="text-center mt-4">
+                                            <p class="text-muted">Không có dữ liệu sân nào.</p>
+                                        </div>
+                                    </c:if>
                                 </div>
                             </div>
                         </div>
@@ -179,7 +353,7 @@
             </div>
         </div>
         
-        <!-- Add User Modal -->
+        <!-- Add Court Modal -->
         <div class="modal fade" id="addCourtModal" tabindex="-1" aria-labelledby="addCourtModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -191,15 +365,11 @@
                         </div>
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label>Tên sân</label>
-                                <input type="text" name="courtName" class="form-control" required>
+                                <label for="courtName" class="form-label">Tên sân *</label>
+                                <input type="text" class="form-control" id="courtName" name="courtName" required>
                             </div>
                             <div class="mb-3">
-                                <label>Mô tả</label>
-                                <input type="text" name="description" class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <label for="courtType">Loại sân *</label>
+                                <label for="courtType" class="form-label">Loại sân *</label>
                                 <select class="form-control" id="courtType" name="courtType" required>
                                     <option value="">Chọn loại sân</option>
                                     <option value="VIP">VIP</option>
@@ -208,15 +378,20 @@
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label>Trạng thái</label>
-                                <select name="status" class="form-control">
-                                    <option value="Active">Active</option>
-                                    <option value="Inactive">Inactive</option>
+                                <label for="description" class="form-label">Mô tả</label>
+                                <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="status" class="form-label">Trạng thái</label>
+                                <select class="form-control" id="status" name="status">
+                                    <option value="Available">Hoạt động</option>
+                                    <option value="Unavailable">Không hoạt động</option>
+                                    <option value="Maintenance">Bảo trì</option>
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label>Hình ảnh (URL)</label>
-                                <input type="text" name="courtImage" class="form-control">
+                                <label for="courtImage" class="form-label">Hình ảnh (URL)</label>
+                                <input type="text" class="form-control" id="courtImage" name="courtImage" placeholder="Nhập URL hình ảnh">
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -228,67 +403,80 @@
             </div>
         </div>
         
-        <!-- Edit User Modal -->
-        <c:if test="${not empty editCourt}">
-            <div class="modal fade show" id="editCourtModal" tabindex="-1" aria-labelledby="editCourtModalLabel" aria-modal="true" style="display:block; background:rgba(0,0,0,0.5);">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <form method="post" action="court-manager">
-                            <input type="hidden" name="action" value="update">
-                            <input type="hidden" name="id" value="${editCourt.courtId}">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="editCourtModalLabel">Sửa Sân</h5>
-                                <a href="court-manager" class="btn-close" aria-label="Close"></a>
+        <!-- Edit Court Modal -->
+        <div class="modal fade" id="editCourtModal" tabindex="-1" aria-labelledby="editCourtModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form method="post" action="court-manager">
+                        <input type="hidden" name="action" value="edit">
+                        <input type="hidden" name="courtId" id="editCourtId">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editCourtModalLabel">Sửa Sân</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="editCourtName" class="form-label">Tên sân *</label>
+                                <input type="text" class="form-control" id="editCourtName" name="courtName" required>
                             </div>
-                            <div class="modal-body">
-                                <div class="mb-3">
-                                    <label>Tên sân</label>
-                                    <input type="text" name="courtName" class="form-control" value="${editCourt.courtName}" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label>Mô tả</label>
-                                    <input type="text" name="description" class="form-control" value="${editCourt.description}">
-                                </div>
-                                <div class="mb-3">
-                                    <label>Loại sân</label>
-                                    <select name="courtType" class="form-control">
-                                        <option value="">Chọn loại sân</option>
-                                        <option value="VIP" ${editCourt.courtType == 'VIP' ? 'selected' : ''}>VIP</option>
-                                        <option value="Double" ${editCourt.courtType == 'Double' ? 'selected' : ''}>Double</option>
-                                        <option value="Single" ${editCourt.courtType == 'Single' ? 'selected' : ''}>Single</option>
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label>Trạng thái</label>
-                                    <select name="status" class="form-control">
-                                        <option value="Active" ${editCourt.status == 'Active' ? 'selected' : ''}>Active</option>
-                                        <option value="Inactive" ${editCourt.status == 'Inactive' ? 'selected' : ''}>Inactive</option>
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label>Hình ảnh (URL)</label>
-                                    <input type="text" name="courtImage" class="form-control" value="${editCourt.courtImage}">
-                                </div>
+                            <div class="mb-3">
+                                <label for="editCourtType" class="form-label">Loại sân *</label>
+                                <select class="form-control" id="editCourtType" name="courtType" required>
+                                    <option value="">Chọn loại sân</option>
+                                    <option value="VIP">VIP</option>
+                                    <option value="Double">Double</option>
+                                    <option value="Single">Single</option>
+                                </select>
                             </div>
-                            <div class="modal-footer">
-                                <a href="court-manager" class="btn btn-secondary">Đóng</a>
-                                <button type="submit" class="btn btn-primary">Cập nhật</button>
+                            <div class="mb-3">
+                                <label for="editDescription" class="form-label">Mô tả</label>
+                                <textarea class="form-control" id="editDescription" name="description" rows="3"></textarea>
                             </div>
+                            <div class="mb-3">
+                                <label for="editStatus" class="form-label">Trạng thái</label>
+                                <select class="form-control" id="editStatus" name="status">
+                                    <option value="Available">Hoạt động</option>
+                                    <option value="Unavailable">Không hoạt động</option>
+                                    <option value="Maintenance">Bảo trì</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editCourtImage" class="form-label">Hình ảnh (URL)</label>
+                                <input type="text" class="form-control" id="editCourtImage" name="courtImage" placeholder="Nhập URL hình ảnh">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn btn-primary">Cập nhật</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Delete Confirmation Modal -->
+        <div class="modal fade" id="deleteCourtModal" tabindex="-1" aria-labelledby="deleteCourtModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteCourtModalLabel">Xác nhận xóa</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Bạn có chắc chắn muốn xóa sân "<span id="deleteCourtName"></span>"?</p>
+                        <p class="text-danger">Hành động này không thể hoàn tác!</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                        <form method="post" action="court-manager" style="display:inline">
+                            <input type="hidden" name="action" value="delete">
+                            <input type="hidden" name="courtId" id="deleteCourtId">
+                            <button type="submit" class="btn btn-danger">Xóa</button>
                         </form>
                     </div>
                 </div>
             </div>
-            <script>
-                // Tự động mở modal khi có editUser
-                document.addEventListener('DOMContentLoaded', function() {
-                    var modal = document.getElementById('editCourtModal');
-                    if (modal) {
-                        modal.classList.add('show');
-                        modal.style.display = 'block';
-                    }
-                });
-            </script>
-        </c:if>
+        </div>
         
         <!-- content-wrapper ends -->
     </div>
@@ -321,6 +509,44 @@ $(document).ready(function() {
         $('.alert').fadeOut('slow');
     }, 5000);
 });
+
+// Sort table function
+function sortTable(sortBy) {
+    const urlParams = new URLSearchParams(window.location.search);
+    let currentSortOrder = urlParams.get('sortOrder') || 'DESC';
+    
+    if (urlParams.get('sortBy') === sortBy) {
+        currentSortOrder = currentSortOrder === 'ASC' ? 'DESC' : 'ASC';
+    } else {
+        currentSortOrder = 'ASC';
+    }
+    
+    urlParams.set('sortBy', sortBy);
+    urlParams.set('sortOrder', currentSortOrder);
+    urlParams.set('page', '1'); // Reset to first page when sorting
+    
+    window.location.href = 'court-manager?' + urlParams.toString();
+}
+
+// Edit court function
+function editCourt(courtId, courtName, courtType, description, status, courtImage) {
+    document.getElementById('editCourtId').value = courtId;
+    document.getElementById('editCourtName').value = courtName;
+    document.getElementById('editCourtType').value = courtType;
+    document.getElementById('editDescription').value = description || '';
+    document.getElementById('editStatus').value = status;
+    document.getElementById('editCourtImage').value = courtImage || '';
+    
+    new bootstrap.Modal(document.getElementById('editCourtModal')).show();
+}
+
+// Delete court function
+function deleteCourt(courtId, courtName) {
+    document.getElementById('deleteCourtId').value = courtId;
+    document.getElementById('deleteCourtName').textContent = courtName;
+    
+    new bootstrap.Modal(document.getElementById('deleteCourtModal')).show();
+}
 </script>
 </body>
-</html>
+</html> 

@@ -87,6 +87,24 @@ public class UserManagerController extends HttpServlet {
         user.setUsername(request.getParameter("username"));
         user.setEmail(request.getParameter("email"));
         user.setFullName(request.getParameter("fullname"));
+        
+        // Xử lý Date of Birth
+        String dobStr = request.getParameter("dob");
+        if (dobStr != null && !dobStr.trim().isEmpty()) {
+            try {
+                java.sql.Date dob = java.sql.Date.valueOf(dobStr);
+                user.setDob(dob);
+            } catch (Exception e) {
+                // Nếu có lỗi parse date, bỏ qua
+            }
+        }
+        
+        // Xử lý Gender
+        String gender = request.getParameter("gender");
+        if (gender != null && !gender.trim().isEmpty()) {
+            user.setGender(gender);
+        }
+        
         user.setRole(request.getParameter("role"));
         user.setStatus(request.getParameter("status"));
         user.setPhone(request.getParameter("phone"));
@@ -104,10 +122,28 @@ public class UserManagerController extends HttpServlet {
 
     private void updateUser(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
-        int userId = Integer.parseInt(request.getParameter("userID"));
+        int userId = Integer.parseInt(request.getParameter("id"));
         UserDTO user = userDAO.getUserByID(userId);
         if (user != null) {
             user.setFullName(request.getParameter("fullname"));
+            
+            // Xử lý Date of Birth
+            String dobStr = request.getParameter("dob");
+            if (dobStr != null && !dobStr.trim().isEmpty()) {
+                try {
+                    java.sql.Date dob = java.sql.Date.valueOf(dobStr);
+                    user.setDob(dob);
+                } catch (Exception e) {
+                    // Nếu có lỗi parse date, bỏ qua
+                }
+            }
+            
+            // Xử lý Gender
+            String gender = request.getParameter("gender");
+            if (gender != null && !gender.trim().isEmpty()) {
+                user.setGender(gender);
+            }
+            
             user.setRole(request.getParameter("role"));
             user.setStatus(request.getParameter("status"));
             user.setPhone(request.getParameter("phone"));

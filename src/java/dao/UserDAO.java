@@ -425,31 +425,53 @@ public boolean updateUserProfile1(UserDTO user) throws SQLException {
 
     // Thêm user đơn giản (dùng cho admin thêm user)
     public boolean addUserSimple(UserDTO user) throws SQLException {
-        String sql = "INSERT INTO users (username, email, password, FullName, role, status, phone, address, SportLevel) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO users (username, email, password, FullName, Dob, Gender, role, status, phone, address, SportLevel) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = DBUtils.getConnection().prepareStatement(sql)) {
             ps.setString(1, user.getUsername());
             ps.setString(2, user.getEmail());
             ps.setString(3, user.getPassword());
             ps.setString(4, user.getFullName());
-            ps.setString(5, user.getRole());
-            ps.setString(6, user.getStatus());
-            ps.setString(7, user.getPhone());
-            ps.setString(8, user.getAddress());
-            ps.setString(9, user.getSportLevel());
+            
+            // Xử lý Dob
+            if (user.getDob() != null) {
+                ps.setDate(5, new java.sql.Date(user.getDob().getTime()));
+            } else {
+                ps.setNull(5, Types.DATE);
+            }
+            
+            // Xử lý Gender
+            ps.setString(6, user.getGender());
+            
+            ps.setString(7, user.getRole());
+            ps.setString(8, user.getStatus());
+            ps.setString(9, user.getPhone());
+            ps.setString(10, user.getAddress());
+            ps.setString(11, user.getSportLevel());
             return ps.executeUpdate() > 0;
         }
     }
 
     // Cập nhật user đơn giản (dùng cho admin sửa user)
     public boolean updateUserSimple(UserDTO user) throws SQLException {
-        String sql = "UPDATE users SET FullName=?, role=?, status=?, phone=?, address=? WHERE UserID=?";
+        String sql = "UPDATE users SET FullName=?, Dob=?, Gender=?, role=?, status=?, phone=?, address=? WHERE UserID=?";
         try (PreparedStatement ps = DBUtils.getConnection().prepareStatement(sql)) {
             ps.setString(1, user.getFullName());
-            ps.setString(2, user.getRole());
-            ps.setString(3, user.getStatus());
-            ps.setString(4, user.getPhone());
-            ps.setString(5, user.getAddress());
-            ps.setInt(6, user.getUserID());
+            
+            // Xử lý Dob
+            if (user.getDob() != null) {
+                ps.setDate(2, new java.sql.Date(user.getDob().getTime()));
+            } else {
+                ps.setNull(2, Types.DATE);
+            }
+            
+            // Xử lý Gender
+            ps.setString(3, user.getGender());
+            
+            ps.setString(4, user.getRole());
+            ps.setString(5, user.getStatus());
+            ps.setString(6, user.getPhone());
+            ps.setString(7, user.getAddress());
+            ps.setInt(8, user.getUserID());
             return ps.executeUpdate() > 0;
         }
     }

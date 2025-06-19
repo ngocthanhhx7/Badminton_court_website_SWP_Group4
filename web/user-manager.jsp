@@ -106,6 +106,8 @@
                                                     <th>Username</th>
                                                     <th>Email</th>
                                                     <th>Full Name</th>
+                                                    <th>Date of Birth</th>
+                                                    <th>Gender</th>
                                                     <th>Role</th>
                                                     <th>Status</th>
                                                     <th>Phone</th>
@@ -121,6 +123,12 @@
                                                         <td>${u.username}</td>
                                                         <td>${u.email}</td>
                                                         <td>${u.fullName}</td>
+                                                        <td>
+                                                            <c:if test="${not empty u.dob}">
+                                                                ${u.dob}
+                                                            </c:if>
+                                                        </td>
+                                                        <td>${u.gender}</td>
                                                         <td>${u.role}</td>
                                                         <td>${u.status}</td>
                                                         <td>${u.phone}</td>
@@ -175,6 +183,19 @@
                             <div class="mb-3">
                                 <label>Full Name</label>
                                 <input type="text" name="fullname" class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <label>Date of Birth</label>
+                                <input type="date" name="dob" class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <label>Gender</label>
+                                <select name="gender" class="form-control">
+                                    <option value="">Chọn giới tính</option>
+                                    <option value="Male">Nam</option>
+                                    <option value="Female">Nữ</option>
+                                    <option value="Other">Khác</option>
+                                </select>
                             </div>
                             <div class="mb-3">
                                 <label>Password</label>
@@ -237,6 +258,19 @@
                                 <div class="mb-3">
                                     <label>Full Name</label>
                                     <input type="text" name="fullname" class="form-control" value="${editUser.fullName}">
+                                </div>
+                                <div class="mb-3">
+                                    <label>Date of Birth</label>
+                                    <input type="date" name="dob" class="form-control" value="${editUser.dob}">
+                                </div>
+                                <div class="mb-3">
+                                    <label>Gender</label>
+                                    <select name="gender" class="form-control">
+                                        <option value="">Chọn giới tính</option>
+                                        <option value="Male" ${editUser.gender == 'Male' ? 'selected' : ''}>Nam</option>
+                                        <option value="Female" ${editUser.gender == 'Female' ? 'selected' : ''}>Nữ</option>
+                                        <option value="Other" ${editUser.gender == 'Other' ? 'selected' : ''}>Khác</option>
+                                    </select>
                                 </div>
                                 <div class="mb-3">
                                     <label>Role</label>
