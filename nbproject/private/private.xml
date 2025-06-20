@@ -4,48 +4,50 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/SWP-project/src/java/utils/PasswordUtil.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerAdmin/PageManagerController.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerAdmin/VideoManagerController.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerUser/VNPayReturnController.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerAdmin/AboutManagerController.java</file>
-            <file>file:/C:/SWP-project/src/java/com/vnpay/common/ajaxServlet.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerUser/BookingController.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerUser/BlogDetailController.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerUser/CourtController.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerUser/ViewProfileController.java</file>
+            <file>file:/C:/SWP-project/src/java/controller/admin/OfferManagerController.java</file>
+            <file>file:/C:/SWP-project/src/java/controller/user/ContactServlet.java</file>
+            <file>file:/C:/SWP-project/src/java/controller/user/ChatGPTServlet.java</file>
+            <file>file:/C:/SWP-project/src/java/controller/user/RegisterController.java</file>
+            <file>file:/C:/SWP-project/src/java/controller/user/ForgotPasswordServlet.java</file>
             <file>file:/C:/SWP-project/src/java/dao/CourtScheduleDAO.java</file>
             <file>file:/C:/SWP-project/src/java/dao/CourtDAO.java</file>
             <file>file:/C:/SWP-project/src/java/models/CourtDTO.java</file>
             <file>file:/C:/SWP-project/src/java/models/VideoDTO.java</file>
+            <file>file:/C:/SWP-project/src/java/controller/sale/ViewInvoiceStatisticsServlet.java</file>
+            <file>file:/C:/SWP-project/src/java/controller/user/CourtController.java</file>
             <file>file:/C:/SWP-project/src/java/utils/AccessControlUtil.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerAdmin/SliderManagerController.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerUser/UserLoginController.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerUser/UpdateProfileController.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerAdmin/InstagramManagerController.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerAdmin/OfferManagerController.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerUser/ContactServlet.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerUser/CourtDetailController.java</file>
+            <file>file:/C:/SWP-project/src/java/controller/admin/VideoManagerController.java</file>
+            <file>file:/C:/SWP-project/src/java/controller/user/LoginGoogleController.java</file>
+            <file>file:/C:/SWP-project/src/java/controller/admin/InstagramManagerController.java</file>
+            <file>file:/C:/SWP-project/src/java/dao/LoginGoogleDAO.java</file>
+            <file>file:/C:/SWP-project/src/java/controller/admin/SliderManagerController.java</file>
+            <file>file:/C:/SWP-project/src/java/controller/user/LoginController.java</file>
+            <file>file:/C:/SWP-project/src/java/dao/BlogPostDAO.java</file>
+            <file>file:/C:/SWP-project/src/java/controller/sale/ViewInvoiceDetailServlet.java</file>
+            <file>file:/C:/SWP-project/src/java/controller/user/ViewProfileController.java</file>
+            <file>file:/C:/SWP-project/src/java/controller/admin/ContactManagerController.java</file>
+            <file>file:/C:/SWP-project/src/java/controller/user/RegistrationController.java</file>
+            <file>file:/C:/SWP-project/src/java/controller/user/UserLoginController.java</file>
+            <file>file:/C:/SWP-project/src/java/controller/admin/UserManagerController.java</file>
             <file>file:/C:/SWP-project/src/java/dao/BookingDAO.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerAdmin/UserManagerController.java</file>
+            <file>file:/C:/SWP-project/src/java/controller/user/UpdateProfileController.java</file>
             <file>file:/C:/SWP-project/src/java/models/FeaturedCourtDTO.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerAdmin/ContactManagerController.java</file>
             <file>file:/C:/SWP-project/src/java/dao/SliderDAO.java</file>
+            <file>file:/C:/SWP-project/src/java/controller/sale/UpdateStatusServlet.java</file>
             <file>file:/C:/SWP-project/src/java/models/EquipmentRentalDTO.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerUser/RegisterController.java</file>
-            <file>file:/C:/SWP-project/src/java/com/vnpay/common/PaymentResultServlet.java</file>
             <file>file:/C:/SWP-project/src/java/com/vnpay/common/vnpayRefund.java</file>
             <file>file:/C:/SWP-project/src/java/filter/ProfileCheckFilter.java</file>
             <file>file:/C:/SWP-project/src/java/dao/UserDAO.java</file>
             <file>file:/C:/SWP-project/src/java/models/UserDTO.java</file>
             <file>file:/C:/SWP-project/src/java/service/UserService.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerUser/ChatGPTServlet.java</file>
+            <file>file:/C:/SWP-project/src/java/controller/user/BlogDetailController.java</file>
+            <file>file:/C:/SWP-project/src/java/controller/user/BlogController.java</file>
             <file>file:/C:/SWP-project/src/java/utils/FileUploadUtil.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerUser/LoginGoogleController.java</file>
+            <file>file:/C:/SWP-project/src/java/dao/InvoiceDetailDAO.java</file>
             <file>file:/C:/SWP-project/src/java/com/vnpay/common/Config.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerUser/RegistrationController.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerUser/BlogController.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerUser/LoginController.java</file>
-            <file>file:/C:/SWP-project/src/java/controllerUser/ForgotPasswordServlet.java</file>
+            <file>file:/C:/SWP-project/src/java/controller/admin/AboutManagerController.java</file>
+            <file>file:/C:/SWP-project/src/java/controller/admin/PageManagerController.java</file>
+            <file>file:/C:/SWP-project/src/java/controller/sale/ViewBookingController.java</file>
         </group>
     </open-files>
 </project-private>

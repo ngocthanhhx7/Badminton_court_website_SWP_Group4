@@ -103,7 +103,7 @@ public class ajaxServlet extends HttpServlet {
         String orderType = "other";
         
         
-        long amount = 10000 * 100;
+        long amount = 100000 * 100;
         String bankCode = req.getParameter("bankCode");
         
         String vnp_TxnRef = String.valueOf(req.getParameter("courtScheduleId"));

@@ -6,7 +6,10 @@ import utils.DBUtils;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import models.BookingView;
 
 public class BookingDAO {
     
@@ -171,4 +174,188 @@ public class BookingDAO {
         }
         return null;
     }
+
+
+    public double getWeeklyRevenue(int time, int year) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public double getMonthlyRevenue(int time, int year) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+   
+
+ public List<BookingView> getAllBookingViews() {
+    List<BookingView> list = new ArrayList<>();
+
+    String sql = "SELECT b.BookingID, u.FullName, u.Phone, u.Email, " +
+                 "c.CourtName, bd.StartTime, bd.EndTime, " +
+                 "DATEDIFF(MINUTE, bd.StartTime, bd.EndTime) / 60 AS DurationHours, " +
+                 "b.Status, n.NoteDetails, n.Status AS NoteStatus, " +
+                 "bd.HourlyRate, bd.Subtotal " +
+                 "FROM Bookings b " +
+                 "JOIN Users u ON b.CustomerID = u.UserID " +
+                 "JOIN BookingDetails bd ON b.BookingID = bd.BookingID " +
+                 "JOIN Courts c ON bd.CourtID = c.CourtID " +
+                 "LEFT JOIN BookingNotes n ON b.BookingID = n.BookingID " +
+                 "ORDER BY bd.StartTime DESC";
+
+    try (Connection con = DBUtils.getConnection();
+         PreparedStatement ps = con.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
+
+        while (rs.next()) {
+            BookingView bv = new BookingView();
+            bv.setBookingID(rs.getInt("BookingID"));
+            bv.setCustomerName(rs.getString("FullName"));
+            bv.setPhone(rs.getString("Phone"));
+            bv.setEmail(rs.getString("Email"));
+            bv.setCourtName(rs.getString("CourtName"));
+            bv.setBookingTime(rs.getTimestamp("StartTime"));
+            bv.setDurationHours(rs.getInt("DurationHours"));
+            bv.setStatus(rs.getString("Status"));
+            bv.setNoteDetails(rs.getString("NoteDetails"));
+            bv.setNoteStatus(rs.getString("NoteStatus"));
+            bv.setHourlyRate(rs.getDouble("HourlyRate"));
+            bv.setSubtotal(rs.getDouble("Subtotal"));
+            list.add(bv);
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    return list;
+}
+
+public List<BookingView> getBookingViewsByPhone(String phone) {
+    List<BookingView> list = new ArrayList<>();
+
+    String sql = "SELECT b.BookingID, u.FullName, u.Phone, u.Email, " +
+                 "c.CourtName, bd.StartTime, bd.EndTime, " +
+                 "DATEDIFF(MINUTE, bd.StartTime, bd.EndTime) / 60 AS DurationHours, " +
+                 "b.Status, n.NoteDetails, n.Status AS NoteStatus, " +
+                 "bd.HourlyRate, bd.Subtotal " +
+                 "FROM Bookings b " +
+                 "JOIN Users u ON b.CustomerID = u.UserID " +
+                 "JOIN BookingDetails bd ON b.BookingID = bd.BookingID " +
+                 "JOIN Courts c ON bd.CourtID = c.CourtID " +
+                 "LEFT JOIN BookingNotes n ON b.BookingID = n.BookingID " +
+                 "WHERE u.Phone LIKE ? " +
+                 "ORDER BY bd.StartTime DESC";
+
+    try (Connection con = DBUtils.getConnection();
+         PreparedStatement ps = con.prepareStatement(sql)) {
+
+        ps.setString(1, "%" + phone + "%");
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            BookingView bv = new BookingView();
+            bv.setBookingID(rs.getInt("BookingID"));
+            bv.setCustomerName(rs.getString("FullName"));
+            bv.setPhone(rs.getString("Phone"));
+            bv.setEmail(rs.getString("Email"));
+            bv.setCourtName(rs.getString("CourtName"));
+            bv.setBookingTime(rs.getTimestamp("StartTime"));
+            bv.setDurationHours(rs.getInt("DurationHours"));
+            bv.setStatus(rs.getString("Status"));
+            bv.setNoteDetails(rs.getString("NoteDetails"));
+            bv.setNoteStatus(rs.getString("NoteStatus"));
+            bv.setHourlyRate(rs.getDouble("HourlyRate"));
+            bv.setSubtotal(rs.getDouble("Subtotal"));
+            list.add(bv);
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    return list;
+}
+
+    public List<BookingView> getBookingViewsByDateRange(Date startDate, Date endDate) {
+    List<BookingView> list = new ArrayList<>();
+
+    String sql = "SELECT b.BookingID, u.FullName, u.Phone, u.Email, " +
+                 "bd.StartTime, bd.EndTime, bd.HourlyRate, bd.Subtotal, " +
+                 "b.DurationHours, b.Status, n.NoteDetails " +
+                 "FROM Bookings b " +
+                 "JOIN Users u ON b.CustomerID = u.UserID " +
+                 "JOIN BookingDetails bd ON b.BookingID = bd.BookingID " +
+                 "LEFT JOIN BookingNotes n ON b.BookingID = n.BookingID " +
+                 "WHERE bd.StartTime >= ? AND bd.StartTime < ?";
+
+    try (Connection con = DBUtils.getConnection();
+         PreparedStatement ps = con.prepareStatement(sql)) {
+
+        ps.setTimestamp(1, new java.sql.Timestamp(startDate.getTime()));
+        ps.setTimestamp(2, new java.sql.Timestamp(endDate.getTime()));
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            BookingView bv = new BookingView();
+            bv.setBookingID(rs.getInt("BookingID"));
+            bv.setCustomerName(rs.getString("FullName"));
+            bv.setPhone(rs.getString("Phone"));
+            bv.setEmail(rs.getString("Email"));
+            bv.setBookingTime(rs.getTimestamp("StartTime"));
+            bv.setDurationHours(rs.getInt("DurationHours"));
+            bv.setStatus(rs.getString("Status"));
+            bv.setNoteDetails(rs.getString("NoteDetails"));
+            bv.setHourlyRate(rs.getDouble("HourlyRate"));
+            bv.setSubtotal(rs.getDouble("Subtotal"));
+            list.add(bv);
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    return list;
+}
+
+public void updateBookingStatus(int bookingID, String newStatus) {
+    String sql = "UPDATE Bookings SET Status = ? WHERE BookingID = ?";
+
+    try (Connection con = DBUtils.getConnection();
+         PreparedStatement ps = con.prepareStatement(sql)) {
+
+        ps.setString(1, newStatus);
+        ps.setInt(2, bookingID);
+        ps.executeUpdate();
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+
+// Trong BookingDAO.java
+public Map<String, Double> getRevenueByDate() {
+    Map<String, Double> revenueMap = new LinkedHashMap<>();
+
+    String sql = "SELECT CONVERT(DATE, bd.StartTime) AS BookingDate, SUM(bd.Subtotal) AS TotalRevenue " +
+                 "FROM BookingDetails bd " +
+                 "GROUP BY CONVERT(DATE, bd.StartTime) " +
+                 "ORDER BY BookingDate";
+
+    try (Connection con = DBUtils.getConnection();
+         PreparedStatement ps = con.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
+
+        while (rs.next()) {
+            String date = rs.getString("BookingDate");
+            double revenue = rs.getDouble("TotalRevenue");
+            revenueMap.put(date, revenue);
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    return revenueMap;
+}
+
+
 }
