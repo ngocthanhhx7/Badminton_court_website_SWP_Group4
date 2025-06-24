@@ -3,16 +3,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import models.UserDTO;
-import org.mindrot.jbcrypt.BCrypt;
-import utils.DBUtils;
-import models.UserDTO;
 import utils.DBUtils;
 import java.sql.*;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import org.mindrot.jbcrypt.BCrypt;
-import static utils.PasswordUtil.hashPassword;
 public class UserDAO {
 
     private Connection conn;
@@ -429,7 +424,8 @@ public boolean updatePassword(String email, String newPassword) throws SQLExcept
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-public boolean updateUserProfile1(UserDTO user) throws SQLException {
+    }
+    public boolean updateUserProfile1(UserDTO user) throws SQLException {
     String sql = "UPDATE Users "
                + "SET FullName = ?, Dob = ?, Gender = ?, Phone = ?, Address = ?, SportLevel = ? "
                + "WHERE UserID = ?";
