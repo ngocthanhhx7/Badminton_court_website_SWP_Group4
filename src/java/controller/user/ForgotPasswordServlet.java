@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import service.UserService;
 
-@WebServlet(name="ForgotPasswordServlet", urlPatterns={"/forget-password"})
+@WebServlet(name = "ForgotPasswordServlet", urlPatterns = {"/ForgotPasswordServlet"})
 public class ForgotPasswordServlet extends HttpServlet {
 
     private UserService userService;
@@ -21,7 +21,7 @@ public class ForgotPasswordServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("forgot-password.jsp").forward(request, response);
+        request.getRequestDispatcher("forgotPassword.jsp").forward(request, response);
     }
 
     @Override
@@ -35,13 +35,13 @@ public class ForgotPasswordServlet extends HttpServlet {
         // Validate input
         if (email == null || email.trim().isEmpty()) {
             request.setAttribute("error", "Vui lòng nhập email.");
-            request.getRequestDispatcher("forgot-password.jsp").forward(request, response);
+            request.getRequestDispatcher("forgotPassword.jsp").forward(request, response);
             return;
         }
 
         if (email == null || !email.matches("^[\\w.%+-]+@[\\w.-]+\\.com$")) {
     request.setAttribute("error", "Vui lòng nhập địa chỉ email hợp lệ có đuôi .com.");
-    request.getRequestDispatcher("forgot-password.jsp").forward(request, response);
+    request.getRequestDispatcher("forgotPassword.jsp").forward(request, response);
     return;
 }
 
@@ -53,12 +53,12 @@ public class ForgotPasswordServlet extends HttpServlet {
                 request.getRequestDispatcher("resetPassword.jsp").forward(request, response);
             } else {
                 request.setAttribute("error", "Email không tồn tại trong hệ thống.");
-                request.getRequestDispatcher("forgot-password.jsp").forward(request, response);
+                request.getRequestDispatcher("forgotPassword.jsp").forward(request, response);
             }
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", "Lỗi khi xử lý yêu cầu: " + e.getMessage());
-            request.getRequestDispatcher("forgot-password.jsp").forward(request, response);
+            request.getRequestDispatcher("forgotPassword.jsp").forward(request, response);
         }
     }
 }

@@ -52,8 +52,8 @@
                     <div class="col-xl-5 col-lg-4 d-none d-lg-block">
                         <div class="book_room d-flex align-items-center justify-content-end">
                             <div class="book_btn d-flex gap-2">
-                                <a href="./Login" class="btn btn-outline-primary">Login</a>
-                                <a href="./register" class="btn btn-primary">Register</a>
+                                <a href="Login.jsp" class="btn btn-outline-primary">Login</a>
+                                <a href="register.jsp" class="btn btn-primary">Register</a>
                             </div>
                         </div>
                     </div>

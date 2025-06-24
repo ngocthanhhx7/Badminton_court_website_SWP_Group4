@@ -31,6 +31,7 @@ public class UserDTO {
         this.verifyCode = verifyCode;
     }
 
+
     public UserDTO() {
     }
 

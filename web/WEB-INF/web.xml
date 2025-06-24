@@ -116,4 +116,16 @@
         <filter-name>ProfileCheckFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+    <dependencies>
+    <dependency>
+        <groupId>javax.websocket</groupId>
+        <artifactId>javax.websocket-api</artifactId>
+        <version>1.1</version>
+    </dependency>
+    <dependency>
+        <groupId>org.glassfish.tyrus</groupId>
+        <artifactId>tyrus-server</artifactId>
+        <version>1.13</version>
+    </dependency>
+</dependencies>
 </web-app>

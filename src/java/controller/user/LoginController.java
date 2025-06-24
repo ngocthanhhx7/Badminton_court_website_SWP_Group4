@@ -79,7 +79,7 @@ public class LoginController extends HttpServlet {
         String password = request.getParameter("password");
 
         // Kiểm tra đầu vào
-        if (emailOrUsername == null || emailOrUsername.trim().isEmpty()
+if (emailOrUsername == null || emailOrUsername.trim().isEmpty()
                 || password == null || password.trim().isEmpty()) {
             request.setAttribute("error", "Email/Username và mật khẩu là bắt buộc.");
             request.getRequestDispatcher("Login.jsp").forward(request, response);
@@ -98,7 +98,7 @@ public class LoginController extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("acc", admin);
             session.setAttribute("accType", "admin");
-            session.setAttribute("username", admin.getUsername());
+             session.setAttribute("username", admin.getUsername()); // ✅ thêm dòng này
 
             handleRememberMe(request, response, emailOrUsername, password);
 
@@ -110,7 +110,7 @@ public class LoginController extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("acc", user);
             session.setAttribute("accType", "user");
-            session.setAttribute("username", user.getUsername());
+             session.setAttribute("username", user.getUsername()); // ✅ thêm dòng này
 
             // Kiểm tra profile đầy đủ chưa
             if (user.getFullName() == null
@@ -168,21 +168,6 @@ public class LoginController extends HttpServlet {
             // Xóa cookie nếu user không chọn Remember
             Cookie idCookie = new Cookie("loginIdentifier", "");
             Cookie pwCookie = new Cookie("loginPassword", "");
-            idCookie.setMaxAge(0);
-            pwCookie.setMaxAge(0);
-            response.addCookie(idCookie);
-            response.addCookie(pwCookie);
-        }
-    }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+        }}}
 
-}
