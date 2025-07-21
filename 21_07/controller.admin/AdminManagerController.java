@@ -37,7 +37,10 @@ public class AdminManagerController extends HttpServlet {
                 showAddForm(request, response);
             } else if (action.equals("toggleStatus")) {
                 toggleAdminStatus(request, response);
+            } else if (action.equals("delete")) {
+                deleteAdmin(request, response);
             }
+            
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("errorMessage", "Lỗi hệ thống: " + e.getMessage());
@@ -132,6 +135,18 @@ public class AdminManagerController extends HttpServlet {
             request.setAttribute("successMessage", "Đã đổi trạng thái admin!");
         } else {
             request.setAttribute("errorMessage", "Không tìm thấy admin!");
+        }
+        listAdmins(request, response);
+    }
+
+            private void deleteAdmin(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, SQLException {
+        int adminId = Integer.parseInt(request.getParameter("id"));
+        boolean success = adminDAO.deleteAdmin(adminId);
+        if (success) {
+            request.setAttribute("successMessage", "Đã xóa admin thành công!");
+        } else {
+            request.setAttribute("errorMessage", "Xóa admin thất bại!");
         }
         listAdmins(request, response);
     }
