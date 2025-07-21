@@ -5,10 +5,12 @@ import models.BookingDetailDTO;
 import utils.DBUtils;
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import models.BookingView;
 
 public class BookingDAO {
@@ -62,7 +64,7 @@ public class BookingDAO {
             WHERE b.CustomerID = ? 
             ORDER BY b.CreatedAt DESC
         """;
-        
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         List<BookingDTO> bookings = new ArrayList<>();
         try (Connection connection = DBUtils.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -79,6 +81,8 @@ public class BookingDAO {
                     .createdAt(rs.getTimestamp("CreatedAt").toLocalDateTime())
                     .updatedAt(rs.getTimestamp("UpdatedAt") != null ? 
                               rs.getTimestamp("UpdatedAt").toLocalDateTime() : null)
+                    .createdAtStr(rs.getTimestamp("CreatedAt").toLocalDateTime().format(formatter))
+                    .updatedAtStr(rs.getTimestamp("UpdatedAt") != null ? rs.getTimestamp("UpdatedAt").toLocalDateTime().format(formatter) : null)
                     .customerName(rs.getString("FullName"))
                     .customerEmail(rs.getString("Email"))
                     .customerPhone(rs.getString("Phone"))
@@ -98,7 +102,7 @@ public class BookingDAO {
             JOIN Courts c ON bd.CourtID = c.CourtID 
             WHERE bd.BookingID = ?
         """;
-        
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         List<BookingDetailDTO> details = new ArrayList<>();
         try (Connection connection = DBUtils.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -113,6 +117,8 @@ public class BookingDAO {
                     .courtId(rs.getLong("CourtID"))
                     .startTime(rs.getTimestamp("StartTime").toLocalDateTime())
                     .endTime(rs.getTimestamp("EndTime").toLocalDateTime())
+                    .startTimeStr(rs.getTimestamp("StartTime").toLocalDateTime().format(formatter))
+                    .endTimeStr(rs.getTimestamp("EndTime").toLocalDateTime().format(formatter))
                     .hourlyRate(rs.getBigDecimal("HourlyRate"))
                     .subtotal(rs.getBigDecimal("Subtotal"))
                     .courtName(rs.getString("CourtName"))
@@ -357,5 +363,22 @@ public Map<String, Double> getRevenueByDate() {
     return revenueMap;
 }
 
+    
+    public List<BookingDTO> getBookingsByCustomerAndBookingDetail(Long customerId) {
+        List<BookingDTO> bookings = getBookingsByCustomer(customerId);
+        return bookings.stream()
+        .filter(b -> "Completed".equalsIgnoreCase(b.getStatus()))
+        .peek(b -> b.setBookingDetails(getBookingDetails(b.getBookingId())))
+        .collect(Collectors.toList());
+    }
+    
+    public List<BookingDTO> getBookingsByCustomerAndBookingDetailDraft(Long customerId) {
+        List<BookingDTO> bookings = getBookingsByCustomer(customerId);
+        System.out.println(bookings.size());
+        return bookings.stream()
+        .filter(b -> "Pending".equalsIgnoreCase(b.getStatus()))
+        .peek(b -> b.setBookingDetails(getBookingDetails(b.getBookingId())))
+        .collect(Collectors.toList());
+    }
 
 }

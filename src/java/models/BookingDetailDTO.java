@@ -25,4 +25,8 @@ public class BookingDetailDTO {
     private String courtName;
     private String courtType;
     private int durationHours;
+    
+    private String startTimeStr;
+    private String endTimeStr;
+   
 }

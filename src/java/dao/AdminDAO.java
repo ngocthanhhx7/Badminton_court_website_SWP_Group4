@@ -91,17 +91,23 @@ public class AdminDAO {
     }
 
     public boolean registerAdmin(AdminDTO admin) throws SQLException {
-        validateEmail(admin.getEmail());
-        validatePassword(admin.getPassword());
+        String sql = "INSERT INTO Admins (Username, [Password], Email, FullName, [Status], verify_code) "
+                + "VALUES (?, ?, ?, 'Active', ?)";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, admin.getUsername());
+            ps.setString(2, admin.getPassword());
+            ps.setString(3, admin.getEmail());
 
-        String sql = "INSERT INTO Admins (Username, Password, FullName, Email, Status, CreatedAt) VALUES (?, ?, ?, ?, ?, GETDATE())";
-        try (Connection conn = new DBUtils().getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, admin.getUsername());
-            stmt.setString(2, admin.getPassword());
-            stmt.setString(3, admin.getFullName());
-            stmt.setString(4, admin.getEmail());
-            stmt.setString(5, admin.getStatus() != null ? admin.getStatus() : "Active");
-            return stmt.executeUpdate() > 0;
+            if (admin.getFullName() != null && !admin.getFullName().isEmpty()) {
+                ps.setString(4, admin.getFullName());
+            } else {
+                ps.setNull(4, Types.NVARCHAR);
+            }
+
+            // Thêm dòng này để set verify_code
+            ps.setString(12, admin.getVerifyCode());
+
+            return ps.executeUpdate() > 0;
         }
     }
 
@@ -117,45 +123,56 @@ public class AdminDAO {
     }
 
     public AdminDTO getAdminByID(int adminID) throws SQLException {
-        String sql = "SELECT * FROM Admins WHERE AdminID = ?";
-        try (Connection conn = new DBUtils().getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, adminID);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return new AdminDTO(
-                            rs.getInt("AdminID"),
-                            rs.getString("Username"),
-                            rs.getString("Password"),
-                            rs.getString("FullName"),
-                            rs.getString("Email"),
-                            rs.getString("Status"),
-                            rs.getTimestamp("CreatedAt"),
-                            rs.getTimestamp("UpdatedAt")
-                    );
-                }
+        String sql = "SELECT * FROM admins WHERE AdminID = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, adminID);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return mapResultSetToAdmin(rs);
             }
         }
         return null;
     }
+        private AdminDTO mapResultSetToAdmin(ResultSet rs) throws SQLException {
+        AdminDTO admin = new AdminDTO();
+        admin.setAdminID(rs.getInt("AdminID"));
+        admin.setUsername(rs.getString("Username"));
+        admin.setEmail(rs.getString("Email"));
+        admin.setPassword(rs.getString("Password"));
+        
+        
+        admin.setFullName(rs.getString("FullName"));
+       
+        admin.setStatus(rs.getString("Status"));
+        return admin;
+    }
 
-    public List<AdminDTO> getAllAdmins() throws SQLException {
-        List<AdminDTO> admins = new ArrayList<>();
-        String sql = "SELECT * FROM Admins";
-        try (Connection conn = new DBUtils().getConnection(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+    public List<AdminDTO> getAllAdmin() throws SQLException {
+        List<AdminDTO> list = new ArrayList<>();
+        String sql = "SELECT * FROM admins ORDER BY AdminID ASC";
+        try (PreparedStatement ps = DBUtils.getConnection().prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                admins.add(new AdminDTO(
-                        rs.getInt("AdminID"),
-                        rs.getString("Username"),
-                        rs.getString("Password"),
-                        rs.getString("FullName"),
-                        rs.getString("Email"),
-                        rs.getString("Status"),
-                        rs.getTimestamp("CreatedAt"),
-                        rs.getTimestamp("UpdatedAt")
-                ));
+                list.add(mapResultSetToAdmin(rs));
             }
         }
-        return admins;
+        return list;
+    }
+        // Tìm kiếm theo username, email, fullname
+    public List<AdminDTO> searchAdmin(String keyword) throws SQLException {
+        List<AdminDTO> list = new ArrayList<>();
+        String sql = "SELECT * FROM admins WHERE username LIKE ? OR email LIKE ? OR FullName LIKE ? ORDER BY AdminID ASC";
+        try (PreparedStatement ps = DBUtils.getConnection().prepareStatement(sql)) {
+            String kw = "%" + keyword + "%";
+            ps.setString(1, kw);
+            ps.setString(2, kw);
+            ps.setString(3, kw);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(mapResultSetToAdmin(rs));
+            }
+        }
+        return list;
     }
 
     public boolean updateAdmin(AdminDTO admin) throws SQLException {
@@ -168,6 +185,88 @@ public class AdminDAO {
             stmt.setString(5, admin.getStatus());
             stmt.setInt(6, admin.getAdminID());
             return stmt.executeUpdate() > 0;
+        }
+    }
+        // Cập nhật 
+    public boolean updateAdminSimple(AdminDTO admin) throws SQLException {
+        String sql = "UPDATE admins SET FullName=?, status=? WHERE AdminID=?";
+        try (PreparedStatement ps = DBUtils.getConnection().prepareStatement(sql)) {
+            ps.setString(1, admin.getFullName());
+            ps.setString(2, admin.getStatus());
+            ps.setInt(3, admin.getAdminID());
+            return ps.executeUpdate() > 0;
+        }
+    }
+    
+    public boolean addAdminSimple(AdminDTO admin) throws SQLException {
+        String sql = "INSERT INTO admins (username, email, password, FullName, status) VALUES (?, ?, ?, ?, ?)";
+        try (PreparedStatement ps = DBUtils.getConnection().prepareStatement(sql)) {
+            ps.setString(1, admin.getUsername());
+            ps.setString(2, admin.getEmail());
+            ps.setString(3, admin.getPassword());
+            ps.setString(4, admin.getFullName());
+            ps.setString(5, admin.getStatus());
+            return ps.executeUpdate() > 0;
+        }
+    }
+    public boolean insertAdmin(String email, String password, String code) {
+        String sql = "INSERT INTO admins (email, password, verify_code , is_verified) VALUES (?, ?, ?,false)";
+        try (Connection conn = DBUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, email);
+            ps.setString(2, password);
+            ps.setString(3, code);
+            ps.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace(); // Log lỗi để dễ debug
+            return false;
+        }
+    }
+        private static String hashPassword(String password) {
+        try {
+            java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
+            md.update(password.getBytes());
+            byte[] digest = md.digest();
+            StringBuilder sb = new StringBuilder();
+            for (byte b : digest) {
+                sb.append(String.format("%02x", b & 0xff));
+            }
+            return sb.toString();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+        
+    public boolean verifyCode(String email, String code) {
+        String sql = "SELECT * FROM admins WHERE email=? AND verify_code=?";
+        try (Connection conn = DBUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setString(1, email.trim());
+            ps.setString(2, code.trim());
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    String updateSql = "UPDATE admins SET is_verified=1, verify_code=NULL WHERE email=? AND verify_code=?";
+                    try (PreparedStatement update = conn.prepareStatement(updateSql)) {
+                        update.setString(1, email.trim());
+                        update.setString(2, code.trim());
+                        int rows = update.executeUpdate();
+                        return rows > 0;
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    
+        public boolean deleteAdmin(int adminID) throws SQLException {
+        String sql = "DELETE FROM admins WHERE AdminID = ?";
+        try (PreparedStatement ps = DBUtils.getConnection().prepareStatement(sql)) {
+            ps.setInt(1, adminID);
+            return ps.executeUpdate() > 0;
         }
     }
 }

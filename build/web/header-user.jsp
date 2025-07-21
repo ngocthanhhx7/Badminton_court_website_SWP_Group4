@@ -12,7 +12,9 @@
     <!-- <link rel="manifest" href="site.webmanifest"> -->
     <link rel="shortcut icon" type="image/x-icon" href="img/favicon.png">
     <!-- Place favicon.ico in the root directory -->
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
 </head>
 <header>
     <div class="header-area">
@@ -30,7 +32,7 @@
                                     </li>
                                     <li><a href="">pages <i class="ti-angle-down"></i></a>
                                         <ul class="submenu">
-                                            <li><a href="./history-booking">History Bookings</a></li>
+                                            <li><a href="booking?action=history">History Bookings</a></li>
                                             <li><a href="./contact">Contact</a></li>
                                             <li><a href="booking?action=schedule">View Schedule</a></li>
                                             
@@ -96,6 +98,9 @@
                                                 </li>
                                                 <li><hr class="dropdown-divider"></li>
                                                 <li><a class="dropdown-item" href="view-profile.jsp"><i class="fa fa-user me-2"></i>View Profile</a></li>
+                                                <li><a class="dropdown-item" href="booking?action=my-bookings"><i class="fa fa-history me-2"></i>Booking History</a></li>
+                                                <li><a class="dropdown-item" href="partner-search?action=my-posts"><i class="fa fa-users me-2"></i>My Partner Posts</a></li>
+                                                <li><a class="dropdown-item" href="./booking?action=draft"><i class="fa-solid fa-forward"></i>Booking Draft</a></li>
                                                 <li><a class="dropdown-item" href="change-password.jsp"><i class="fa fa-key me-2"></i>Change Password</a></li>
                                                 <li><hr class="dropdown-divider"></li>
                                                 <li><a class="dropdown-item text-danger" href="./logout"><i class="fa fa-sign-out me-2"></i>Logout</a></li>
@@ -103,6 +108,9 @@
                                         </div>
                                     </c:otherwise>
                                 </c:choose>
+                                 <a href="CartServlet" class="ms-3 position-relative" style="color: #fff;">
+                                                <i class="bi bi-cart-fill" style="font-size: 1.5rem;"></i>
+                                  </a>
                             </div>
                         </div>
                     </div>

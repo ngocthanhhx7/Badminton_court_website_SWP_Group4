@@ -32,7 +32,7 @@
                     </div>
                     <div class="form-group">
                         <label for="amount">Số tiền hoàn</label>
-                        <input class="form-control" data-val="true" data-val-number="The field Amount must be a number." data-val-required="The Amount field is required." id="amount" max="100000000" min="1" name="amount" type="number" value="100000" />
+                        <input class="form-control" data-val="true" data-val-number="The field Amount must be a number." data-val-required="The Amount field is required." id="amount" max="100000000" min="1" name="amount" type="number" value="10000" />
                     </div>
                     <div class="form-group">
                         <label for="trantype">Kiểu hoàn tiền</label>

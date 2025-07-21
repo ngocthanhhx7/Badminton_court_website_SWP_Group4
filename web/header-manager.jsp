@@ -175,7 +175,8 @@
                         <li class="nav-item"><a class="nav-link" href="./user-manager">User Account</a></li>
                         <li class="nav-item"><a class="nav-link" href="./admin-manager">Admin Account</a></li>
                         <li class="nav-item"><a class="nav-link" href="./court-manager">Court Manager</a></li>
-                        <li class="nav-item"> <a class="nav-link" href="./sevice-manaer">Sevice Manager</a></li>
+                        <li class="nav-item"> <a class="nav-link" href="./service-manager">Service Manager</a></li>
+                        <li class="nav-item"> <a class="nav-link" href="./scheduler-manager">Scheduler Manager</a></li>
                     </ul>
                 </div>
             </li>

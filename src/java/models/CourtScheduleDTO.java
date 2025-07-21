@@ -30,4 +30,8 @@ public class CourtScheduleDTO {
     
     private String startTimeStr;
     private String endTimeStr;
+    
+    private CourtDTO courtDTO;
+    
+    private boolean isExpire;
 }
