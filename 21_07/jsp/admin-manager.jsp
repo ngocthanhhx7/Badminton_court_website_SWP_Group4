@@ -132,6 +132,11 @@
                                                                 <button type="submit" class="btn btn-${a.status == 'Active' ? 'secondary' : 'success'} btn-sm">
                                                                     ${a.status == 'Active' ? 'Vô hiệu hóa' : 'Kích hoạt'}
                                                                 </button>
+                                                            <form method="get" action="admin-manager" style="display:inline" onsubmit="return confirm('Bạn có chắc muốn xóa admin này?');">
+                                                                <input type="hidden" name="action" value="delete">
+                                                                <input type="hidden" name="id" value="${a.adminID}">
+                                                                <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
+                                                            </form>
                                                             </form>
                                                         </td>
                                                     </tr>
