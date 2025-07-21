@@ -29,6 +29,9 @@ public class ServiceManagerController extends HttpServlet {
                 showAddForm(request, response);
             } else if (action.equals("toggleStatus")) {
                 toggleServiceStatus(request, response);
+            
+            } else if (action.equals("delete")) {
+                deleteService(request, response);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -172,7 +175,18 @@ public class ServiceManagerController extends HttpServlet {
         }
         listServices(request, response);
     }
-
+    
+    private void deleteService(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, SQLException {
+        int serviceId = Integer.parseInt(request.getParameter("id"));
+        boolean success = serviceDAO.deleteService(serviceId);
+        if (success) {
+            request.setAttribute("successMessage", "Đã xóa service thành công!");
+        } else {
+            request.setAttribute("errorMessage", "Xóa service thất bại!");
+        }
+        listServices(request, response);
+    }
     @Override
     public String getServletInfo() {
         return "Short description";
