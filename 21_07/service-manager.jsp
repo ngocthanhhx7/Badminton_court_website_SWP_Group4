@@ -141,6 +141,12 @@
                                                                     ${s.status == 'Active' ? 'Vô hiệu hóa' : 'Kích hoạt'}
                                                                 </button>
                                                             </form>
+                                                            <form method="get" action="service-manager" style="display:inline" onsubmit="return confirm('Bạn có chắc muốn xóa service này?');">
+                                                                <input type="hidden" name="action" value="delete">
+                                                                <input type="hidden" name="id" value="${s.serviceID}">
+                                                                <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
+                                                            </form>
+
                                                         </td>
                                                     </tr>
                                                 </c:forEach>
