@@ -109,6 +109,14 @@ public class ServiceDAO {
         }
     }
 
+         public boolean deleteService(int serviceID) throws SQLException {
+        String sql = "DELETE FROM services WHERE ServiceID = ?";
+        try (PreparedStatement ps = DBUtils.getConnection().prepareStatement(sql)) {
+            ps.setInt(1, serviceID);
+            return ps.executeUpdate() > 0;
+        }
+    }
+
 
  
 
