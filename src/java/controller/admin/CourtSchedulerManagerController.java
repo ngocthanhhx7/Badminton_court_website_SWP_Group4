@@ -123,6 +123,11 @@ public class CourtSchedulerManagerController extends HttpServlet {
                 case "toggleStatus":
                     handleToggleStatus(request, session, scheduleDAO);
                     break;
+                case "generate7days":
+                    boolean genSuccess = scheduleDAO.generateCourtSchedules7Days();
+                    if (genSuccess) session.setAttribute("successMessage", "Tạo lịch 7 ngày thành công!");
+                    else session.setAttribute("errorMessage", "Tạo lịch 7 ngày thất bại!");
+                    break;
                 default:
                     break;
             }

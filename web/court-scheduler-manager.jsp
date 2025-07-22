@@ -93,6 +93,13 @@
                                     <a href="court-scheduler-manager" class="btn btn-secondary"><i class="typcn typcn-refresh"></i> Làm mới</a>
                                 </div>
                             </form>
+                            <!-- Button to generate 7 days schedule -->
+                            <form method="post" action="court-scheduler-manager" style="display:inline;">
+                                <input type="hidden" name="action" value="generate7days">
+                                <button type="submit" class="btn btn-success mb-3" onclick="return confirm('Bạn có chắc chắn muốn tạo lịch 7 ngày?');">
+                                    <i class="typcn typcn-calendar-outline"></i> Tạo lịch 7 ngày
+                                </button>
+                            </form>
                             <!-- Pagination Info -->
                             <div class="pagination-info">
                                 Hiển thị ${startRecord} - ${endRecord} của ${totalSchedules} lịch sân

@@ -388,4 +388,16 @@ public class CourtScheduleDAO {
         }
         return 0;
     }
+
+    public boolean generateCourtSchedules7Days() {
+        String sql = "EXEC [dbo].[sp_GenerateCourtSchedules7Days]";
+        try (Connection connection = utils.DBUtils.getConnection();
+             CallableStatement cs = connection.prepareCall(sql)) {
+            cs.execute();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
