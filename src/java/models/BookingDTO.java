@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -23,4 +24,12 @@ public class BookingDTO {
     private String customerName;
     private String customerEmail;
     private String customerPhone;
+    
+    private List<BookingDetailDTO> bookingDetails;
+    private String createdAtStr;
+    private String updatedAtStr;
+    
+    private boolean isCancel;
+    private boolean isCanRating;
+    private boolean isExpire;
 }

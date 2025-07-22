@@ -103,7 +103,7 @@
             <div class="container mx-auto">
 
                 <!-- Form tìm kiếm -->
-                <form method="get" action="./home" class="mb-10 max-w-4xl mx-auto flex flex-wrap gap-2 md:gap-4 items-center justify-center">
+                <form method="get" action="./court" class="mb-10 max-w-4xl mx-auto flex flex-wrap gap-2 md:gap-4 items-center justify-center">
                     <!-- Ô tìm kiếm -->
                     <input 
                         type="text" 

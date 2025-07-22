@@ -99,6 +99,113 @@
             background-clip: text;
         }
         
+        
+        /* NEW STYLES FOR RATING AND COMMENTS */
+        .rating-section {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 30px 0;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(252, 182, 159, 0.3);
+        }
+
+        .rating-title {
+            color: #8b4513;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .stars-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .star {
+            font-size: 1.8rem;
+            color: #ddd;
+            transition: all 0.3s ease;
+        }
+
+        .star.filled {
+            color: #ffd700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        .rating-text {
+            color: #8b4513;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .comments-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .comments-title {
+            color: #2c3e50;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            text-align: center;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .comment-item {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .comment-item:hover {
+            transform: translateX(5px);
+        }
+
+        .comment-text {
+            color: #555;
+            font-size: 15px;
+            line-height: 1.6;
+            font-style: italic;
+            position: relative;
+        }
+
+        .comment-text:before {
+            content: '"';
+            font-size: 2rem;
+            color: #667eea;
+            position: absolute;
+            left: -10px;
+            top: -5px;
+        }
+
+        .comment-text:after {
+            content: '"';
+            font-size: 2rem;
+            color: #667eea;
+        }
+
+        .no-comments {
+            text-align: center;
+            color: #6c757d;
+            font-style: italic;
+            padding: 40px 20px;
+        }
+        
         .court-type-badge {
             display: inline-block;
             background: linear-gradient(45deg, #78350f, #a0522d);
@@ -388,6 +495,78 @@
             color: #6c757d;
         }
         
+        
+        /* NEW: Date Picker Styles */
+        .date-picker-container {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(187, 222, 251, 0.3);
+        }
+
+        .date-picker-title {
+            color: #1565c0;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .date-picker-form {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .date-input {
+            padding: 12px 20px;
+            border: 2px solid #90caf9;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 500;
+            color: #1565c0;
+            background: white;
+            transition: all 0.3s ease;
+            outline: none;
+            min-width: 180px;
+        }
+
+        .date-input:focus {
+            border-color: #1976d2;
+            box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .btn-date-submit {
+            background: linear-gradient(45deg, #1976d2, #1565c0);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(25, 118, 210, 0.3);
+            cursor: pointer;
+        }
+
+        .btn-date-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(25, 118, 210, 0.4);
+        }
+
+        .btn-date-submit:active {
+            transform: translateY(0);
+        }
+        
         @media (max-width: 768px) {
             .court-title {
                 font-size: 2rem;
@@ -520,6 +699,59 @@
                                 </div>
                             </div>
                             
+                            <div class="rating-section">
+                                <h4 class="rating-title">
+                                    <i class="fa fa-star"></i> Customer Rating
+                                </h4>
+                                <div class="stars-container">
+                                    <c:choose>
+                                        <c:when test="${not empty avgRating && avgRating > 0}">
+                                            <c:forEach var="i" begin="1" end="5">
+                                                <i class="fa fa-star star ${i <= avgRating ? 'filled' : ''}"></i>
+                                            </c:forEach>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <c:forEach var="i" begin="1" end="5">
+                                                <i class="fa fa-star star"></i>
+                                            </c:forEach>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
+                                <div class="rating-text">
+                                    <c:choose>
+                                        <c:when test="${not empty avgRating && avgRating > 0}">
+                                            <fmt:formatNumber value="${avgRating}" maxFractionDigits="1" minFractionDigits="1"/> out of 5 stars
+                                        </c:when>
+                                        <c:otherwise>
+                                            No ratings yet
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
+                            </div>
+
+                            <!-- NEW: Comments Section -->
+                            <div class="comments-section">
+                                <h4 class="comments-title">
+                                    <i class="fa fa-comments"></i> Customer Reviews
+                                </h4>
+                                <c:choose>
+                                    <c:when test="${not empty notes}">
+                                        <c:forEach var="note" items="${notes}">
+                                            <div class="comment-item">
+                                                <p class="comment-text">${note}</p>
+                                            </div>
+                                        </c:forEach>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div class="no-comments">
+                                            <i class="fa fa-comment-o" style="font-size: 2rem; margin-bottom: 10px; display: block;"></i>
+                                            No reviews available yet. Be the first to leave a review!
+                                        </div>
+                                    </c:otherwise>
+                                </c:choose>
+                            </div>
+                            
+                            
                             <!-- User Authentication Check -->
                             <c:choose>
                                 <c:when test="${not empty sessionScope.acc}">
@@ -611,6 +843,26 @@
                                     Next Day <i class="fa fa-chevron-right"></i>
                                 </a>
                             </div>
+                                    
+                            <!-- NEW: Date Picker -->
+                            <div class="date-picker-container">
+                                <div class="date-picker-title">
+                                    <i class="fa fa-calendar-o"></i>
+                                    Select a Specific Date
+                                </div>
+                                <form class="date-picker-form" method="GET" action="court-detail?courtId=${court.courtId}">
+                                    <input type="hidden" name="courtId" value="${court.courtId}">
+                                    <input type="date" 
+                                           name="date" 
+                                           class="date-input"
+                                           value="<c:choose><c:when test='${not empty selectedDateStr}'>${selectedDateStr}</c:when><c:otherwise><fmt:formatDate value='${now}' pattern='yyyy-MM-dd' /></c:otherwise></c:choose>"
+                                           min="<fmt:formatDate value='${now}' pattern='yyyy-MM-dd' />"
+                                           required>
+                                    <button type="submit" class="btn-date-submit">
+                                        <i class="fa fa-search"></i> View Schedule
+                                    </button>
+                                </form>
+                            </div>        
                         </div>
                         
                         <div class="time-slots-container">
@@ -626,13 +878,33 @@
                                             <div>
                                                 <c:choose>
                                                     <c:when test="${schedule.status == 'Available'}">
-                                                        <span class="status-badge-schedule badge-available">Available</span>
-                                                        <c:if test="${not empty sessionScope.acc}">
-                                                           <a href="booking?courtId=${schedule.courtId}&date=<fmt:formatDate value='${selectedDate}' pattern='yyyy-MM-dd'/>&startTime=${schedule.startTime}&endTime=${schedule.endTime}&courtScheduleId=${schedule.scheduleId}" 
-                                                                class="btn-book-slot">
-                                                                Book Now
-                                                             </a>
-                                                        </c:if>
+                                                        <c:choose>
+                                                            <c:when test="${not schedule.expire}">
+                                                                <!-- Available -->
+                                                                <span class="status-badge-schedule badge-available">Available</span>
+                                                                <c:if test="${not empty sessionScope.acc}">
+                                                                    <!-- Book Now button -->
+                                                                    <a href="booking?courtScheduleIds=${schedule.scheduleId}" 
+                                                                       class="inline-block bg-green-600 hover:bg-green-700 text-white font-semibold py-1.5 px-4 rounded-xl text-sm shadow-sm transition">
+                                                                        <i class="fa fa-calendar-check-o mr-1"></i> Book Now
+                                                                    </a>
+                                                                    <!-- Add to Cart button -->
+                                                                    <form action="CartServlet" method="post" class="inline-block ml-2">
+                                                                        <input type="hidden" name="action" value="create" />
+                                                                        <input type="hidden" name="scheduleId" value="${schedule.scheduleId}" />
+                                                                        <input type="hidden" name="price" value="100000" />
+                                                                        <button type="submit" 
+                                                                                class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-1.5 px-4 rounded-xl text-sm shadow-sm transition">
+                                                                            <i class="fa fa-shopping-cart mr-1"></i> Add to Cart
+                                                                        </button>
+                                                                    </form>
+                                                                </c:if>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <!-- Expired -->
+                                                                <span class="status-badge-schedule badge-expired">Expired</span>
+                                                            </c:otherwise>
+                                                        </c:choose>
                                                     </c:when>
                                                     <c:when test="${schedule.status == 'Booked'}">
                                                         <span class="status-badge-schedule badge-booked">Booked</span>
@@ -641,6 +913,7 @@
                                                         <span class="status-badge-schedule badge-maintenance">Maintenance</span>
                                                     </c:otherwise>
                                                 </c:choose>
+
                                             </div>
                                         </div>
                                     </c:forEach>

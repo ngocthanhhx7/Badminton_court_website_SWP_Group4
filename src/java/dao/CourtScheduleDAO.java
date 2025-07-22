@@ -6,8 +6,10 @@ import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CourtScheduleDAO {
     
@@ -157,5 +159,86 @@ public class CourtScheduleDAO {
     }   
 
 
+    public CourtScheduleDTO getScheduleById(int scheduleId) {
+        String sql = "SELECT cs.*, c.CourtName, c.CourtType " +
+                     "FROM CourtSchedules cs " +
+                     "JOIN Courts c ON cs.CourtID = c.CourtID " +
+                     "WHERE cs.ScheduleID = ?";
 
+        try (Connection conn = DBUtils.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, scheduleId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return CourtScheduleDTO.builder()
+                        .scheduleId(rs.getLong("ScheduleID"))
+                        .courtId(rs.getInt("CourtID"))
+                        .scheduleDate(rs.getDate("ScheduleDate").toLocalDate())
+                        .startTime(rs.getTime("StartTime").toLocalTime())
+                        .endTime(rs.getTime("EndTime").toLocalTime())
+                        .status(rs.getString("Status"))
+                        .isHoliday(rs.getBoolean("IsHoliday"))
+                        .courtName(rs.getString("CourtName"))
+                        .courtType(rs.getString("CourtType"))
+                        .build();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    public List<CourtScheduleDTO> getSchedulesByIds(List<Integer> scheduleIds) {
+        List<CourtScheduleDTO> schedules = new ArrayList<>();
+        if (scheduleIds == null || scheduleIds.isEmpty()) return schedules;
+
+        String placeholders = scheduleIds.stream()
+            .map(id -> "?")
+            .collect(Collectors.joining(","));
+
+          CourtDAO courtDAO = new CourtDAO();
+        
+        String sql = "SELECT cs.*, c.CourtName, c.CourtType " +
+                     "FROM CourtSchedules cs " +
+                     "JOIN Courts c ON cs.CourtID = c.CourtID " +
+                     "WHERE cs.ScheduleID IN (" + placeholders + ")";
+
+        try (Connection conn = DBUtils.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            for (int i = 0; i < scheduleIds.size(); i++) {
+                ps.setInt(i + 1, scheduleIds.get(i));
+            }
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                CourtScheduleDTO schedule = CourtScheduleDTO.builder()
+                        .scheduleId(rs.getLong("ScheduleID"))
+                        .courtId(rs.getInt("CourtID"))
+                        .scheduleDate(rs.getDate("ScheduleDate").toLocalDate())
+                        .startTime(rs.getTime("StartTime").toLocalTime())
+                        .endTime(rs.getTime("EndTime").toLocalTime())
+                        .status(rs.getString("Status"))
+                        .isHoliday(rs.getBoolean("IsHoliday"))
+                        .courtName(rs.getString("CourtName"))
+                        .courtType(rs.getString("CourtType"))
+                        .build();
+                
+                 schedule.setCourtDTO(courtDAO.getCourtById(schedule.getCourtId()));
+
+                // Set formatted time strings
+                DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
+                schedule.setStartTimeStr(schedule.getStartTime().format(timeFormat));
+                schedule.setEndTimeStr(schedule.getEndTime().format(timeFormat));
+
+                schedules.add(schedule);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return schedules;
+    }
 }

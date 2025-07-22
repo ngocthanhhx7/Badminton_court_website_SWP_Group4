@@ -11,6 +11,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CourtDAO {
+    
+    public List<CourtDTO> getCourtsByIds(List<Integer> courtIds) {
+        List<CourtDTO> courts = new ArrayList<>();
+        if (courtIds == null || courtIds.isEmpty()) {
+            return courts; // Trả về danh sách rỗng nếu không có ID nào
+        }
+
+        StringBuilder sql = new StringBuilder("SELECT * FROM Courts WHERE CourtID IN (");
+        for (int i = 0; i < courtIds.size(); i++) {
+            sql.append("?");
+            if (i < courtIds.size() - 1) {
+                sql.append(",");
+            }
+        }
+        sql.append(")");
+        try (Connection connection = DBUtils.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
+            for (int i = 0; i < courtIds.size(); i++) {
+                preparedStatement.setInt(i + 1, courtIds.get(i));
+            }
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                courts.add(mapResultSetToCourt(resultSet));
+            }
+        } catch (Exception e) {
+            System.err.println("Error getting courts by IDs: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return courts;
+    }
 
     public List<CourtDTO> getAllCourts() {
         String sql = "SELECT * FROM Courts ORDER BY CourtID DESC";
@@ -447,7 +478,7 @@ public class CourtDAO {
     
     // Helper method to map ResultSet to CourtDTO
     private CourtDTO mapResultSetToCourt(ResultSet rs) throws Exception {
-        return CourtDTO.builder()
+        CourtDTO courtDto =  CourtDTO.builder()
                 .courtId(rs.getInt("CourtID"))
                 .courtName(rs.getString("CourtName"))
                 .description(rs.getString("Description"))
@@ -458,6 +489,7 @@ public class CourtDAO {
                 .updatedAt(rs.getTimestamp("UpdatedAt"))
                 .courtImage(rs.getString("CourtImage"))
                 .build();
+        return courtDto;
     }
     
     // Helper method to check and create table if needed

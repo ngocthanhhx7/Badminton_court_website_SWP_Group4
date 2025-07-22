@@ -95,7 +95,6 @@
         <!-- header-end -->
 
 
-        <jsp:include page="chatbox.jsp" /> 
 
         <!-- slider_area_start -->
         <div class="slider_area">
@@ -580,54 +579,8 @@
         </script>
         <div id="chat-icon" onclick="window.location.href='chatRoomServer.jsp'" title="Chuyển sang trang chat">💬</div>
 
-<html>
-<head>
-    <title>Homepage with Chat Icon</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        #chat-icon {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            background-color: #6f42c1;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-size: 28px;
-            cursor: pointer;
-            z-index: 1001;
-            box-shadow: 0 0 10px rgba(0,0,0,0.3);
-        }
-        #chat-icon:hover {
-            background-color: #5a32a3;
-        }
-    </style>
-</head>
-<body>
 
-<h1>Welcome to the Homepage</h1>
-<p>Some homepage content here...</p>
-
-<!-- Chat Icon Only -->
-<div id="chat-icon" onclick="window.location.href='chatRoomServer.jsp'" title="Chuyển sang trang chat">
-    💬
-</div>
-
-</body>
-</html>
 
     </body>
-
-<%@ page session="true" %>
-<%
-    String username = (String) session.getAttribute("username");
-%>
-
 
 </html>

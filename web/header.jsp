@@ -25,16 +25,12 @@
                                     <li><a href="./home">home</a></li>
                                     <li><a href="./court">Courts</a></li>
                                     <li><a href="./about">About</a></li>
-                                    <li><a href="./blog">blog <i class="ti-angle-down"></i></a>
-                                        <ul class="submenu">
-                                            <li><a href="./blog">blog</a></li>
-                                            <li><a href="single-blog.jsp">single-blog</a></li>
-                                        </ul>
-                                    </li>
+                                    <li><a href="./booking?action=schedule">Schedules</a></li>
                                     <li><a href="#">pages <i class="ti-angle-down"></i></a>
                                         <ul class="submenu">
+                                            <li><a href="./blog">blog</a></li>
                                             <li><a href="elements.jsp">elements</a></li>
-                                            <li><a href="./contact.jsp">Contact</a></li>
+                                            <li><a href="/contact">Contact</a></li>
                                         </ul>
                                     </li>
                                     
@@ -52,8 +48,8 @@
                     <div class="col-xl-5 col-lg-4 d-none d-lg-block">
                         <div class="book_room d-flex align-items-center justify-content-end">
                             <div class="book_btn d-flex gap-2">
-                                <a href="Login.jsp" class="btn btn-outline-primary">Login</a>
-                                <a href="register.jsp" class="btn btn-primary">Register</a>
+                                <a href="./Login" class="btn btn-outline-primary">Login</a>
+                                <a href="./register" class="btn btn-primary">Register</a>
                             </div>
                         </div>
                     </div>
