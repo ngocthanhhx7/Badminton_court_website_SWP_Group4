@@ -241,4 +241,151 @@ public class CourtScheduleDAO {
 
         return schedules;
     }
+
+    // === CRUD & FILTER/PAGINATION METHODS ===
+    public boolean addSchedule(CourtScheduleDTO schedule) {
+        String sql = "INSERT INTO CourtSchedules (CourtID, ScheduleDate, StartTime, EndTime, Status, IsHoliday, CreatedBy, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?, ?, ?, GETDATE(), GETDATE())";
+        try (Connection connection = DBUtils.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, schedule.getCourtId());
+            ps.setDate(2, java.sql.Date.valueOf(schedule.getScheduleDate()));
+            ps.setTime(3, java.sql.Time.valueOf(schedule.getStartTime()));
+            ps.setTime(4, java.sql.Time.valueOf(schedule.getEndTime()));
+            ps.setString(5, schedule.getStatus());
+            ps.setBoolean(6, schedule.isHoliday());
+            ps.setLong(7, schedule.getCreatedBy() != null ? schedule.getCreatedBy() : 1L);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updateSchedule(CourtScheduleDTO schedule) {
+        String sql = "UPDATE CourtSchedules SET CourtID=?, ScheduleDate=?, StartTime=?, EndTime=?, Status=?, IsHoliday=?, UpdatedAt=GETDATE() WHERE ScheduleID=?";
+        try (Connection connection = DBUtils.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, schedule.getCourtId());
+            ps.setDate(2, java.sql.Date.valueOf(schedule.getScheduleDate()));
+            ps.setTime(3, java.sql.Time.valueOf(schedule.getStartTime()));
+            ps.setTime(4, java.sql.Time.valueOf(schedule.getEndTime()));
+            ps.setString(5, schedule.getStatus());
+            ps.setBoolean(6, schedule.isHoliday());
+            ps.setLong(7, schedule.getScheduleId());
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean deleteSchedule(Long scheduleId) {
+        String sql = "DELETE FROM CourtSchedules WHERE ScheduleID = ?";
+        try (Connection connection = DBUtils.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setLong(1, scheduleId);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public List<CourtScheduleDTO> getSchedulesWithFilters(Integer courtId, String status, String courtType, LocalDate scheduleDate, String sortBy, String sortOrder, int page, int pageSize) {
+        // Validate and sanitize parameters
+        if (page < 1) page = 1;
+        if (pageSize < 1) pageSize = 10;
+        if (pageSize > 100) pageSize = 100;
+        String[] allowedSortFields = {"ScheduleID", "CourtID", "ScheduleDate", "StartTime", "EndTime", "Status", "IsHoliday", "CreatedAt"};
+        boolean isValidSortField = false;
+        for (String field : allowedSortFields) {
+            if (field.equals(sortBy)) {
+                isValidSortField = true;
+                break;
+            }
+        }
+        if (!isValidSortField) sortBy = "ScheduleID";
+        if (!"ASC".equalsIgnoreCase(sortOrder) && !"DESC".equalsIgnoreCase(sortOrder)) sortOrder = "DESC";
+        StringBuilder sql = new StringBuilder("SELECT cs.*, c.CourtName, c.CourtType FROM CourtSchedules cs JOIN Courts c ON cs.CourtID = c.CourtID WHERE 1=1");
+        List<Object> params = new ArrayList<>();
+        if (courtId != null) {
+            sql.append(" AND cs.CourtID = ?");
+            params.add(courtId);
+        }
+        if (status != null && !status.trim().isEmpty()) {
+            sql.append(" AND cs.Status = ?");
+            params.add(status.trim());
+        }
+        if (courtType != null && !courtType.trim().isEmpty()) {
+            sql.append(" AND c.CourtType = ?");
+            params.add(courtType.trim());
+        }
+        if (scheduleDate != null) {
+            sql.append(" AND cs.ScheduleDate = ?");
+            params.add(java.sql.Date.valueOf(scheduleDate));
+        }
+        sql.append(" ORDER BY cs.").append(sortBy).append(" ").append(sortOrder);
+        sql.append(" OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
+        params.add((page - 1) * pageSize);
+        params.add(pageSize);
+        List<CourtScheduleDTO> schedules = new ArrayList<>();
+        try (Connection connection = DBUtils.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql.toString())) {
+            for (int i = 0; i < params.size(); i++) {
+                ps.setObject(i + 1, params.get(i));
+            }
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                CourtScheduleDTO schedule = CourtScheduleDTO.builder()
+                        .scheduleId(rs.getLong("ScheduleID"))
+                        .courtId(rs.getInt("CourtID"))
+                        .scheduleDate(rs.getDate("ScheduleDate").toLocalDate())
+                        .startTime(rs.getTime("StartTime").toLocalTime())
+                        .endTime(rs.getTime("EndTime").toLocalTime())
+                        .status(rs.getString("Status"))
+                        .isHoliday(rs.getBoolean("IsHoliday"))
+                        .courtName(rs.getString("CourtName"))
+                        .courtType(rs.getString("CourtType"))
+                        .build();
+                schedules.add(schedule);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return schedules;
+    }
+
+    public int getFilteredSchedulesCount(Integer courtId, String status, String courtType, LocalDate scheduleDate) {
+        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM CourtSchedules cs JOIN Courts c ON cs.CourtID = c.CourtID WHERE 1=1");
+        List<Object> params = new ArrayList<>();
+        if (courtId != null) {
+            sql.append(" AND cs.CourtID = ?");
+            params.add(courtId);
+        }
+        if (status != null && !status.trim().isEmpty()) {
+            sql.append(" AND cs.Status = ?");
+            params.add(status.trim());
+        }
+        if (courtType != null && !courtType.trim().isEmpty()) {
+            sql.append(" AND c.CourtType = ?");
+            params.add(courtType.trim());
+        }
+        if (scheduleDate != null) {
+            sql.append(" AND cs.ScheduleDate = ?");
+            params.add(java.sql.Date.valueOf(scheduleDate));
+        }
+        try (Connection connection = DBUtils.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql.toString())) {
+            for (int i = 0; i < params.size(); i++) {
+                ps.setObject(i + 1, params.get(i));
+            }
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 }
