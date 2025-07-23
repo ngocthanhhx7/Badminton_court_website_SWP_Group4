@@ -3,8 +3,12 @@ package controller.user;
 import com.vnpay.common.Config;
 import dao.BookingDAO;
 import dao.InvoiceDAO;
+import dao.UserDAO;
 import models.BookingDTO;
+import models.BookingDetailDTO;
 import models.InvoiceDTO;
+import models.UserDTO;
+import utils.EmailUtils;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -17,7 +21,9 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @WebServlet(name = "VNPayReturnController", urlPatterns = {"/vnpay-return"})
@@ -25,12 +31,14 @@ public class VNPayReturnController extends HttpServlet {
     
     private BookingDAO bookingDAO;
     private InvoiceDAO invoiceDAO;
+    private UserDAO userDAO;
     
     @Override
     public void init() throws ServletException {
         super.init();
         bookingDAO = new BookingDAO();
         invoiceDAO = new InvoiceDAO();
+        userDAO = new UserDAO();
     }
     
     @Override
@@ -93,6 +101,7 @@ public class VNPayReturnController extends HttpServlet {
                             .build();
                         
                         invoiceDAO.createInvoice(invoice);
+
                     }
                     
                     request.setAttribute("message", "Payment successful! Your booking has been confirmed.");

@@ -130,22 +130,50 @@ body {
 }
 .button-row {
     display: flex;
-    justify-content: center;
-    gap: 20px; /* Khoảng cách giữa 2 nút */
-    margin-top: 20px;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 25px;
+    padding: 0 20px;
 }
 
 .btn {
-    padding: 10px 20px;
+    padding: 12px 20px;
     background-color: rgba(255, 255, 255, 0.15);
     color: white;
     border: none;
     border-radius: 25px;
     text-decoration: none;
-    font-size: 16px;
-    transition: background 0.3s ease;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-weight: 500;
 }
 
 .btn:hover {
-    background-color: rgba(255, 255, 255, 0.3);
+    background-color: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    color: white;
+    text-decoration: none;
+}
+
+.btn i {
+    font-size: 14px;
+}
+
+/* Responsive cho mobile */
+@media (max-width: 768px) {
+    .button-row {
+        padding: 0 15px;
+        gap: 10px;
+    }
+    
+    .btn {
+        padding: 10px 15px;
+        font-size: 14px;
+    }
 }

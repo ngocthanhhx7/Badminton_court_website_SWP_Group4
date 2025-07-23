@@ -10,6 +10,7 @@ import models.BookingDetailDTO;
 import models.CourtDTO;
 import models.CourtScheduleDTO;
 import models.UserDTO;
+import utils.EmailUtils;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -30,6 +31,9 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.LinkedHashMap;
 
 @WebServlet(name = "BookingController", urlPatterns = {"/booking"})
 public class BookingController extends HttpServlet {
@@ -84,34 +88,41 @@ public class BookingController extends HttpServlet {
             case "create":
                 createBooking(request, response);
                 break;
+            case "cancel":
+                cancelBooking(request, response);
+                break;
         }
     }
 
     private void showMyBookings(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String courtIdParam = request.getParameter("courtId");
+        HttpSession session = request.getSession();
+        UserDTO user = (UserDTO) session.getAttribute("acc");
 
-        if (courtIdParam != null) {
-            try {
-                Integer courtId = Integer.parseInt(courtIdParam);
-                CourtDTO court = courtDAO.getCourtById(courtId);
-                request.setAttribute("court", court);
-
-                // Get available schedules for next 7 days
-                List<CourtScheduleDTO> schedules = new ArrayList<>();
-                LocalDate today = LocalDate.now();
-                for (int i = 0; i < 7; i++) {
-                    LocalDate date = today.plusDays(i);
-                    List<CourtScheduleDTO> daySchedules = scheduleDAO.getAvailableSchedules(courtId, date);
-                    schedules.addAll(daySchedules);
-                }
-                request.setAttribute("schedules", schedules);
-
-            } catch (NumberFormatException e) {
-                request.setAttribute("error", "Invalid court ID");
-            }
+        if (user == null) {
+            response.sendRedirect("Login.jsp");
+            return;
         }
 
-        request.getRequestDispatcher("booking-form.jsp").forward(request, response);
+        try {
+            // Get user's booking history
+            List<BookingDTO> userBookings = bookingDAO.getBookingsByCustomer(Long.valueOf(user.getUserID()));
+            
+            // Get booking details for each booking
+            Map<Long, List<BookingDetailDTO>> bookingDetailsMap = new LinkedHashMap<>();
+            for (BookingDTO booking : userBookings) {
+                List<BookingDetailDTO> details = bookingDAO.getBookingDetails(booking.getBookingId());
+                bookingDetailsMap.put(booking.getBookingId(), details);
+            }
+            
+            request.setAttribute("userBookings", userBookings);
+            request.setAttribute("bookingDetailsMap", bookingDetailsMap);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("error", "Không thể tải lịch sử đặt sân");
+        }
+
+        request.getRequestDispatcher("my-bookings.jsp").forward(request, response);
     }
 
     private void showSchedule(HttpServletRequest request, HttpServletResponse response)
@@ -263,6 +274,118 @@ public class BookingController extends HttpServlet {
             e.printStackTrace();
             request.setAttribute("error", "An error occurred: " + e.getMessage());
             showBookingForm(request, response);
+        }
+    }
+
+    private void cancelBooking(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        
+        HttpSession session = request.getSession();
+        UserDTO user = (UserDTO) session.getAttribute("acc");
+
+        if (user == null) {
+            response.sendRedirect("Login.jsp");
+            return;
+        }
+
+        try {
+            Long bookingId = Long.parseLong(request.getParameter("bookingId"));
+            
+            // Get booking details before cancelling
+            BookingDTO booking = bookingDAO.getBookingById(bookingId);
+            
+            if (booking == null) {
+                request.setAttribute("error", "Booking not found");
+                showMyBookings(request, response);
+                return;
+            }
+            
+            // Check if booking belongs to current user
+            if (!booking.getCustomerId().equals(Long.valueOf(user.getUserID()))) {
+                request.setAttribute("error", "You don't have permission to cancel this booking");
+                showMyBookings(request, response);
+                return;
+            }
+            
+            // Check if booking status is Pending
+            if (!"Pending".equals(booking.getStatus())) {
+                request.setAttribute("error", "Only pending bookings can be cancelled");
+                showMyBookings(request, response);
+                return;
+            }
+            
+            // Update booking status to Cancelled
+            boolean success = bookingDAO.updateBookingStatus(bookingId, "Cancelled");
+            
+            if (success) {
+                // Get booking details for email
+                List<BookingDetailDTO> details = bookingDAO.getBookingDetails(bookingId);
+                
+                // Send cancellation email
+                try {
+                    sendCancellationEmail(user, booking, details);
+                } catch (Exception emailEx) {
+                    // Don't fail the cancellation if email fails
+                    System.err.println("Failed to send cancellation email: " + emailEx.getMessage());
+                }
+                
+                request.setAttribute("success", "Booking has been cancelled successfully. A confirmation email has been sent.");
+            } else {
+                request.setAttribute("error", "Failed to cancel booking. Please try again.");
+            }
+            
+        } catch (NumberFormatException e) {
+            request.setAttribute("error", "Invalid booking ID");
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("error", "An error occurred: " + e.getMessage());
+        }
+        
+        showMyBookings(request, response);
+    }
+    
+    private void sendCancellationEmail(UserDTO user, BookingDTO booking, List<BookingDetailDTO> details) {
+        try {
+            // Prepare court details as HTML rows
+            List<String> courtDetailRows = new ArrayList<>();
+            for (BookingDetailDTO detail : details) {
+                // Kiểm tra nếu có thông tin court
+                String courtName = (detail.getCourtName() != null && !detail.getCourtName().isEmpty()) 
+                    ? detail.getCourtName() : "Court #" + detail.getCourtId();
+                String courtType = (detail.getCourtType() != null && !detail.getCourtType().isEmpty()) 
+                    ? detail.getCourtType() : "Badminton";
+                
+                String row = "<tr>"
+                    + "<td style='padding:8px; border-bottom:1px solid #dee2e6;'>" + courtName + "</td>"
+                    + "<td style='padding:8px; border-bottom:1px solid #dee2e6;'>" + courtType + "</td>"
+                    + "<td style='padding:8px; border-bottom:1px solid #dee2e6;'>"
+                    + detail.getStartTime().toString().substring(0, 16).replace("T", " ")
+                    + " - "
+                    + detail.getEndTime().toString().substring(11, 16)
+                    + "</td>"
+                    + "</tr>";
+                courtDetailRows.add(row);
+            }
+
+            // Nếu không có chi tiết hoặc thông tin trống, tạo email đơn giản hơn
+            if (courtDetailRows.isEmpty() || courtDetailRows.get(0).contains("Court #")) {
+                // Send simplified email without court details table
+                EmailUtils.sendSimpleCancellationEmail(
+                    user.getEmail(), 
+                    user.getFullName(), 
+                    booking.getBookingId().toString()
+                );
+            } else {
+                // Use full email template with court details
+                EmailUtils.sendBookingCancellationEmail(
+                    user.getEmail(), 
+                    user.getFullName(), 
+                    booking.getBookingId().toString(), 
+                    courtDetailRows
+                );
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to send cancellation email", e);
         }
     }
 

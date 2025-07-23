@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class AdminDAO {
 
@@ -16,22 +17,26 @@ public class AdminDAO {
     }
 
     public AdminDTO login(String username, String password) {
-        String query = "SELECT * FROM Admins WHERE Username = ? AND Password = ?";
+        String query = "SELECT * FROM Admins WHERE Username = ?";
         try (Connection conn = new DBUtils().getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setString(1, username);
-            ps.setString(2, password);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return new AdminDTO(
-                            rs.getInt("AdminID"),
-                            rs.getString("Username"),
-                            rs.getString("Password"),
-                            rs.getString("FullName"),
-                            rs.getString("Email"),
-                            rs.getString("Status"),
-                            rs.getTimestamp("CreatedAt"),
-                            rs.getTimestamp("UpdatedAt")
-                    );
+                    String hashedPassword = rs.getString("Password");
+                    
+                    // Kiểm tra bằng BCrypt
+                    if (BCrypt.checkpw(password, hashedPassword)) {
+                        return new AdminDTO(
+                                rs.getInt("AdminID"),
+                                rs.getString("Username"),
+                                hashedPassword,
+                                rs.getString("FullName"),
+                                rs.getString("Email"),
+                                rs.getString("Status"),
+                                rs.getTimestamp("CreatedAt"),
+                                rs.getTimestamp("UpdatedAt")
+                        );
+                    }
                 }
             }
         } catch (Exception e) {
@@ -52,23 +57,27 @@ public class AdminDAO {
     }
 
     public AdminDTO loginWithEmailOrUsername(String input, String password) {
-        String query = "SELECT * FROM Admins WHERE (Username = ? OR Email = ?) AND Password = ?";
+        String query = "SELECT * FROM Admins WHERE (Username = ? OR Email = ?)";
         try (PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setString(1, input);
             ps.setString(2, input);
-            ps.setString(3, password);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return new AdminDTO(
-                            rs.getInt("AdminID"),
-                            rs.getString("Username"),
-                            rs.getString("Password"),
-                            rs.getString("FullName"),
-                            rs.getString("Email"),
-                            rs.getString("Status"),
-                            rs.getTimestamp("CreatedAt"),
-                            rs.getTimestamp("UpdatedAt")
-                    );
+                    String hashedPassword = rs.getString("Password");
+                    
+                    // Kiểm tra bằng BCrypt
+                    if (BCrypt.checkpw(password, hashedPassword)) {
+                        return new AdminDTO(
+                                rs.getInt("AdminID"),
+                                rs.getString("Username"),
+                                hashedPassword,
+                                rs.getString("FullName"),
+                                rs.getString("Email"),
+                                rs.getString("Status"),
+                                rs.getTimestamp("CreatedAt"),
+                                rs.getTimestamp("UpdatedAt")
+                        );
+                    }
                 }
             }
         } catch (Exception e) {
@@ -84,9 +93,8 @@ public class AdminDAO {
     }
 
     private void validatePassword(String password) throws SQLException {
-        if (password == null || password.length() < 8
-                || !password.matches("^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*\\d).+$")) {
-            throw new SQLException("Mật khẩu phải có ít nhất 8 ký tự, 1 chữ cái in hoa, 1 ký tự đặc biệt và 1 số.");
+        if (password == null || password.length() < 6) {
+            throw new SQLException("Mật khẩu phải có ít nhất 6 ký tự.");
         }
     }
 

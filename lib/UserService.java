@@ -98,11 +98,10 @@ public class UserService {
         }
     }
 
-    // Validate password: at least 8 chars, 1 uppercase, 1 special char, 1 digit
+    // Validate password: at least 6 chars
     private void validatePassword(String password) throws IllegalArgumentException {
-        if (password == null || password.length() < 8 ||
-            !password.matches("^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*\\d).+$")) {
-            throw new IllegalArgumentException("Mật khẩu phải có ít nhất 8 ký tự, 1 chữ cái in hoa, 1 ký tự đặc biệt và 1 số.");
+        if (password == null || password.length() < 6) {
+            throw new IllegalArgumentException("Mật khẩu phải có ít nhất 6 ký tự.");
         }
     }
 

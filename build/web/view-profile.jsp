@@ -96,8 +96,15 @@
             </div>
 
             <div class="button-row">
-                <a href="./edit-profile.jsp" class="btn">Chỉnh sửa thông tin</a>
-                <a href="./home" class="btn">← Về trang chủ</a>
+                <a href="./edit-profile.jsp" class="btn">
+                    <i class="fa fa-edit"></i> Chỉnh sửa thông tin
+                </a>
+                <a href="change-password" class="btn">
+                    <i class="fa fa-lock"></i> Đổi mật khẩu
+                </a>
+                <a href="./home" class="btn">
+                    <i class="fa fa-home"></i> Về trang chủ
+                </a>
             </div>
         </div>
 

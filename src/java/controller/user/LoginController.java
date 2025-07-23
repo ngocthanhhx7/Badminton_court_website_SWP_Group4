@@ -110,19 +110,13 @@ if (emailOrUsername == null || emailOrUsername.trim().isEmpty()
             HttpSession session = request.getSession();
             session.setAttribute("acc", user);
             session.setAttribute("accType", "user");
-             session.setAttribute("username", user.getUsername()); // ✅ thêm dòng này
+            session.setAttribute("username", user.getUsername()); // ✅ thêm dòng này
 
-            // Kiểm tra profile đầy đủ chưa
-            if (user.getFullName() == null
-                    || user.getDob() == null
-                    || user.getGender() == null
-                    || user.getPhone() == null
-                    || user.getAddress() == null
-                    || user.getSportLevel() == null) {
-
+            // Kiểm tra profile đầy đủ chưa sử dụng method từ ProfileSetupController
+            if (!controller.ProfileSetupController.isProfileComplete(user)) {
                 handleRememberMe(request, response, emailOrUsername, password);
-                session.setAttribute("currentUser", user); // Lưu user để dùng trong CompleteProfile.jsp
-                response.sendRedirect("completeProfile.jsp");
+                session.setAttribute("currentUser", user); // Lưu user để dùng trong profile-setup.jsp
+                response.sendRedirect("profile-setup.jsp");
                 return;
             }
 

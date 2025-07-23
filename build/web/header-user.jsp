@@ -30,9 +30,10 @@
                                     </li>
                                     <li><a href="">pages <i class="ti-angle-down"></i></a>
                                         <ul class="submenu">
-                                            <li><a href="./history-booking">History Bookings</a></li>
+                                            <li><a href="booking?action=my-bookings">Booking History</a></li>
                                             <li><a href="./contact">Contact</a></li>
                                             <li><a href="booking?action=schedule">View Schedule</a></li>
+                                            <li><a href="partner-search">Find Partner</a></li>
                                             
                                             
                                         </ul>
@@ -65,6 +66,8 @@
                                                 </li>
                                                 <li><hr class="dropdown-divider"></li>
                                                 <li><a class="dropdown-item" href="view-profile.jsp"><i class="fa fa-user me-2"></i>View Profile</a></li>
+                                                <li><a class="dropdown-item" href="booking?action=my-bookings"><i class="fa fa-history me-2"></i>Booking History</a></li>
+                                                <li><a class="dropdown-item" href="partner-search?action=my-posts"><i class="fa fa-users me-2"></i>My Partner Posts</a></li>
                                                 <li><a class="dropdown-item" href="change-password.jsp"><i class="fa fa-key me-2"></i>Change Password</a></li>
                                                 <li><hr class="dropdown-divider"></li>
                                                 <li><a class="dropdown-item text-danger" href="./logout"><i class="fa fa-sign-out me-2"></i>Logout</a></li>
@@ -96,6 +99,8 @@
                                                 </li>
                                                 <li><hr class="dropdown-divider"></li>
                                                 <li><a class="dropdown-item" href="view-profile.jsp"><i class="fa fa-user me-2"></i>View Profile</a></li>
+                                                <li><a class="dropdown-item" href="booking?action=my-bookings"><i class="fa fa-history me-2"></i>Booking History</a></li>
+                                                <li><a class="dropdown-item" href="partner-search?action=my-posts"><i class="fa fa-users me-2"></i>My Partner Posts</a></li>
                                                 <li><a class="dropdown-item" href="change-password.jsp"><i class="fa fa-key me-2"></i>Change Password</a></li>
                                                 <li><hr class="dropdown-divider"></li>
                                                 <li><a class="dropdown-item text-danger" href="./logout"><i class="fa fa-sign-out me-2"></i>Logout</a></li>
