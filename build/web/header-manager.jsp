@@ -16,7 +16,7 @@
     <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
         <ul class="navbar-nav mr-lg-2">
             <li class="nav-item  d-none d-lg-flex">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="./scheduler-manager">
                     Calendar
                 </a>
             </li>
@@ -161,6 +161,7 @@
                         <li class="nav-item"> <a class="nav-link" href="./video-manager">Video</a></li>
                         <li class="nav-item"> <a class="nav-link" href="./contact-manager">Contact</a></li>
                         <li class="nav-item"> <a class="nav-link" href="./instagram-manager">Instagram</a></li>
+                        <li class="nav-item"> <a class="nav-link" href="./blog-manager">Blog</a></li>
                     </ul>
                 </div>
             </li>
@@ -176,7 +177,10 @@
                         <li class="nav-item"><a class="nav-link" href="./admin-manager">Admin Account</a></li>
                         <li class="nav-item"><a class="nav-link" href="./court-manager">Court Manager</a></li>
                         <li class="nav-item"> <a class="nav-link" href="./service-manager">Service Manager</a></li>
-                        <li class="nav-item"> <a class="nav-link" href="./scheduler-manager">Scheduler Manager</a></li>
+<!--                        <li class="nav-item"> <a class="nav-link" href="./scheduler-manager">Scheduler Manager</a></li>-->
+                        <li class="nav-item"> <a class="nav-link" href="./court-scheduler-manager">Scheduler Manager</a></li>
+                        <li class="nav-item"> <a class="nav-link" href="./court-rates-manager">Court Rates Manager</a></li>
+                        
                     </ul>
                 </div>
             </li>

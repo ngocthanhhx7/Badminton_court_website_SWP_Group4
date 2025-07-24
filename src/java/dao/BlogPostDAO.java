@@ -2,18 +2,13 @@ package dao;
 
 import models.BlogPostDTO;
 import utils.DBUtils;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class BlogPostDAO {
-
-    public List<BlogPostDTO> getAllPosts() {
+        public List<BlogPostDTO> getAllPosts() {
         String sql = "SELECT * FROM BlogPosts ORDER BY PublishedAt DESC";
         try (Connection connection = DBUtils.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -427,5 +422,126 @@ public class BlogPostDAO {
         }
         return null;
     }
+    
+    public boolean addBlogPost(BlogPostDTO post) {
+        String sql = "INSERT INTO BlogPosts (Title, Slug, Content, Summary, ThumbnailUrl, PublishedAt, AuthorID, ViewCount, Status, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, GETDATE(), GETDATE())";
+        try (Connection conn = DBUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, post.getTitle());
+            ps.setString(2, post.getSlug());
+            ps.setString(3, post.getContent());
+            ps.setString(4, post.getSummary());
+            ps.setString(5, post.getThumbnailUrl());
+            ps.setTimestamp(6, post.getPublishedAt());
+            ps.setInt(7, post.getAuthorID());
+            ps.setInt(8, post.getViewCount());
+            ps.setString(9, post.getStatus());
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) { e.printStackTrace(); return false; }
+    }
 
+    public boolean updateBlogPost(BlogPostDTO post) {
+        String sql = "UPDATE BlogPosts SET Title=?, Slug=?, Content=?, Summary=?, ThumbnailUrl=?, PublishedAt=?, AuthorID=?, ViewCount=?, Status=?, UpdatedAt=GETDATE() WHERE PostID=?";
+        try (Connection conn = DBUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, post.getTitle());
+            ps.setString(2, post.getSlug());
+            ps.setString(3, post.getContent());
+            ps.setString(4, post.getSummary());
+            ps.setString(5, post.getThumbnailUrl());
+            ps.setTimestamp(6, post.getPublishedAt());
+            ps.setInt(7, post.getAuthorID());
+            ps.setInt(8, post.getViewCount());
+            ps.setString(9, post.getStatus());
+            ps.setInt(10, post.getPostID());
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) { e.printStackTrace(); return false; }
+    }
+
+    public boolean updateBlogPostStatus(int postId, String newStatus) {
+        BlogPostDTO post = getBlogPostById(postId);
+        if (post == null) return false;
+        post.setStatus(newStatus);
+        return updateBlogPost(post);
+    }
+
+    public boolean deleteBlogPost(int postId) {
+        String sql = "DELETE FROM BlogPosts WHERE PostID = ?";
+        try (Connection conn = DBUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, postId);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) { e.printStackTrace(); return false; }
+    }
+
+    public BlogPostDTO getBlogPostById(int postId) {
+        String sql = "SELECT * FROM BlogPosts WHERE PostID = ?";
+        try (Connection conn = DBUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, postId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return mapResultSetToBlogPost(rs);
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+        return null;
+    }
+
+    public List<BlogPostDTO> getBlogPostsWithFilters(String title, String status, Integer authorId, String sortBy, String sortOrder, int page, int pageSize) {
+        if (page < 1) page = 1;
+        if (pageSize < 1) pageSize = 10;
+        if (pageSize > 100) pageSize = 100;
+        String[] allowedSortFields = {"PostID", "Title", "PublishedAt", "AuthorID", "ViewCount", "Status", "CreatedAt"};
+        boolean isValidSortField = false;
+        for (String field : allowedSortFields) {
+            if (field.equals(sortBy)) { isValidSortField = true; break; }
+        }
+        if (!isValidSortField) sortBy = "PostID";
+        if (!"ASC".equalsIgnoreCase(sortOrder) && !"DESC".equalsIgnoreCase(sortOrder)) sortOrder = "DESC";
+        StringBuilder sql = new StringBuilder("SELECT * FROM BlogPosts WHERE 1=1");
+        List<Object> params = new ArrayList<>();
+        if (title != null && !title.trim().isEmpty()) { sql.append(" AND Title LIKE ?"); params.add("%" + title.trim() + "%"); }
+        if (status != null && !status.trim().isEmpty()) { sql.append(" AND Status = ?"); params.add(status.trim()); }
+        if (authorId != null) { sql.append(" AND AuthorID = ?"); params.add(authorId); }
+        sql.append(" ORDER BY ").append(sortBy).append(" ").append(sortOrder);
+        sql.append(" OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
+        params.add((page - 1) * pageSize);
+        params.add(pageSize);
+        List<BlogPostDTO> posts = new ArrayList<>();
+        try (Connection conn = DBUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+            for (int i = 0; i < params.size(); i++) { ps.setObject(i + 1, params.get(i)); }
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                posts.add(mapResultSetToBlogPost(rs));
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+        return posts;
+    }
+
+    public int getFilteredBlogPostsCount(String title, String status, Integer authorId) {
+        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM BlogPosts WHERE 1=1");
+        List<Object> params = new ArrayList<>();
+        if (title != null && !title.trim().isEmpty()) { sql.append(" AND Title LIKE ?"); params.add("%" + title.trim() + "%"); }
+        if (status != null && !status.trim().isEmpty()) { sql.append(" AND Status = ?"); params.add(status.trim()); }
+        if (authorId != null) { sql.append(" AND AuthorID = ?"); params.add(authorId); }
+        try (Connection conn = DBUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+            for (int i = 0; i < params.size(); i++) { ps.setObject(i + 1, params.get(i)); }
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getInt(1);
+        } catch (Exception e) { e.printStackTrace(); }
+        return 0;
+    }
+
+    private BlogPostDTO mapResultSetToBlogPost(ResultSet rs) throws SQLException {
+        return BlogPostDTO.builder()
+                .PostID(rs.getInt("PostID"))
+                .Title(rs.getString("Title"))
+                .Slug(rs.getString("Slug"))
+                .Content(rs.getString("Content"))
+                .Summary(rs.getString("Summary"))
+                .ThumbnailUrl(rs.getString("ThumbnailUrl"))
+                .PublishedAt(rs.getTimestamp("PublishedAt"))
+                .AuthorID(rs.getInt("AuthorID"))
+                .ViewCount(rs.getInt("ViewCount"))
+                .Status(rs.getString("Status"))
+                .CreatedAt(rs.getTimestamp("CreatedAt"))
+                .UpdatedAt(rs.getTimestamp("UpdatedAt"))
+                .build();
+    }
 }
