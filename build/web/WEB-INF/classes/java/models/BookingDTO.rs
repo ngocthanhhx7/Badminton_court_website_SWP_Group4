@@ -1,0 +1,2 @@
+models.BookingDTO
+models.BookingDTO$BookingDTOBuilder

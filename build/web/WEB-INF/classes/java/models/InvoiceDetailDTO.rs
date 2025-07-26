@@ -1,0 +1,2 @@
+models.InvoiceDetailDTO$InvoiceDetailDTOBuilder
+models.InvoiceDetailDTO

@@ -1,0 +1,2 @@
+models.BlogCategoryDTO
+models.BlogCategoryDTO$BlogCategoryDTOBuilder

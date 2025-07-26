@@ -1,0 +1,2 @@
+models.ServiceHighlightDTO
+models.ServiceHighlightDTO$ServiceHighlightDTOBuilder

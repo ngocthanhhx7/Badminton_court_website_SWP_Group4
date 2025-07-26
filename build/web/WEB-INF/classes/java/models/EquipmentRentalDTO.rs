@@ -1,0 +1,2 @@
+models.EquipmentRentalDTO$EquipmentRentalDTOBuilder
+models.EquipmentRentalDTO
