@@ -172,7 +172,8 @@
                                 <input type="email" name="email" class="form-control" required>
                             </div>
                             <div class="mb-3">
-                                <label>Full Name</label>
+                                <label>Full Name
+                                </label>
                                 <input type="text" name="fullname" class="form-control">
                             </div>
                             

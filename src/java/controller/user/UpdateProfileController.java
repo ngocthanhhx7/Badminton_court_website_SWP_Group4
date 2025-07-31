@@ -4,8 +4,8 @@
  */
 package controller.user;
 
-import dao.UserDAO;
-import dao.AdminDAO;
+import dal.UserDAO;
+import dal.AdminDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -204,51 +204,51 @@ public class UpdateProfileController extends HttpServlet {
         }
     }
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        Object sessionUser = session.getAttribute("currentUser");
-        if (sessionUser == null) {
-            sessionUser = session.getAttribute("acc");
-        }
-        // Chỉ xử lý cho UserDTO, không xử lý cho AdminDTO
-        if (!(sessionUser instanceof UserDTO)) {
-            response.sendRedirect("./Login");
-            return;
-        }
-        UserDTO user = (UserDTO) sessionUser;
-        if (user == null) {
-            response.sendRedirect("./Login");
-            return;
-        }
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            user.setFullName(request.getParameter("fullname").trim());
-            user.setDob(sdf.parse(request.getParameter("dob")));
-            user.setGender(request.getParameter("gender"));
-            user.setPhone(request.getParameter("phone").trim());
-            user.setAddress(request.getParameter("address").trim());
-            String sportLevel = request.getParameter("sportlevel");
-            if (sportLevel == null || sportLevel.trim().isEmpty()) {
-                sportLevel = user.getSportLevel() != null ? user.getSportLevel() : "Beginner";
-            }
-            user.setSportLevel(sportLevel);
-            boolean updated = userDAO.updateUserProfile1(user);
-            if (updated) {
-                session.setAttribute("currentUser", user);
-                session.setAttribute("acc", user);
-                response.sendRedirect("./home");
-            } else {
-                request.setAttribute("message", "Cập nhật thất bại, vui lòng thử lại.");
-                request.getRequestDispatcher("completeProfile.jsp").forward(request, response);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            request.setAttribute("message", "Lỗi hệ thống: " + e.getMessage());
-            request.getRequestDispatcher("completeProfile.jsp").forward(request, response);
-        }
-    }
+//    @Override
+//    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+//            throws ServletException, IOException {
+//        HttpSession session = request.getSession();
+//        Object sessionUser = session.getAttribute("currentUser");
+//        if (sessionUser == null) {
+//            sessionUser = session.getAttribute("acc");
+//        }
+//        // Chỉ xử lý cho UserDTO, không xử lý cho AdminDTO
+//        if (!(sessionUser instanceof UserDTO)) {
+//            response.sendRedirect("./Login");
+//            return;
+//        }
+//        UserDTO user = (UserDTO) sessionUser;
+//        if (user == null) {
+//            response.sendRedirect("./Login");
+//            return;
+//        }
+//        try {
+//            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//            user.setFullName(request.getParameter("fullname").trim());
+//            user.setDob(sdf.parse(request.getParameter("dob")));
+//            user.setGender(request.getParameter("gender"));
+//            user.setPhone(request.getParameter("phone").trim());
+//            user.setAddress(request.getParameter("address").trim());
+//            String sportLevel = request.getParameter("sportlevel");
+//            if (sportLevel == null || sportLevel.trim().isEmpty()) {
+//                sportLevel = user.getSportLevel() != null ? user.getSportLevel() : "Beginner";
+//            }
+//            user.setSportLevel(sportLevel);
+//            boolean updated = userDAO.updateUserProfile1(user);
+//            if (updated) {
+//                session.setAttribute("currentUser", user);
+//                session.setAttribute("acc", user);
+//                response.sendRedirect("./home");
+//            } else {
+//                request.setAttribute("message", "Cập nhật thất bại, vui lòng thử lại.");
+//                request.getRequestDispatcher("completeProfile.jsp").forward(request, response);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            request.setAttribute("message", "Lỗi hệ thống: " + e.getMessage());
+//            request.getRequestDispatcher("completeProfile.jsp").forward(request, response);
+//        }
+//    }
 
     @Override
     public String getServletInfo() {

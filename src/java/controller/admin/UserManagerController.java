@@ -1,6 +1,6 @@
 package controller.admin;
 
-import dao.UserDAO;
+import dal.UserDAO;
 import models.UserDTO;
 import java.io.IOException;
 import java.sql.SQLException;

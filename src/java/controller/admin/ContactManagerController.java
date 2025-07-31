@@ -1,6 +1,6 @@
 package controller.admin;
 
-import dao.ContactInfoDAO;
+import dal.ContactInfoDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;

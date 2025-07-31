@@ -142,11 +142,19 @@
                 <p class="sidebar-menu-title">Dash menu</p>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./page-manager">
-                    <i class="typcn typcn-device-desktop menu-icon"></i>
-                    <span class="menu-title">Dashboard <span class="badge badge-primary ml-3">New</span></span>
-                </a>
+    <a class="nav-link" data-toggle="collapse" href="#dashboard-submenu" aria-expanded="false" aria-controls="dashboard-submenu">
+        <i class="typcn typcn-device-desktop menu-icon"></i>
+        <span class="menu-title">Dashboard</span>
+        <i class="menu-arrow"></i>
+    </a>
+    <div class="collapse" id="dashboard-submenu">
+        <ul class="nav flex-column sub-menu">
+            <li class="nav-item">
+                <a class="nav-link" href="dashboard.jsp">Dashboard New</a>
             </li>
+        </ul>
+    </div>
+</li>
             <li class="nav-item">
                 <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
                     <i class="typcn typcn-briefcase menu-icon"></i>
@@ -161,7 +169,7 @@
                         <li class="nav-item"> <a class="nav-link" href="./video-manager">Video</a></li>
                         <li class="nav-item"> <a class="nav-link" href="./contact-manager">Contact</a></li>
                         <li class="nav-item"> <a class="nav-link" href="./instagram-manager">Instagram</a></li>
-                        <li class="nav-item"> <a class="nav-link" href="./blog-manager">Blog</a></li>
+                        <li class="nav-item"> <a class="nav-link" href="blog-management.jsp">Blog</a></li>
                     </ul>
                 </div>
             </li>
@@ -177,10 +185,8 @@
                         <li class="nav-item"><a class="nav-link" href="./admin-manager">Admin Account</a></li>
                         <li class="nav-item"><a class="nav-link" href="./court-manager">Court Manager</a></li>
                         <li class="nav-item"> <a class="nav-link" href="./service-manager">Service Manager</a></li>
-<!--                        <li class="nav-item"> <a class="nav-link" href="./scheduler-manager">Scheduler Manager</a></li>-->
                         <li class="nav-item"> <a class="nav-link" href="./court-scheduler-manager">Scheduler Manager</a></li>
-                        <li class="nav-item"> <a class="nav-link" href="./court-rates-manager">Court Rates Manager</a></li>
-                        
+                        <li class="nav-item"> <a class="nav-link" href="./scheduler-manager?action=list">Booking Manager</a></li>
                     </ul>
                 </div>
             </li>

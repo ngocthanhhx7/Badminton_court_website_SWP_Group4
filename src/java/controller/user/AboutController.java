@@ -1,12 +1,12 @@
 package controller.user;
 
-import dao.AboutSectionDAO;
-import dao.ContactInfoDAO;
-import dao.CourtDAO;
-import dao.InstagramFeedDAO;
-import dao.OfferDAO;
-import dao.SliderDAO;
-import dao.VideoDAO;
+import dal.AboutSectionDAO;
+import dal.ContactInfoDAO;
+import dal.CourtDAO;
+import dal.InstagramFeedDAO;
+import dal.OfferDAO;
+import dal.SliderDAO;
+import dal.VideoDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;

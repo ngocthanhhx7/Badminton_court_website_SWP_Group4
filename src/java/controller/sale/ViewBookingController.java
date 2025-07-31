@@ -4,7 +4,7 @@
  */
 package controller.sale;
 
-import dao.BookingDAO;
+import dal.BookingDAO;
 import models.BookingView;
 import java.util.List;
 

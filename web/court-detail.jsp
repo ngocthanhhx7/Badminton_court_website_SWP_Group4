@@ -4,21 +4,17 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!doctype html>
 <html class="no-js" lang="zxx">
-
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>BadmintonHub - ${court.courtName} Details</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <link rel="shortcut icon" type="image/x-icon" href="img/favicon.png">
-
     <!-- CSS here -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/font-awesome.min.css">
     <link rel="stylesheet" href="css/style.css">
-
     <script src="https://cdn.tailwindcss.com"></script>
     
     <style>
@@ -99,7 +95,6 @@
             background-clip: text;
         }
         
-        
         /* NEW STYLES FOR RATING AND COMMENTS */
         .rating-section {
             background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
@@ -109,14 +104,12 @@
             text-align: center;
             box-shadow: 0 8px 25px rgba(252, 182, 159, 0.3);
         }
-
         .rating-title {
             color: #8b4513;
             font-size: 1.5rem;
             font-weight: 600;
             margin-bottom: 15px;
         }
-
         .stars-container {
             display: flex;
             justify-content: center;
@@ -124,24 +117,20 @@
             gap: 5px;
             margin-bottom: 10px;
         }
-
         .star {
             font-size: 1.8rem;
             color: #ddd;
             transition: all 0.3s ease;
         }
-
         .star.filled {
             color: #ffd700;
             text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
         }
-
         .rating-text {
             color: #8b4513;
             font-size: 1.1rem;
             font-weight: 500;
         }
-
         .comments-section {
             background: #f8f9fa;
             padding: 30px;
@@ -149,7 +138,6 @@
             margin: 30px 0;
             box-shadow: 0 8px 25px rgba(0,0,0,0.1);
         }
-
         .comments-title {
             color: #2c3e50;
             font-size: 1.8rem;
@@ -161,7 +149,6 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-
         .comment-item {
             background: white;
             padding: 20px;
@@ -171,11 +158,9 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             transition: transform 0.3s ease;
         }
-
         .comment-item:hover {
             transform: translateX(5px);
         }
-
         .comment-text {
             color: #555;
             font-size: 15px;
@@ -183,7 +168,6 @@
             font-style: italic;
             position: relative;
         }
-
         .comment-text:before {
             content: '"';
             font-size: 2rem;
@@ -192,13 +176,11 @@
             left: -10px;
             top: -5px;
         }
-
         .comment-text:after {
             content: '"';
             font-size: 2rem;
             color: #667eea;
         }
-
         .no-comments {
             text-align: center;
             color: #6c757d;
@@ -495,7 +477,6 @@
             color: #6c757d;
         }
         
-        
         /* NEW: Date Picker Styles */
         .date-picker-container {
             background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
@@ -505,7 +486,6 @@
             text-align: center;
             box-shadow: 0 4px 15px rgba(187, 222, 251, 0.3);
         }
-
         .date-picker-title {
             color: #1565c0;
             font-size: 1.2rem;
@@ -516,7 +496,6 @@
             justify-content: center;
             gap: 8px;
         }
-
         .date-picker-form {
             display: flex;
             align-items: center;
@@ -524,7 +503,6 @@
             gap: 15px;
             flex-wrap: wrap;
         }
-
         .date-input {
             padding: 12px 20px;
             border: 2px solid #90caf9;
@@ -537,13 +515,11 @@
             outline: none;
             min-width: 180px;
         }
-
         .date-input:focus {
             border-color: #1976d2;
             box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
             transform: translateY(-1px);
         }
-
         .btn-date-submit {
             background: linear-gradient(45deg, #1976d2, #1565c0);
             color: white;
@@ -557,14 +533,105 @@
             box-shadow: 0 4px 15px rgba(25, 118, 210, 0.3);
             cursor: pointer;
         }
-
         .btn-date-submit:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(25, 118, 210, 0.4);
         }
-
         .btn-date-submit:active {
             transform: translateY(0);
+        }
+
+        /* NEW: Multiple Selection Styles */
+        .time-slot-checkbox {
+            margin-right: 15px;
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+
+        .time-slot.selected {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: 2px solid #5a6fd8;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .selection-controls {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .selection-info {
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .btn-book-selected {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .btn-book-selected:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+        }
+
+        .btn-book-selected:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-clear-selection {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn-clear-selection:hover {
+            background: white;
+            color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .selected-slots-list {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            color: white;
+        }
+
+        .selected-slot-item {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 12px;
+            border-radius: 15px;
+            margin: 3px;
+            font-size: 14px;
         }
         
         @media (max-width: 768px) {
@@ -623,18 +690,8 @@
                     <div class="court-detail-card">
                         <!-- Court Image -->
                         <div class="court-image-container">
-                            <img src="${not empty court.courtImage ? court.courtImage : 'img/court-placeholder.jpg'}" 
+                            <img src="${not empty court.courtImage ? court.courtImage : 'img/court-placeholder.jpg'}"
                                  alt="${court.courtName}" class="court-image">
-                            
-                            <!-- Status Badge -->
-                            <div class="status-badge 
-                                <c:choose>
-                                    <c:when test='${court.status eq "Available"}'>status-available</c:when>
-                                    <c:when test='${court.status eq "Occupied"}'>status-occupied</c:when>
-                                    <c:otherwise>status-maintenance</c:otherwise>
-                                </c:choose>">
-                                ${court.status}
-                            </div>
                         </div>
                         
                         <!-- Court Information -->
@@ -645,23 +702,15 @@
                                 <i class="fa fa-tag"></i> ${court.courtType}
                             </div>
                             
-                            <!-- Price Information -->
-                            <div class="price-info">
-                                <div class="price-amount">
-                                    <i class="fa fa-money"></i> 100,000 VND
-                                </div>
-                                <div class="price-unit">per hour</div>
-                            </div>
-                            
                             <p class="description-text">
                                 <c:choose>
                                     <c:when test="${not empty court.description}">
                                         ${court.description}
                                     </c:when>
                                     <c:otherwise>
-                                        This is a premium badminton court equipped with professional-grade flooring, 
-                                        excellent lighting, and climate control. Perfect for both recreational and 
-                                        competitive play. The court meets international standards and provides an 
+                                        This is a premium badminton court equipped with professional-grade flooring,
+                                        excellent lighting, and climate control. Perfect for both recreational and
+                                        competitive play. The court meets international standards and provides an
                                         exceptional playing experience for all skill levels.
                                     </c:otherwise>
                                 </c:choose>
@@ -751,14 +800,11 @@
                                 </c:choose>
                             </div>
                             
-                            
                             <!-- User Authentication Check -->
                             <c:choose>
                                 <c:when test="${not empty sessionScope.acc}">
                                     <!-- Action Buttons for Logged-in Users -->
                                     <div class="action-buttons">
-                                      
-                                       
                                         <a href="booking?action=schedule" class="btn-schedule" onclick="scrollToSchedule()">
                                             <i class="fa fa-clock-o"></i> View Schedule Below
                                         </a>
@@ -843,7 +889,7 @@
                                     Next Day <i class="fa fa-chevron-right"></i>
                                 </a>
                             </div>
-                                    
+                            
                             <!-- NEW: Date Picker -->
                             <div class="date-picker-container">
                                 <div class="date-picker-title">
@@ -852,8 +898,8 @@
                                 </div>
                                 <form class="date-picker-form" method="GET" action="court-detail?courtId=${court.courtId}">
                                     <input type="hidden" name="courtId" value="${court.courtId}">
-                                    <input type="date" 
-                                           name="date" 
+                                    <input type="date"
+                                           name="date"
                                            class="date-input"
                                            value="<c:choose><c:when test='${not empty selectedDateStr}'>${selectedDateStr}</c:when><c:otherwise><fmt:formatDate value='${now}' pattern='yyyy-MM-dd' /></c:otherwise></c:choose>"
                                            min="<fmt:formatDate value='${now}' pattern='yyyy-MM-dd' />"
@@ -862,19 +908,68 @@
                                         <i class="fa fa-search"></i> View Schedule
                                     </button>
                                 </form>
-                            </div>        
+                            </div>
                         </div>
+
+                        <!-- NEW: Multiple Selection Controls -->
+                        <c:if test="${not empty sessionScope.acc}">
+                            <div class="selection-controls" id="selectionControls" style="display: none;">
+                                <div class="selection-info">
+                                    <i class="fa fa-check-square-o"></i>
+                                    <span id="selectedCount">0</span> time slot(s) selected
+                                </div>
+                                <div class="selected-slots-list" id="selectedSlotsList"></div>
+                                <button type="button" class="btn-book-selected" id="bookSelectedBtn" onclick="bookSelectedSlots()" disabled>
+                                    <i class="fa fa-calendar-check-o"></i> Book Selected Slots
+                                </button>
+                                <button type="button" class="btn-clear-selection" onclick="clearAllSelections()">
+                                    <i class="fa fa-times"></i> Clear Selection
+                                </button>
+                            </div>
+                        </c:if>
                         
                         <div class="time-slots-container">
                             <c:choose>
                                 <c:when test="${not empty schedules}">
                                     <c:forEach var="schedule" items="${schedules}">
-                                        <div class="time-slot ${schedule.status.toLowerCase()}">
-                                            <div>
-                                                <strong style="font-size: 16px;">
-                                                    ${schedule.startTimeStr} - ${schedule.endTimeStr}
-                                                </strong>
+                                        <div class="time-slot ${schedule.status.toLowerCase()}" id="slot-${schedule.scheduleId}">
+                                            <div style="
+                                                display: flex;
+                                                align-items: center;
+                                                gap: 15px;
+                                            ">
+                                                <!-- NEW: Checkbox for multiple selection -->
+                                                <c:if test="${not empty sessionScope.acc && schedule.status == 'Available' && not schedule.expire}">
+                                                    <input type="checkbox" 
+                                                           class="time-slot-checkbox" 
+                                                           id="checkbox-${schedule.scheduleId}"
+                                                           value="${schedule.scheduleId}"
+                                                           data-time="${schedule.startTimeStr} - ${schedule.endTimeStr}"
+                                                           data-price="${schedule.price}"
+                                                           onchange="handleSlotSelection(this)">
+                                                </c:if>
+                                                
+                                                <div style="
+                                                    display: flex;
+                                                    justify-content: space-between;
+                                                    align-items: center;
+                                                    padding: 12px 16px;
+                                                    margin-bottom: 10px;
+                                                    border-radius: 12px;
+                                                    background-color: #f9f9f9;
+                                                    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+                                                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                                                    flex: 1;
+                                                ">
+                                                    <div style="font-size: 16px; font-weight: 600; color: #37474F;">
+                                                        ⏰ ${schedule.startTimeStr} - ${schedule.endTimeStr}
+                                                    </div>
+                                                    <div style="font-size: 16px; font-weight: 600; color: #2E7D32;">
+                                                        💰 ${schedule.price} ₫
+                                                    </div>
+                                                </div>
                                             </div>
+                                            
                                             <div>
                                                 <c:choose>
                                                     <c:when test="${schedule.status == 'Available'}">
@@ -883,21 +978,21 @@
                                                                 <!-- Available -->
                                                                 <span class="status-badge-schedule badge-available">Available</span>
                                                                 <c:if test="${not empty sessionScope.acc}">
-                                                                    <!-- Book Now button -->
-                                                                    <a href="booking?courtScheduleIds=${schedule.scheduleId}" 
+                                                                    <!-- Individual Book Now button -->
+                                                                    <a href="booking?courtScheduleIds=${schedule.scheduleId}"
                                                                        class="inline-block bg-green-600 hover:bg-green-700 text-white font-semibold py-1.5 px-4 rounded-xl text-sm shadow-sm transition">
                                                                         <i class="fa fa-calendar-check-o mr-1"></i> Book Now
                                                                     </a>
                                                                     <!-- Add to Cart button -->
-                                                                    <form action="CartServlet" method="post" class="inline-block ml-2">
+<!--                                                                    <form action="CartServlet" method="post" class="inline-block ml-2">
                                                                         <input type="hidden" name="action" value="create" />
                                                                         <input type="hidden" name="scheduleId" value="${schedule.scheduleId}" />
-                                                                        <input type="hidden" name="price" value="100000" />
-                                                                        <button type="submit" 
+                                                                        <input type="hidden" name="price" value="${schedule.price}" />
+                                                                        <button type="submit"
                                                                                 class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-1.5 px-4 rounded-xl text-sm shadow-sm transition">
                                                                             <i class="fa fa-shopping-cart mr-1"></i> Add to Cart
                                                                         </button>
-                                                                    </form>
+                                                                    </form>-->
                                                                 </c:if>
                                                             </c:when>
                                                             <c:otherwise>
@@ -913,7 +1008,6 @@
                                                         <span class="status-badge-schedule badge-maintenance">Maintenance</span>
                                                     </c:otherwise>
                                                 </c:choose>
-
                                             </div>
                                         </div>
                                     </c:forEach>
@@ -1010,6 +1104,77 @@
     <script src="js/main.js"></script>
     
     <script>
+        // NEW: Multiple selection functionality
+        let selectedSlots = [];
+
+        function handleSlotSelection(checkbox) {
+            const scheduleId = checkbox.value;
+            const timeSlot = checkbox.getAttribute('data-time');
+            const price = checkbox.getAttribute('data-price');
+            const slotElement = document.getElementById('slot-' + scheduleId);
+
+            if (checkbox.checked) {
+                // Add to selection
+                selectedSlots.push({
+                    id: scheduleId,
+                    time: timeSlot,
+                    price: price
+                });
+                slotElement.classList.add('selected');
+            } else {
+                selectedSlots = selectedSlots.filter(slot => slot.id !== scheduleId);
+                slotElement.classList.remove('selected');
+            }
+
+            updateSelectionDisplay();
+        }
+
+        function updateSelectionDisplay() {
+            const selectionControls = document.getElementById('selectionControls');
+            const selectedCount = document.getElementById('selectedCount');
+            const selectedSlotsList = document.getElementById('selectedSlotsList');
+            const bookSelectedBtn = document.getElementById('bookSelectedBtn');
+
+            if (selectedSlots.length > 0) {
+                selectionControls.style.display = 'block';
+                selectedCount.textContent = selectedSlots.length;
+                bookSelectedBtn.disabled = false;
+
+                // Display selected slots
+               selectedSlotsList.innerHTML = selectedSlots.map(function(slot) {
+                            return '<span class="selected-slot-item">' + slot.time + ' - ' + slot.price + '₫</span>';
+                        }).join('');
+            } else {
+                selectionControls.style.display = 'none';
+                bookSelectedBtn.disabled = true;
+                selectedSlotsList.innerHTML = '';
+            }
+        }
+
+        function bookSelectedSlots() {
+            if (selectedSlots.length === 0) {
+                alert('Please select at least one time slot.');
+                return;
+            }
+
+            const scheduleIds = selectedSlots.map(slot => slot.id).join(',');
+            const bookingUrl = `booking?courtScheduleIds=` + scheduleIds;
+            window.location.href = bookingUrl;
+        }
+
+        function clearAllSelections() {
+            // Uncheck all checkboxes
+            const checkboxes = document.querySelectorAll('.time-slot-checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = false;
+                const slotElement = document.getElementById('slot-' + checkbox.value);
+                slotElement.classList.remove('selected');
+            });
+
+            selectedSlots = [];
+            updateSelectionDisplay();
+        }
+
         // Smooth scroll to schedule section
         function scrollToSchedule() {
             document.getElementById('schedule-section').scrollIntoView({
@@ -1039,6 +1204,5 @@
             }
         });
     </script>
-
 </body>
 </html>

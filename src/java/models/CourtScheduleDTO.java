@@ -23,6 +23,7 @@ public class CourtScheduleDTO {
     private Long createdBy;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private double price;
     
     // Additional fields
     private String courtName;

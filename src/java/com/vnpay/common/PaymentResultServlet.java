@@ -2,8 +2,8 @@ package com.vnpay.common;
 
 
 
-import dao.CourtScheduleDAO;
-import dao.InvoiceDAO;
+import dal.CourtScheduleDAO;
+import dal.InvoiceDAO;
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDateTime;

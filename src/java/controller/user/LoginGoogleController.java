@@ -5,7 +5,7 @@
 
 package controller.user;
 
-import dao.LoginGoogleDAO;
+import dal.LoginGoogleDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;

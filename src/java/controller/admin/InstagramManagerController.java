@@ -1,6 +1,6 @@
 package controller.admin;
 
-import dao.InstagramFeedDAO;
+import dal.InstagramFeedDAO;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;

@@ -5,10 +5,10 @@
 
 package controller.user;
 
-import dao.ContactInfoDAO;
-import dao.CourtDAO;
-import dao.InstagramFeedDAO;
-import dao.OfferDAO;
+import dal.ContactInfoDAO;
+import dal.CourtDAO;
+import dal.InstagramFeedDAO;
+import dal.OfferDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;

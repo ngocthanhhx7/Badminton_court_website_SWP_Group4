@@ -1,37 +1,82 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package models;
 
+import java.util.Date;
 
-import java.sql.Timestamp;
-import lombok.*;
-
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class BlogPostDTO {
-    private int PostID;
-    private String Title;
-    private String Slug;
-    private String Content;
-    private String Summary;
-    private String ThumbnailUrl;
-    private Timestamp PublishedAt;
-    private int AuthorID;
-    private int ViewCount;
-    private String Status;
-    private Timestamp CreatedAt;
-    private Timestamp UpdatedAt;
-    private int commentCount;
+    private int postID;
+    private String title;
+    private String slug;
+    private String content;
+    private String summary;
+    private String thumbnailUrl;
+    private Date publishedAt;
+    private int authorID;
+    private int viewCount;
+    private String status;
+    private int commentCount; // ✅ Thêm dòng này
 
-    public int getCommentCount() {
-        return commentCount;
+    // Constructor đầy đủ
+    public BlogPostDTO(int postID, String title, String slug, String content, String summary, String thumbnailUrl, String status) {
+        this.postID = postID;
+        this.title = title;
+        this.slug = slug;
+        this.content = content;
+        this.summary = summary;
+        this.thumbnailUrl = thumbnailUrl;
+        this.status = status;
     }
 
-    public void setCommentCount(int commentCount) {
+    // Constructor đầy đủ + commentCount (tuỳ nếu bạn có)
+    public BlogPostDTO(int postID, String title, String slug, String content, String summary,
+                       String thumbnailUrl, String status, int commentCount) {
+        this(postID, title, slug, content, summary, thumbnailUrl, status);
         this.commentCount = commentCount;
     }
+
+    // Constructor để thêm bài mới
+    public BlogPostDTO(String title, String slug, String content, String summary,
+                       String thumbnailUrl, int authorID, String status) {
+        this.title = title;
+        this.slug = slug;
+        this.content = content;
+        this.summary = summary;
+        this.thumbnailUrl = thumbnailUrl;
+        this.authorID = authorID;
+        this.status = status;
+    }
+
+    // Constructor đơn giản để update bài viết
+    public BlogPostDTO(int postID, String title, String slug, String content, String summary) {
+        this.postID = postID;
+        this.title = title;
+        this.slug = slug;
+        this.content = content;
+        this.summary = summary;
+    }
+
+    // ➕ Getter
+    public int getPostID() { return postID; }
+    public String getTitle() { return title; }
+    public String getSlug() { return slug; }
+    public String getContent() { return content; }
+    public String getSummary() { return summary; }
+    public String getThumbnailUrl() { return thumbnailUrl; }
+    public Date getPublishedAt() { return publishedAt; }
+    public int getAuthorID() { return authorID; }
+    public int getViewCount() { return viewCount; }
+    public String getStatus() { return status; }
+    public int getCommentCount() { return commentCount; } // ✅ Thêm getter
+
+    // ➕ Setter
+    public void setPostID(int postID) { this.postID = postID; }
+    public void setTitle(String title) { this.title = title; }
+    public void setSlug(String slug) { this.slug = slug; }
+    public void setContent(String content) { this.content = content; }
+    public void setSummary(String summary) { this.summary = summary; }
+    public void setThumbnailUrl(String thumbnailUrl) { this.thumbnailUrl = thumbnailUrl; }
+    public void setPublishedAt(Date publishedAt) { this.publishedAt = publishedAt; }
+    public void setAuthorID(int authorID) { this.authorID = authorID; }
+    public void setViewCount(int viewCount) { this.viewCount = viewCount; }
+    public void setStatus(String status) { this.status = status; }
+    public void setCommentCount(int commentCount) { this.commentCount = commentCount; } // ✅ Thêm setter
 }

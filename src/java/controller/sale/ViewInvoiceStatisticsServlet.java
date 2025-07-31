@@ -1,6 +1,6 @@
 package controller.sale;
 
-import dao.InvoiceDetailDAO;
+import dal.InvoiceDetailDAO;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;

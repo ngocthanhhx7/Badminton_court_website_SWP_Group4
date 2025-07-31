@@ -7,7 +7,6 @@ public class User {
     private String username, password, email, fullName, dob,
                    gender, phone, address, sportLevel, role, createdBy, status;
 
-    // ✅ Constructor đầy đủ (bao gồm status)
     public User(String username, String password, String email, String fullName, String dob, String gender, String phone, String address, String sportLevel, String role, String createdBy, String status) {
         this.username = username;
         this.password = password;
@@ -23,7 +22,6 @@ public class User {
         this.status = status;
     }
 
-    // ✅ Constructor không có status (tuỳ dùng)
     public User(String username, String password, String email, String fullName, String dob, String gender, String phone, String address, String sportLevel, String role, String createdBy) {
         this(username, password, email, fullName, dob, gender, phone, address, sportLevel, role, createdBy, "Active");
     }
@@ -32,7 +30,6 @@ public class User {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-    // ✅ Getter
     public String getUsername() { return username; }
     public String getPassword() { return password; }
     public String getEmail() { return email; }
@@ -46,7 +43,6 @@ public class User {
     public String getCreatedBy() { return createdBy; }
     public String getStatus() { return status; }
 
-    // ✅ Setter
     public void setUsername(String username) { this.username = username; }
     public void setPassword(String password) { this.password = password; }
     public void setEmail(String email) { this.email = email; }

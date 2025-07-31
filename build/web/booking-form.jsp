@@ -391,7 +391,7 @@
                                                             <div class="detail-item">
                                                                 <i class="fa fa-money"></i>
                                                                 <span class="detail-label">Price:</span>
-                                                                <span class="price-value">100,000 VND</span>
+                                                                <span class="price-value">${schedule.price} VND</span>
                                                             </div>
                                                             <c:if test="${schedule.holiday}">
                                                                 <div class="detail-item">
@@ -414,12 +414,7 @@
                                             </div>
                                         </div>
                                         
-                                        <!-- Price Information -->
-                                        <div class="price-info">
-                                            <h5><i class="fa fa-money"></i> 100,000 VND / Hour per Court</h5>
-                                            <small>Standard rate for all court bookings</small>
-                                        </div>
-                                        
+                                      
                                         <!-- Booking Summary -->
                                         <div class="booking-summary">
                                             <h5 class="text-center mb-3">
@@ -431,7 +426,7 @@
                                             </div>
                                             <div class="summary-item">
                                                 <span>Price per Slot:</span>
-                                                <span>100,000 VND</span>
+                                                <span>${sum} VND</span>
                                             </div>
                                             <div class="summary-item">
                                                 <span>Duration per Slot:</span>
@@ -439,9 +434,9 @@
                                             </div>
                                             <div class="summary-item">
                                                 <span><strong>Total Amount:</strong></span>
-                                                <span><strong class="total-amount" data-schedules="${courtSchedules.size()}">
+                                                <span><strong class="total-amount" data-schedules="${sum}">
                                                     <script>
-                                                        document.write((${courtSchedules.size()} * 100000).toLocaleString('vi-VN') + ' VND');
+                                                        document.write((${sum}).toLocaleString('vi-VN') + ' VND');
                                                     </script>
                                                 </strong></span>
                                             </div>
@@ -451,7 +446,7 @@
                                         <form action="/SWP_Project/vnpayajax" method="post" id="bookingForm">
                                             <input type="hidden" name="action" value="create">
                                             <input type="hidden" name="courtScheduleIds" value="${courtScheduleIds}">
-                                            <input type="hidden" name="totalAmount" value="${courtSchedules.size() * 100000}">
+                                            <input type="hidden" name="totalAmount" value="${sum}">
                                             
                                             <div class="form-group">
                                                 <label class="form-label">
@@ -465,7 +460,7 @@
                                                 <button type="submit" class="btn-book">
                                                     <i class="fa fa-credit-card"></i> Proceed to Payment
                                                     <span class="payment-amount">
-                                                        (<script>document.write((${courtSchedules.size()} * 100000).toLocaleString('vi-VN'));</script> VND)
+                                                        (<script>document.write((${sum}).toLocaleString('vi-VN'));</script> VND)
                                                     </span>
                                                 </button>
                                             </div>
@@ -476,9 +471,9 @@
                                             <a href="court" class="btn btn-outline-secondary">
                                                 <i class="fa fa-arrow-left"></i> Back to Courts
                                             </a>
-                                            <a href="CartServlet" class="btn btn-outline-primary ml-2">
+<!--                                            <a href="CartServlet" class="btn btn-outline-primary ml-2">
                                                 <i class="fa fa-shopping-cart"></i> View Cart
-                                            </a>
+                                            </a>-->
                                         </div>
                                     </c:when>
                                     <c:otherwise>
@@ -491,9 +486,9 @@
                                                 <a href="court" class="btn btn-primary mr-2">
                                                     <i class="fa fa-search"></i> Browse Courts
                                                 </a>
-                                                <a href="CartServlet" class="btn btn-outline-primary">
+<!--                                                <a href="CartServlet" class="btn btn-outline-primary">
                                                     <i class="fa fa-shopping-cart"></i> View Cart
-                                                </a>
+                                                </a>-->
                                             </div>
                                         </div>
                                     </c:otherwise>

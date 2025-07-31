@@ -27,12 +27,8 @@
         <servlet-class>controller.user.RegisterController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>RegistrationController</servlet-name>
-        <servlet-class>controller.user.RegistrationController</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>UpdateProfileController</servlet-name>
-        <servlet-class>controller.user.UpdateProfileController</servlet-class>
+        <servlet-name>ProfileSetupController</servlet-name>
+        <servlet-class>controller.user.ProfileSetupController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ChatServlet</servlet-name>
@@ -63,16 +59,8 @@
         <url-pattern>/register</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>RegistrationController</servlet-name>
-        <url-pattern>/registration</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>UpdateProfileController</servlet-name>
-        <url-pattern>/update-profile</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>UpdateProfileController</servlet-name>
-        <url-pattern>/update-profile-admin</url-pattern>
+        <servlet-name>ProfileSetupController</servlet-name>
+        <url-pattern>/profile-setup</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ChatServlet</servlet-name>

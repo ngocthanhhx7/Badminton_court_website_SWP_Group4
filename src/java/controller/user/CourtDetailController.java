@@ -5,8 +5,10 @@
 
 package controller.user;
 
-import dao.CourtDAO;
-import dao.CourtScheduleDAO;
+import dal.BookingNoteDAO;
+import dal.CourtDAO;
+import dal.CourtRateDAO;
+import dal.CourtScheduleDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -15,6 +17,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -41,6 +44,10 @@ public class CourtDetailController extends HttpServlet {
             Integer courtId = Integer.parseInt(courtIdParam);
             CourtDTO court = courtDAO.getCourtById(courtId);
             
+            CourtRateDAO courtRateDAO = new CourtRateDAO();
+            double price = courtRateDAO.getRandomPriceByCourtID(courtId);
+            request
+            .setAttribute("price", price);
             if (court == null) {
                 request.setAttribute("error", "Court not found");
                 request.getRequestDispatcher("error.jsp").forward(request, response);
@@ -54,6 +61,10 @@ public class CourtDetailController extends HttpServlet {
             } else {
                 selectedDate = LocalDate.now();
             }
+            
+            BookingNoteDAO bookingNoteDAO = new BookingNoteDAO();
+            request.setAttribute("avgRating", bookingNoteDAO.getAverageRatingByCourtId(courtId));
+            request.setAttribute("notes", bookingNoteDAO.getTop3RatingNotesByCourtId(courtId));
 
             Date dateForJsp = Date.from(selectedDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
             request.setAttribute("selectedDate", dateForJsp);
@@ -74,8 +85,17 @@ public class CourtDetailController extends HttpServlet {
             for (CourtScheduleDTO schedule : schedules) {
                 schedule.setStartTimeStr(schedule.getStartTime().format(timeFormatter));
                 schedule.setEndTimeStr(schedule.getEndTime().format(timeFormatter));
+                
+                LocalDateTime scheduleStartDateTime = schedule.getScheduleDate().atTime(schedule.getStartTime());
+                if (scheduleStartDateTime.isBefore(LocalDateTime.now())) {
+                    schedule.setExpire(true);
+                } else {
+                    schedule.setExpire(false);
+                }
             }
             request.setAttribute("schedules", schedules);
+            
+            
             
             
             // Set court data as request attribute

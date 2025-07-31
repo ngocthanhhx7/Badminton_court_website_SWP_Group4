@@ -513,15 +513,22 @@
                                                                                 </strong>
                                                                             </div>
                                                                             <div>
-                                                                                <c:choose>
+                                                                               <c:choose>
                                                                                     <c:when test="${timeSlot.status == 'Available'}">
-                                                                                        <span class="status-badge badge-available">Available</span>
-                                                                                        <c:if test="${not empty sessionScope.acc}">
-                                                                                            <button type="button" class="btn-book-slot" 
-                                                                                                onclick="openBookingModal('${timeSlot.courtId}', '${timeSlot.courtName}', '${timeSlot.courtType}', '<fmt:formatDate value='${selectedDate}' pattern='yyyy-MM-dd'/>', '${timeSlot.startTime}', '${timeSlot.endTime}', '${timeSlot.scheduleId}', '${timeSlot.startTimeStr}', '${timeSlot.endTimeStr}')">
-                                                                                                Book
-                                                                                            </button>
-                                                                                        </c:if>
+                                                                                        <c:choose>
+                                                                                            <c:when test="${not timeSlot.expire}">
+                                                                                                <span class="status-badge badge-available">Available</span>
+                                                                                                <c:if test="${not empty sessionScope.acc}">
+                                                                                                    <button type="button" class="btn-book-slot" 
+                                                                                                        onclick="openBookingModal('${timeSlot.courtId}', '${timeSlot.courtName}', '${timeSlot.courtType}', '<fmt:formatDate value='${selectedDate}' pattern='yyyy-MM-dd'/>', '${timeSlot.startTime}', '${timeSlot.endTime}', '${timeSlot.scheduleId}', '${timeSlot.startTimeStr}', '${timeSlot.endTimeStr}')">
+                                                                                                        Book
+                                                                                                    </button>
+                                                                                                </c:if>
+                                                                                            </c:when>
+                                                                                            <c:otherwise>
+                                                                                                <span class="status-badge badge-expired">Expired</span>
+                                                                                            </c:otherwise>
+                                                                                        </c:choose>
                                                                                     </c:when>
                                                                                     <c:when test="${timeSlot.status == 'Booked'}">
                                                                                         <span class="status-badge badge-booked">Booked</span>
@@ -631,14 +638,12 @@
                                     <strong id="modalBookingTime">-</strong>
                                 </div>
                             </div>
-
                             <!-- Hidden form fields -->
                             <input type="hidden" name="courtId" id="modalCourtId">
                             <input type="hidden" name="date" id="modalDate">
                             <input type="hidden" name="startTime" id="modalStartTime">
                             <input type="hidden" name="endTime" id="modalEndTime">
                             <input type="hidden" name="courtScheduleId" id="modalScheduleId">
-
                             <!-- User Selection -->
                             <div class="mb-3">
                                 <label for="selectedUser" class="form-label">
@@ -646,6 +651,7 @@
                                 </label>
                                 <select class="form-control" id="selectedUser" name="userId" required onchange="updateUserInfo()">
                                     <option value="">Choose a user...</option>
+                                    <option value="external">-- Người dùng ngoài hệ thống --</option>
                                     <c:forEach var="user" items="${users}">
                                         <option value="${user.userID}" 
                                                 data-fullname="${user.fullName}" 
@@ -656,12 +662,35 @@
                                         </option>
                                     </c:forEach>
                                 </select>
+                                <!-- In-system user info -->
                                 <div class="user-info" id="userInfo" style="display: none;">
                                     <small>
                                         <i class="fa fa-envelope"></i> <span id="userEmail">-</span> | 
                                         <i class="fa fa-phone"></i> <span id="userPhone">-</span> | 
                                         <i class="fa fa-trophy"></i> Level: <span id="userSportLevel">-</span>
                                     </small>
+                                </div>
+
+                                <!-- External user fields -->
+                                <div class="external-user-fields mt-2" id="externalUserFields" style="display: none;">
+                                    <div class="mb-2">
+                                        <label for="externalEmail" class="form-label">
+                                            <i class="fa fa-envelope"></i> Email *
+                                        </label>
+                                        <input type="email" class="form-control" id="externalEmail" name="externalEmail" placeholder="user@example.com">
+                                    </div>
+                                    <div class="mb-2">
+                                        <label for="externalFullName" class="form-label">
+                                            <i class="fa fa-user"></i> Full Name *
+                                        </label>
+                                        <input type="text" class="form-control" id="externalFullName" name="externalFullName" placeholder="Full Name">
+                                    </div>
+                                    <div class="mb-2">
+                                        <label for="externalPhone" class="form-label">
+                                            <i class="fa fa-phone"></i> Phone
+                                        </label>
+                                        <input type="text" class="form-control" id="externalPhone" name="externalPhone" placeholder="Phone number (optional)">
+                                    </div>
                                 </div>
                             </div>
 
@@ -683,6 +712,7 @@
                             </button>
                         </div>
                     </form>
+
                 </div>
             </div>
         </div>
@@ -710,97 +740,54 @@
         <!-- End custom js for this page-->
 
         <script>
-            // Auto-hide alerts after 5 seconds
-            $(document).ready(function() {
-                setTimeout(function() {
+    // Auto-hide alerts after 5 seconds
+            $(document).ready(function () {
+                setTimeout(function () {
                     $('.alert').fadeOut('slow');
                 }, 5000);
             });
 
-            // Sort table function
-            function sortTable(sortBy) {
-                const urlParams = new URLSearchParams(window.location.search);
-                let currentSortOrder = urlParams.get('sortOrder') || 'DESC';
-                
-                if (urlParams.get('sortBy') === sortBy) {
-                    currentSortOrder = currentSortOrder === 'ASC' ? 'DESC' : 'ASC';
-                } else {
-                    currentSortOrder = 'ASC';
-                }
-                
-                urlParams.set('sortBy', sortBy);
-                urlParams.set('sortOrder', currentSortOrder);
-                urlParams.set('page', '1'); // Reset to first page when sorting
-                
-                window.location.href = 'court-manager?' + urlParams.toString();
-            }
-
-            // Edit court function
-            function editCourt(courtId, courtName, courtType, description, status, courtImage) {
-                const editModal = document.getElementById('editCourtModal');
-                if (editModal) {
-                    document.getElementById('editCourtId').value = courtId;
-                    document.getElementById('editCourtName').value = courtName;
-                    document.getElementById('editCourtType').value = courtType;
-                    document.getElementById('editDescription').value = description || '';
-                    document.getElementById('editStatus').value = status;
-                    document.getElementById('editCourtImage').value = courtImage || '';
-                    
-                    new bootstrap.Modal(editModal).show();
+            // Format date for display
+            function formatDate(dateString) {
+                try {
+                    const date = new Date(dateString);
+                    const options = {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    };
+                    return date.toLocaleDateString('en-US', options);
+                } catch (error) {
+                    console.error('Error formatting date:', error);
+                    return dateString;
                 }
             }
 
-            // Delete court function
-            function deleteCourt(courtId, courtName) {
-                const deleteModal = document.getElementById('deleteCourtModal');
-                if (deleteModal) {
-                    document.getElementById('deleteCourtId').value = courtId;
-                    document.getElementById('deleteCourtName').textContent = courtName;
-                    
-                    new bootstrap.Modal(deleteModal).show();
-                }
-            }
-
-            // Open booking modal function
+            // Open booking modal
             function openBookingModal(courtId, courtName, courtType, date, startTime, endTime, scheduleId, startTimeStr, endTimeStr) {
-                // Validate required parameters
                 if (!courtId || !scheduleId) {
                     console.error('Missing required booking parameters');
                     return;
                 }
-                
-                // Set hidden form values
-                const modalCourtId = document.getElementById('modalCourtId');
-                const modalDate = document.getElementById('modalDate');
-                const modalStartTime = document.getElementById('modalStartTime');
-                const modalEndTime = document.getElementById('modalEndTime');
-                const modalScheduleId = document.getElementById('modalScheduleId');
-                
-                if (modalCourtId) modalCourtId.value = courtId;
-                if (modalDate) modalDate.value = date;
-                if (modalStartTime) modalStartTime.value = startTimeStr;
-                if (modalEndTime) modalEndTime.value = endTimeStr;
-                if (modalScheduleId) modalScheduleId.value = scheduleId;
-                
-                // Set display values
-                const modalCourtName = document.getElementById('modalCourtName');
-                const modalCourtType = document.getElementById('modalCourtType');
-                const modalBookingDate = document.getElementById('modalBookingDate');
-                const modalBookingTime = document.getElementById('modalBookingTime');
-                
-                if (modalCourtName) modalCourtName.textContent = courtName;
-                if (modalCourtType) modalCourtType.textContent = courtType;
-                if (modalBookingDate) modalBookingDate.textContent = formatDate(date);
-                if (modalBookingTime) modalBookingTime.textContent = startTimeStr + ' - ' + endTimeStr;
-                
-                // Reset form
+
+                document.getElementById('modalCourtId').value = courtId;
+                document.getElementById('modalDate').value = date;
+                document.getElementById('modalStartTime').value = startTimeStr;
+                document.getElementById('modalEndTime').value = endTimeStr;
+                document.getElementById('modalScheduleId').value = scheduleId;
+
+                document.getElementById('modalCourtName').textContent = courtName;
+                document.getElementById('modalCourtType').textContent = courtType;
+                document.getElementById('modalBookingDate').textContent = formatDate(date);
+                document.getElementById('modalBookingTime').textContent = startTimeStr + ' - ' + endTimeStr;
+
                 const bookingForm = document.getElementById('bookingForm');
-                const userInfo = document.getElementById('userInfo');
-                
                 if (bookingForm) bookingForm.reset();
-                if (userInfo) userInfo.style.display = 'none';
-                
-                // Show modal
+
+                document.getElementById('userInfo').style.display = 'none';
+                document.getElementById('externalUserFields').style.display = 'none';
+
                 const bookingModal = document.getElementById('bookingModal');
                 if (bookingModal) {
                     new bootstrap.Modal(bookingModal).show();
@@ -811,62 +798,66 @@
             function updateUserInfo() {
                 const select = document.getElementById('selectedUser');
                 const userInfo = document.getElementById('userInfo');
-                
-                if (!select || !userInfo) return;
-                
-                const selectedOption = select.options[select.selectedIndex];
-                
-                if (selectedOption.value) {
-                    const userEmail = document.getElementById('userEmail');
-                    const userPhone = document.getElementById('userPhone');
-                    const userSportLevel = document.getElementById('userSportLevel');
-                    
-                    if (userEmail) userEmail.textContent = selectedOption.dataset.email || '-';
-                    if (userPhone) userPhone.textContent = selectedOption.dataset.phone || '-';
-                    if (userSportLevel) userSportLevel.textContent = selectedOption.dataset.sportlevel || '-';
-                    userInfo.style.display = 'block';
-                } else {
-                    userInfo.style.display = 'none';
-                }
-            }
+                const externalFields = document.getElementById('externalUserFields');
 
-            // Format date for display
-            function formatDate(dateString) {
-                try {
-                    const date = new Date(dateString);
-                    const options = { 
-                        weekday: 'long', 
-                        year: 'numeric', 
-                        month: 'long', 
-                        day: 'numeric' 
-                    };
-                    return date.toLocaleDateString('en-US', options);
-                } catch (error) {
-                    console.error('Error formatting date:', error);
-                    return dateString;
+                const selectedOption = select.options[select.selectedIndex];
+
+                if (selectedOption.value === 'external') {
+                    if (userInfo) userInfo.style.display = 'none';
+                    if (externalFields) externalFields.style.display = 'block';
+                } else if (selectedOption.value) {
+                    if (externalFields) externalFields.style.display = 'none';
+                    if (userInfo) {
+                        document.getElementById('userEmail').textContent = selectedOption.dataset.email || '-';
+                        document.getElementById('userPhone').textContent = selectedOption.dataset.phone || '-';
+                        document.getElementById('userSportLevel').textContent = selectedOption.dataset.sportlevel || '-';
+                        userInfo.style.display = 'block';
+                    }
+                } else {
+                    if (userInfo) userInfo.style.display = 'none';
+                    if (externalFields) externalFields.style.display = 'none';
                 }
             }
 
             // Form validation before submission
-            $(document).ready(function() {
+            $(document).ready(function () {
                 const bookingForm = document.getElementById('bookingForm');
                 if (bookingForm) {
-                    bookingForm.addEventListener('submit', function(e) {
+                    bookingForm.addEventListener('submit', function (e) {
                         const selectedUser = document.getElementById('selectedUser');
                         const scheduleId = document.getElementById('modalScheduleId');
-                        
+
                         if (!selectedUser || !selectedUser.value) {
                             e.preventDefault();
                             alert('Please select a user for the booking.');
                             return false;
                         }
-                        
+
                         if (!scheduleId || !scheduleId.value) {
                             e.preventDefault();
                             alert('Invalid schedule information. Please try again.');
                             return false;
                         }
-                        
+
+                        if (selectedUser.value === 'external') {
+                            const email = document.getElementById('externalEmail').value.trim();
+                            const name = document.getElementById('externalFullName').value.trim();
+
+                            if (!email || !name) {
+                                e.preventDefault();
+                                alert('Please enter both full name and email for the external user.');
+                                return false;
+                            }
+
+                            // Optionally: validate email format with regex
+                            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                            if (!emailRegex.test(email)) {
+                                e.preventDefault();
+                                alert('Please enter a valid email address.');
+                                return false;
+                            }
+                        }
+
                         return true;
                     });
                 }

@@ -14,6 +14,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import utils.AccessControlUtil;
+import dal.BookingDAO;
+import dal.CourtDAO;
+import dal.InvoiceDAO;
+import dal.UserDAO;
 
 /**
  *
@@ -51,9 +55,8 @@ public class PageManagerController extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/access-denied.jsp");
             return;
         }
-        
         try {
-            
+
             request.getRequestDispatcher("page-manager.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();

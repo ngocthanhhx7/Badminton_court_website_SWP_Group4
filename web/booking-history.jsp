@@ -276,7 +276,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="mb-4">
-                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Your Booking History</h2>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Nếu bạn muốn hủy sân hay liên lạc với chúng tôi qua số điện thoại 0000000000</h2>
                     <p class="text-gray-600">View all your badminton court bookings and their details</p>
                 </div>
 

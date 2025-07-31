@@ -2,11 +2,11 @@ package controller.user;
 
 import com.google.gson.JsonObject;
 import com.vnpay.common.Config;
-import dao.BookingDAO;
-import dao.BookingNoteDAO;
-import dao.CourtDAO;
-import dao.CourtScheduleDAO;
-import dao.UserDAO;
+import dal.BookingDAO;
+import dal.BookingNoteDAO;
+import dal.CourtDAO;
+import dal.CourtScheduleDAO;
+import dal.UserDAO;
 import models.BookingDTO;
 import models.BookingDetailDTO;
 import models.CourtDTO;
@@ -165,6 +165,13 @@ public class BookingController extends HttpServlet {
         for (CourtScheduleDTO schedule : schedules) {
             schedule.setStartTimeStr(schedule.getStartTime().format(timeFormatter));
             schedule.setEndTimeStr(schedule.getEndTime().format(timeFormatter));
+            
+            LocalDateTime scheduleStartDateTime = schedule.getScheduleDate().atTime(schedule.getStartTime());
+            if (scheduleStartDateTime.isBefore(LocalDateTime.now())) {
+                schedule.setExpire(true);
+            } else {
+                schedule.setExpire(false);
+            }
         }
 
         request.setAttribute("schedules", schedules);
@@ -181,9 +188,10 @@ public class BookingController extends HttpServlet {
    private void showBookingForm(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
         String courtScheduleIdsParam = request.getParameter("courtScheduleIds");
+        double sum = 0;
         if (courtScheduleIdsParam != null && !courtScheduleIdsParam.trim().isEmpty()) {
             try {
-                String[] idStrings = courtScheduleIdsParam.split(",");
+                String[] idStrings = courtScheduleIdsParam.split(",");// 1810,1811
                 List<Integer> courtScheduleIds = new ArrayList<>();
 
                 for (String idStr : idStrings) {
@@ -195,11 +203,18 @@ public class BookingController extends HttpServlet {
                 if (!courtScheduleIds.isEmpty()) {
                     CourtScheduleDAO scheduleDAO = new CourtScheduleDAO();
                     List<CourtScheduleDTO> schedules = scheduleDAO.getSchedulesByIds(courtScheduleIds);
+
+                    
+                    for(CourtScheduleDTO cs : schedules ){
+                        sum += cs.getPrice();
+                    }
                     request.setAttribute("courtSchedules", schedules);
                     request.setAttribute("courtScheduleIds", courtScheduleIdsParam);
                 } else {
                     request.setAttribute("error", "Không có ID lịch sân hợp lệ nào được cung cấp.");
                 }
+                request.setAttribute("sum", sum);
+                
 
             } catch (NumberFormatException e) {
                 request.setAttribute("error", "Định dạng ID lịch sân không hợp lệ.");
@@ -298,6 +313,7 @@ public class BookingController extends HttpServlet {
         }
         List<BookingDTO> list = bookingDAO.getBookingsByCustomerAndBookingDetail(Long.valueOf(user.getUserID()));
         LocalDateTime today = LocalDateTime.now(); // Lấy ngày hiện tại (không bao gồm thời gian)
+        CourtScheduleDAO courtScheduleDAO = new CourtScheduleDAO();
         for (BookingDTO booking : list) {
             LocalDateTime bookingDate = booking.getCreatedAt();
             if (bookingDate.isBefore(today)) {
@@ -311,6 +327,23 @@ public class BookingController extends HttpServlet {
             else{
                booking.setCancel(true);        // Có thể hủy nếu ngày booking < hôm nay
                booking.setCanRating(false);
+            }
+            String note = booking.getNotes();
+            
+            boolean isExpire = false;
+            try{
+//                int in = Integer.parseInt(note);
+                String[] arr = note.split(",");
+                System.out.println(arr[0]);
+                CourtScheduleDTO dto = courtScheduleDAO.getScheduleById(Integer.parseInt(arr[0]));
+                 // Ghép ngày + giờ để so sánh
+                LocalDateTime scheduleStart = LocalDateTime.of(dto.getScheduleDate(), dto.getStartTime());
+
+                if (scheduleStart.isBefore(LocalDateTime.now())) {
+                    isExpire = true;
+                }
+                booking.setCanRating(isExpire);
+            }catch(Exception e){
             }
         }
         request.setAttribute("bookingList", list);
@@ -379,6 +412,21 @@ public class BookingController extends HttpServlet {
      private void cancelBooking(HttpServletRequest request, HttpServletResponse response)throws IOException, ServletException{
          BookingDAO bookingDAO = new BookingDAO();
          String id = request.getParameter("draftId");
+         BookingDTO bookingDTO = bookingDAO.getBookingById(Long.parseLong(id));
+         String note = bookingDTO.getNotes();
+         CourtScheduleDAO courtScheduleDAO = new CourtScheduleDAO();
+         
+         String[] arr = note.split(",");
+         for(String x : arr){
+           try{
+               int courtSchedulerID = Integer.parseInt(x);
+               courtScheduleDAO.updateScheduleStatus(Long.valueOf(courtSchedulerID), "Available");
+           }catch(Exception e){
+               
+           }     
+         }
+     
+         
          bookingDAO.updateBookingStatus(Integer.parseInt(id), "Cancelled");
 //         request.getRequestDispatcher("booking-draft-list.jsp").forward(request, response);
          response.sendRedirect("booking?action=draft");
