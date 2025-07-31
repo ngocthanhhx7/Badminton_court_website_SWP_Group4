@@ -1,7 +1,7 @@
 package controller.admin;
 
-import dal.CourtDAO;
-import dal.CourtRateDAO;
+import dao.CourtDAO;
+import dao.CourtRateDAO;
 import models.CourtDTO;
 import models.CourtRateDTO;
 import utils.AccessControlUtil;

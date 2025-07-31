@@ -5,8 +5,8 @@
 
 package controller.user;
 
-import dal.BlogPostDAO;
-import dal.BlogTagDAO;
+import dao.BlogPostDAO;
+import dao.BlogTagDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

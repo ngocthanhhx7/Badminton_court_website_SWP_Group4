@@ -1,7 +1,7 @@
 package controller.admin;
 
-import dal.CourtDAO;
-import dal.CourtScheduleDAO;
+import dao.CourtDAO;
+import dao.CourtScheduleDAO;
 import models.CourtDTO;
 import models.CourtScheduleDTO;
 import utils.AccessControlUtil;

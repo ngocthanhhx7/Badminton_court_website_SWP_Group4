@@ -5,7 +5,7 @@
 
 package controller.admin;
 
-import dal.AdminDAO;
+import dao.AdminDAO;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;

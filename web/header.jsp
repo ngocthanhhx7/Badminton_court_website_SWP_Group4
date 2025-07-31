@@ -28,7 +28,7 @@
                                     <li><a href="./booking?action=schedule">Schedules</a></li>
                                     <li><a href="#">pages <i class="ti-angle-down"></i></a>
                                         <ul class="submenu">
-                                            <li><a href="blog.jsp">blog</a></li>
+                                            <li><a href="./blog">blog</a></li>
                                             <li><a href="elements.jsp">elements</a></li>
                                             <li><a href="/contact">Contact</a></li>
                                         </ul>

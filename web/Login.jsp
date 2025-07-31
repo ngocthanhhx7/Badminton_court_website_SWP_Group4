@@ -73,13 +73,6 @@
                                     <div class="row gy-3 overflow-hidden">
                                         <div class="col-12">
 
-                                            <c:if test="${not empty sessionScope.resetSuccess}">
-                                                <div class="alert alert-success">
-                                                    ${sessionScope.resetSuccess}
-                                                </div>
-                                                <c:remove var="resetSuccess" scope="session" />
-                                            </c:if>
-
                                             <c:if test="${not empty mess || not empty error}">
                                                 <div class="alert alert-danger">
                                                     ${mess}${error}
@@ -124,7 +117,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-6 text-end">
-                                                    <a href="ForgotPasswordServlet" class="link-secondary text-decoration-none">Forgot password?</a>
+                                                    <a href="./forgotPassword.jsp" class="link-secondary text-decoration-none">Forgot password?</a>
                                                 </div>
                                             </div>
                                         </div>

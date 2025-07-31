@@ -1,6 +1,6 @@
 package controller.admin;
 
-import dal.ServiceDAO;
+import dao.ServiceDAO;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;

@@ -2,11 +2,11 @@ package controller.user;
 
 import com.google.gson.JsonObject;
 import com.vnpay.common.Config;
-import dal.BookingDAO;
-import dal.BookingNoteDAO;
-import dal.CourtDAO;
-import dal.CourtScheduleDAO;
-import dal.UserDAO;
+import dao.BookingDAO;
+import dao.BookingNoteDAO;
+import dao.CourtDAO;
+import dao.CourtScheduleDAO;
+import dao.UserDAO;
 import models.BookingDTO;
 import models.BookingDetailDTO;
 import models.CourtDTO;
@@ -337,7 +337,7 @@ public class BookingController extends HttpServlet {
                 System.out.println(arr[0]);
                 CourtScheduleDTO dto = courtScheduleDAO.getScheduleById(Integer.parseInt(arr[0]));
                  // Ghép ngày + giờ để so sánh
-                LocalDateTime scheduleStart = LocalDateTime.of(dto.getScheduleDate(), dto.getStartTime());
+                LocalDateTime scheduleStart = LocalDateTime.of(dto.getScheduleDate(), dto.getEndTime());
 
                 if (scheduleStart.isBefore(LocalDateTime.now())) {
                     isExpire = true;

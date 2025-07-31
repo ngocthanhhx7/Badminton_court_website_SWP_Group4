@@ -1,6 +1,6 @@
 package controller.user;
 
-import dal.PartnerSearchDAO;
+import dao.PartnerSearchDAO;
 import models.PartnerSearchPostDTO;
 import models.PartnerSearchResponseDTO;
 import models.UserDTO;

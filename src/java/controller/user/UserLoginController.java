@@ -101,9 +101,9 @@ public class UserLoginController extends HttpServlet {
         }
         switch (role.toLowerCase()) {
             case "customer":
-                return "/profile-setup.jsp";
+                return "/completeProfile.jsp";
             case "staff":
-                return "/profile-setup.jsp";
+                return "/completeProfile.jsp";
             default:
                 return "/default/completeProfile";
         }

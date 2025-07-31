@@ -65,7 +65,7 @@
                 });
             });
         </script>
-        
+        <script src="js/chat.js"></script>
     </head>
 
 
@@ -93,8 +93,6 @@
         %>
 
         <!-- header-end -->
-        
-        <jsp:include page="chat-gemini.jsp" />
 
 
 

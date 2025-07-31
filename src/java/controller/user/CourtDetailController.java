@@ -5,10 +5,10 @@
 
 package controller.user;
 
-import dal.BookingNoteDAO;
-import dal.CourtDAO;
-import dal.CourtRateDAO;
-import dal.CourtScheduleDAO;
+import dao.BookingNoteDAO;
+import dao.CourtDAO;
+import dao.CourtRateDAO;
+import dao.CourtScheduleDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -46,8 +46,8 @@ public class CourtDetailController extends HttpServlet {
             
             CourtRateDAO courtRateDAO = new CourtRateDAO();
             double price = courtRateDAO.getRandomPriceByCourtID(courtId);
-            request
-            .setAttribute("price", price);
+            request.setAttribute("price", price);
+            
             if (court == null) {
                 request.setAttribute("error", "Court not found");
                 request.getRequestDispatcher("error.jsp").forward(request, response);

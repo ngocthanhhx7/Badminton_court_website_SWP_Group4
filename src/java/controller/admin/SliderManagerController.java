@@ -1,6 +1,6 @@
 package controller.admin;
 
-import dal.SliderDAO;
+import dao.SliderDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;

@@ -7,10 +7,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import service.UserService;
-import utils.EmailUtils;
-import utils.VerificationCodeUtils;
 
-@WebServlet(name = "ForgotPasswordServlet", urlPatterns = {"/ForgotPasswordServlet"})
+@WebServlet(name="ForgotPasswordServlet", urlPatterns={"/forget-password"})
 public class ForgotPasswordServlet extends HttpServlet {
 
     private UserService userService;
@@ -42,35 +40,17 @@ public class ForgotPasswordServlet extends HttpServlet {
         }
 
         if (email == null || !email.matches("^[\\w.%+-]+@[\\w.-]+\\.com$")) {
-            request.setAttribute("error", "Vui lòng nhập địa chỉ email hợp lệ có đuôi .com.");
-            request.getRequestDispatcher("forgot-password.jsp").forward(request, response);
-            return;
-        }
+    request.setAttribute("error", "Vui lòng nhập địa chỉ email hợp lệ có đuôi .com.");
+    request.getRequestDispatcher("forgot-password.jsp").forward(request, response);
+    return;
+}
 
         try {
-            // Check if email exists in the system
+            // Check if email exists
             if (userService.isEmailOrUsernameExists(email, null)) {
-                // Generate verification code
-                String verificationCode = VerificationCodeUtils.generateVerificationCode();
-                
-                // Store verification code
-                VerificationCodeUtils.storeVerificationCode(email, verificationCode);
-                
-                // Send verification email
-                try {
-                    EmailUtils.sendPasswordResetVerificationEmail(email, verificationCode);
-                    
-                    // Redirect to verification page with email
-                    request.setAttribute("email", email);
-                    request.setAttribute("success", "Mã xác minh đã được gửi đến email của bạn. Vui lòng kiểm tra hộp thư.");
-                    request.getRequestDispatcher("verify-reset-code.jsp").forward(request, response);
-                    
-                } catch (Exception emailEx) {
-                    emailEx.printStackTrace();
-                    request.setAttribute("error", "Không thể gửi email xác minh. Vui lòng thử lại sau.");
-                    request.getRequestDispatcher("forgot-password.jsp").forward(request, response);
-                }
-                
+                // Redirect to reset password page with email
+                request.setAttribute("email", email);
+                request.getRequestDispatcher("resetPassword.jsp").forward(request, response);
             } else {
                 request.setAttribute("error", "Email không tồn tại trong hệ thống.");
                 request.getRequestDispatcher("forgot-password.jsp").forward(request, response);

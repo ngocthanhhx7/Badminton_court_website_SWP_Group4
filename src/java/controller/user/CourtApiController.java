@@ -1,7 +1,7 @@
 package controller.user;
 
 import com.google.gson.Gson;
-import dal.CourtDAO;
+import dao.CourtDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

@@ -1,6 +1,6 @@
 package controller.admin;
 
-import dal.OfferDAO;
+import dao.OfferDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;

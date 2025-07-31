@@ -7,9 +7,9 @@ package com.vnpay.common;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import dal.BookingDAO;
-import dal.CourtDAO;
-import dal.CourtScheduleDAO;
+import dao.BookingDAO;
+import dao.CourtDAO;
+import dao.CourtScheduleDAO;
 import java.io.IOException;import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
@@ -80,9 +80,9 @@ public class ajaxServlet extends HttpServlet {
                         LocalDateTime start = LocalDateTime.of(schedule.getScheduleDate(), schedule.getStartTime());
                         LocalDateTime end = LocalDateTime.of(schedule.getScheduleDate(), schedule.getEndTime());
 
-                        BigDecimal hourlyRate = new BigDecimal("100000");
+                        BigDecimal hourlyRate = BigDecimal.valueOf(schedule.getPrice());
                         long hours = java.time.Duration.between(schedule.getStartTime(), schedule.getEndTime()).toHours();
-                        BigDecimal bookingPrice = hourlyRate.multiply(new BigDecimal(hours));
+//                        BigDecimal bookingPrice = hourlyRate.multiply(new BigDecimal(hours));
 
                         BookingDetailDTO detail = BookingDetailDTO.builder()
                                 .bookingId(bookingId)
@@ -93,7 +93,7 @@ public class ajaxServlet extends HttpServlet {
                                 .build();
 
                         bookingDAO.addBookingDetail(detail);
-                        totalAmount = totalAmount.add(bookingPrice);
+                        totalAmount = totalAmount.add(hourlyRate);
                     }
                 }
             }

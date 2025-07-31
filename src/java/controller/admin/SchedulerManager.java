@@ -4,9 +4,9 @@
  */
 package controller.admin;
 
-import dal.BookingDAO;
-import dal.CourtScheduleDAO;
-import dal.UserDAO;
+import dao.BookingDAO;
+import dao.CourtScheduleDAO;
+import dao.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;

@@ -4,8 +4,8 @@
  */
 package controller.user;
 
-import dal.AdminDAO;
-import dal.UserDAO;
+import dao.AdminDAO;
+import dao.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -79,7 +79,7 @@ public class LoginController extends HttpServlet {
         String password = request.getParameter("password");
 
         // Kiểm tra đầu vào
-if (emailOrUsername == null || emailOrUsername.trim().isEmpty()
+        if (emailOrUsername == null || emailOrUsername.trim().isEmpty()
                 || password == null || password.trim().isEmpty()) {
             request.setAttribute("error", "Email/Username và mật khẩu là bắt buộc.");
             request.getRequestDispatcher("Login.jsp").forward(request, response);
@@ -98,7 +98,7 @@ if (emailOrUsername == null || emailOrUsername.trim().isEmpty()
             HttpSession session = request.getSession();
             session.setAttribute("acc", admin);
             session.setAttribute("accType", "admin");
-             session.setAttribute("username", admin.getUsername()); // ✅ thêm dòng này
+            session.setAttribute("username", admin.getUsername());
 
             handleRememberMe(request, response, emailOrUsername, password);
 
@@ -110,13 +110,19 @@ if (emailOrUsername == null || emailOrUsername.trim().isEmpty()
             HttpSession session = request.getSession();
             session.setAttribute("acc", user);
             session.setAttribute("accType", "user");
-            session.setAttribute("username", user.getUsername()); // ✅ thêm dòng này
+            session.setAttribute("username", user.getUsername());
 
-            // Kiểm tra profile đầy đủ chưa sử dụng method từ ProfileSetupController
-            if (!controller.user.ProfileSetupController.isProfileComplete(user)) {
+            // Kiểm tra profile đầy đủ chưa
+            if (user.getFullName() == null
+                    || user.getDob() == null
+                    || user.getGender() == null
+                    || user.getPhone() == null
+                    || user.getAddress() == null
+                    || user.getSportLevel() == null) {
+
                 handleRememberMe(request, response, emailOrUsername, password);
-                session.setAttribute("currentUser", user); // Lưu user để dùng trong profile-setup.jsp
-                response.sendRedirect("profile-setup.jsp");
+                session.setAttribute("currentUser", user); // Lưu user để dùng trong CompleteProfile.jsp
+                response.sendRedirect("completeProfile.jsp");
                 return;
             }
 
@@ -162,6 +168,21 @@ if (emailOrUsername == null || emailOrUsername.trim().isEmpty()
             // Xóa cookie nếu user không chọn Remember
             Cookie idCookie = new Cookie("loginIdentifier", "");
             Cookie pwCookie = new Cookie("loginPassword", "");
+            idCookie.setMaxAge(0);
+            pwCookie.setMaxAge(0);
+            response.addCookie(idCookie);
+            response.addCookie(pwCookie);
+        }
+    }
 
-        }}}
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }// </editor-fold>
 
+}

@@ -11,9 +11,9 @@ import jakarta.servlet.http.HttpServletResponse;
 
 
 
-import dal.CartItemDAO;
-import dal.CourtScheduleDAO;
-import dal.CartsDAO;
+import dao.CartItemDAO;
+import dao.CourtScheduleDAO;
+import dao.CartsDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;

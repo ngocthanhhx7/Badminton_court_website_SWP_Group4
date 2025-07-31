@@ -34,16 +34,16 @@ public class ProfileCheckFilter implements Filter {
                     || user.getAddress() == null
                     || user.getSportLevel() == null) {
                 
-                // Cho phép truy cập trang profile-setup.jsp
+                // Cho phép truy cập trang completeProfile.jsp
                 String requestURI = httpRequest.getRequestURI();
-                if (!requestURI.contains("profile-setup.jsp") 
-                    && !requestURI.contains("profile-setup")
+                if (!requestURI.contains("completeProfile.jsp") 
+                    && !requestURI.contains("complete-profile")
                     && !requestURI.contains("Login.jsp")
                     && !requestURI.contains("login")
                     && !requestURI.contains("logout")
                     && !requestURI.contains("assets")) {
                     
-                    httpResponse.sendRedirect("profile-setup.jsp");
+                    httpResponse.sendRedirect("completeProfile.jsp");
                     return;
                 }
             }

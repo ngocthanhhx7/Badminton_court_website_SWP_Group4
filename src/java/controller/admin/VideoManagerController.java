@@ -1,6 +1,6 @@
 package controller.admin;
 
-import dal.VideoDAO;
+import dao.VideoDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;

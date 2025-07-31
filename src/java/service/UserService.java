@@ -5,7 +5,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import dal.UserDAO;
+import dao.UserDAO;
 import java.security.MessageDigest;
 import models.UserDTO;
 import java.sql.Connection;
@@ -22,13 +22,6 @@ public class UserService {
 
     // Đăng ký tài khoản người dùng mới
     public boolean registerUser(String username, String email, String password, String role, String phone ) throws SQLException {
-        // Debug logging
-        System.out.println("UserService.registerUser - Debug values:");
-        System.out.println("Username: '" + username + "'");
-        System.out.println("Email: '" + email + "'");
-        System.out.println("Phone: '" + phone + "' (length: " + (phone != null ? phone.length() : "null") + ")");
-        System.out.println("Role: '" + role + "'");
-        
         // Kiểm tra tồn tại
         if (userDAO.isEmailOrUsernameExists(email, username)) {
             return false;
@@ -52,41 +45,8 @@ public class UserService {
         user.setCreatedAt(new java.sql.Timestamp(System.currentTimeMillis()));
         user.setCreatedBy(null);
 
-        // Debug user object
-        System.out.println("UserDTO created - Phone: '" + user.getPhone() + "'");
-
         // Gọi DAO để lưu vào DB
         return userDAO.registerUserBasic(user);
-    }
-
-    // Kiểm tra duplicate cho từng field riêng biệt
-    public String checkDuplicateFields(String username, String email, String phone) throws SQLException {
-        List<String> errors = new ArrayList<>();
-        
-        // Kiểm tra username
-        if (isUsernameExists(username)) {
-            errors.add("Username đã tồn tại");
-        }
-        
-        // Kiểm tra email
-        if (isEmailExists(email)) {
-            errors.add("Email đã được sử dụng");
-        }
-        
-        // Kiểm tra phone nếu có
-        if (phone != null && !phone.trim().isEmpty() && userDAO.isPhoneExists(phone)) {
-            errors.add("Số điện thoại đã được sử dụng");
-        }
-        
-        return errors.isEmpty() ? null : String.join(", ", errors);
-    }
-    
-    public boolean isUsernameExists(String username) throws SQLException {
-        return userDAO.isEmailOrUsernameExists("", username);
-    }
-    
-    public boolean isEmailExists(String email) throws SQLException {
-        return userDAO.isEmailOrUsernameExists(email, "");
     }
 
     // Kiểm tra username/email đã tồn tại
@@ -145,10 +105,11 @@ public class UserService {
         }
     }
 
-    // Validate password: at least 6 chars
+    // Validate password: at least 8 chars, 1 uppercase, 1 special char, 1 digit
     private void validatePassword(String password) throws IllegalArgumentException {
-        if (password == null || password.length() < 6) {
-            throw new IllegalArgumentException("Mật khẩu phải có ít nhất 6 ký tự.");
+        if (password == null || password.length() < 8 ||
+            !password.matches("^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*\\d).+$")) {
+            throw new IllegalArgumentException("Mật khẩu phải có ít nhất 8 ký tự, 1 chữ cái in hoa, 1 ký tự đặc biệt và 1 số.");
         }
     }
     
