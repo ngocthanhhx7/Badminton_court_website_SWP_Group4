@@ -78,10 +78,19 @@
                     <file>${file.reference.commons-logging-1.2.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 9adf8973081fd7441f0fc29177fbbc48994b1c80
                 <library dirs="200">
                     <file>${file.reference.jakarta.activation-2.0.1.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> b2a38c64335a3db7d4801804480f17f41c6a613f
+>>>>>>> 9adf8973081fd7441f0fc29177fbbc48994b1c80
             </web-module-libraries>
             <web-module-additional-libraries/>
             <source-roots>
