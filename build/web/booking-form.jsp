@@ -264,6 +264,110 @@
                     margin-top: 10px;
                 }
             }
+            
+            /* Service Selection Styles */
+            .services-section {
+                border: 2px solid #f0f0f0;
+                border-radius: 15px;
+                padding: 20px;
+                background: #fafafa;
+            }
+            
+            .section-title {
+                color: #333;
+                font-weight: 600;
+                margin-bottom: 20px;
+                border-bottom: 2px solid #ddd;
+                padding-bottom: 10px;
+            }
+            
+            .services-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 15px;
+            }
+            
+            .service-item {
+                background: white;
+                border: 1px solid #e0e0e0;
+                border-radius: 10px;
+                padding: 15px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                transition: all 0.3s ease;
+            }
+            
+            .service-item:hover {
+                border-color: #007bff;
+                box-shadow: 0 2px 8px rgba(0,123,255,0.1);
+            }
+            
+            .service-info {
+                flex: 1;
+            }
+            
+            .service-name {
+                font-weight: 600;
+                color: #333;
+                margin-bottom: 5px;
+            }
+            
+            .service-price {
+                color: #007bff;
+                font-weight: 500;
+                margin-bottom: 5px;
+            }
+            
+            .service-description {
+                font-size: 0.9em;
+                color: #666;
+                font-style: italic;
+            }
+            
+            .service-quantity {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                min-width: 100px;
+            }
+            
+            .service-quantity label {
+                font-size: 0.9em;
+                color: #666;
+                margin-bottom: 5px;
+            }
+            
+            .service-qty-input {
+                width: 80px;
+                text-align: center;
+                padding: 5px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+            }
+            
+            .service-qty-input:focus {
+                border-color: #007bff;
+                outline: none;
+            }
+            
+            @media (max-width: 768px) {
+                .services-grid {
+                    grid-template-columns: 1fr;
+                }
+                
+                .service-item {
+                    flex-direction: column;
+                    text-align: center;
+                }
+                
+                .service-quantity {
+                    margin-top: 15px;
+                    flex-direction: row;
+                    justify-content: center;
+                    gap: 10px;
+                }
+            }
         </style>
     </head>
     <body>
@@ -435,9 +539,7 @@
                                             <div class="summary-item">
                                                 <span><strong>Total Amount:</strong></span>
                                                 <span><strong class="total-amount" data-schedules="${sum}">
-                                                    <script>
-                                                        document.write((${sum}).toLocaleString('vi-VN') + ' VND');
-                                                    </script>
+                                                    <fmt:formatNumber value="${sum}" pattern="#,###" /> VND
                                                 </strong></span>
                                             </div>
                                         </div>
@@ -446,7 +548,43 @@
                                         <form action="/SWP_Project/vnpayajax" method="post" id="bookingForm">
                                             <input type="hidden" name="action" value="create">
                                             <input type="hidden" name="courtScheduleIds" value="${courtScheduleIds}">
-                                            <input type="hidden" name="totalAmount" value="${sum}">
+                                            <input type="hidden" name="totalAmount" id="totalAmount" value="${sum}">
+                                            
+                                            <!-- Services Selection Section -->
+                                            <c:if test="${not empty availableServices}">
+                                            <div class="services-section mb-4">
+                                                <h5 class="section-title">
+                                                    <i class="fa fa-plus-circle"></i> Additional Services
+                                                </h5>
+                                                <div class="services-grid">
+                                                    <c:forEach var="service" items="${availableServices}">
+                                                    <div class="service-item">
+                                                        <div class="service-info">
+                                                            <div class="service-name">${service.serviceName}</div>
+                                                            <div class="service-price">
+                                                                <fmt:formatNumber value="${service.price}" pattern="#,###" /> VND/${service.unit}
+                                                            </div>
+                                                            <c:if test="${not empty service.description}">
+                                                                <div class="service-description">${service.description}</div>
+                                                            </c:if>
+                                                        </div>
+                                                        <div class="service-quantity">
+                                                            <label for="service_${service.serviceID}_quantity">Quantity:</label>
+                                                            <input type="number" 
+                                                                   id="service_${service.serviceID}_quantity"
+                                                                   name="service_${service.serviceID}_quantity" 
+                                                                   min="0" 
+                                                                   max="10" 
+                                                                   value="0" 
+                                                                   class="form-control service-qty-input"
+                                                                   data-price="${service.price}"
+                                                                   onchange="updateTotalAmount()">
+                                                        </div>
+                                                    </div>
+                                                    </c:forEach>
+                                                </div>
+                                            </div>
+                                            </c:if>
                                             
                                             <div class="form-group">
                                                 <label class="form-label">
@@ -459,8 +597,8 @@
                                             <div class="form-group">
                                                 <button type="submit" class="btn-book">
                                                     <i class="fa fa-credit-card"></i> Proceed to Payment
-                                                    <span class="payment-amount">
-                                                        (<script>document.write((${sum}).toLocaleString('vi-VN'));</script> VND)
+                                                    <span class="payment-amount" id="paymentAmountDisplay">
+                                                        (<fmt:formatNumber value="${sum}" pattern="#,###" /> VND)
                                                     </span>
                                                 </button>
                                             </div>
@@ -606,6 +744,30 @@
                     }
                 });
             });
+            
+            // Service quantity calculation
+            function updateTotalAmount() {
+                var baseAmount = parseFloat('${sum}'); // Court booking amount
+                var serviceAmount = 0;
+                
+                // Calculate service costs
+                $('.service-qty-input').each(function() {
+                    var quantity = parseInt($(this).val()) || 0;
+                    var price = parseFloat($(this).data('price')) || 0;
+                    serviceAmount += quantity * price;
+                });
+                
+                var totalAmount = baseAmount + serviceAmount;
+                
+                // Update hidden field
+                $('#totalAmount').val(totalAmount);
+                
+                // Update display
+                $('#paymentAmountDisplay').text('(' + totalAmount.toLocaleString('vi-VN') + ' VND)');
+                
+                // Update total amount display in summary
+                $('.total-amount').text(totalAmount.toLocaleString('vi-VN') + ' VND');
+            }
         </script>
     </body>
 </html>

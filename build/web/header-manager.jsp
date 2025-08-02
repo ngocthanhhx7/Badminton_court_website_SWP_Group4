@@ -162,6 +162,7 @@
                         <li class="nav-item"> <a class="nav-link" href="./contact-manager">Contact</a></li>
                         <li class="nav-item"> <a class="nav-link" href="./instagram-manager">Instagram</a></li>
                         <li class="nav-item"> <a class="nav-link" href="./blog-manager">Blog</a></li>
+
                     </ul>
                 </div>
             </li>
@@ -181,7 +182,7 @@
                         <li class="nav-item"> <a class="nav-link" href="./court-scheduler-manager">Scheduler Manager</a></li>
                         <li class="nav-item"> <a class="nav-link" href="./court-rates-manager">Court Rates Manager</a></li>
                         <li class="nav-item"> <a class="nav-link" href="./scheduler-manager?action=list">Booking Manager</a></li>
-                        
+
                     </ul>
                 </div>
             </li>
@@ -223,6 +224,12 @@
                         <li class="nav-item"> <a class="nav-link" href="pages/icons/mdi.html">Mdi icons</a></li>
                     </ul>
                 </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="dashboard.jsp">
+                    <i class="typcn typcn-document-text menu-icon"></i>
+                    <span class="menu-title">Post by staff</span>
+                </a>
             </li>
         </ul>
     </nav>

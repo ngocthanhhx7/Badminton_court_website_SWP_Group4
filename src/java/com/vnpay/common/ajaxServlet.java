@@ -8,8 +8,10 @@ package com.vnpay.common;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import dao.BookingDAO;
+import dao.BookingServiceDAO;
 import dao.CourtDAO;
 import dao.CourtScheduleDAO;
+import dao.ServiceDAO;
 import java.io.IOException;import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
@@ -33,7 +35,9 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 import models.BookingDTO;
 import models.BookingDetailDTO;
+import models.BookingServiceDTO;
 import models.CourtScheduleDTO;
+import models.ServiceDTO;
 import models.UserDTO;
 
 /**
@@ -48,6 +52,8 @@ public class ajaxServlet extends HttpServlet {
         UserDTO user = (UserDTO) session.getAttribute("acc");
         CourtScheduleDAO scheduleDAO = new CourtScheduleDAO();
         BookingDAO bookingDAO = new BookingDAO();
+        ServiceDAO serviceDAO = new ServiceDAO();
+        BookingServiceDAO bookingServiceDAO = new BookingServiceDAO();
 
         if (user == null) {
             resp.sendRedirect("Login.jsp");
@@ -74,6 +80,7 @@ public class ajaxServlet extends HttpServlet {
 
             BigDecimal totalAmount = BigDecimal.ZERO;
             if (bookingId != null) {
+                // Process court schedules
                 for (Integer scheduleId : scheduleIds) {
                     CourtScheduleDTO schedule = scheduleDAO.getScheduleById(scheduleId);
                     if (schedule != null) {
@@ -94,6 +101,51 @@ public class ajaxServlet extends HttpServlet {
 
                         bookingDAO.addBookingDetail(detail);
                         totalAmount = totalAmount.add(hourlyRate);
+                    }
+                }
+                
+                // Process selected services
+                List<BookingServiceDTO> bookingServices = new ArrayList<>();
+                Map<String, String[]> parameterMap = req.getParameterMap();
+                
+                for (String paramName : parameterMap.keySet()) {
+                    if (paramName.startsWith("service_") && paramName.endsWith("_quantity")) {
+                        String serviceIdStr = paramName.replace("service_", "").replace("_quantity", "");
+                        try {
+                            Integer serviceId = Integer.parseInt(serviceIdStr);
+                            int quantity = Integer.parseInt(req.getParameter(paramName));
+                            
+                            if (quantity > 0) {
+                                // Get service details
+                                ServiceDTO service = serviceDAO.getServiceById(serviceId);
+                                if (service != null) {
+                                    BigDecimal unitPrice = BigDecimal.valueOf(service.getPrice());
+                                    BigDecimal subtotal = unitPrice.multiply(BigDecimal.valueOf(quantity));
+                                    
+                                    BookingServiceDTO bookingService = BookingServiceDTO.builder()
+                                            .bookingId(bookingId)
+                                            .serviceId(serviceId)
+                                            .quantity(quantity)
+                                            .unitPrice(unitPrice)
+                                            .subtotal(subtotal)
+                                            .build();
+                                    bookingServices.add(bookingService);
+                                    
+                                    // Add service cost to total amount
+                                    totalAmount = totalAmount.add(subtotal);
+                                }
+                            }
+                        } catch (NumberFormatException e) {
+                            System.err.println("Invalid service parameter: " + paramName);
+                        }
+                    }
+                }
+                
+                // Save booking services if any selected
+                if (!bookingServices.isEmpty()) {
+                    boolean servicesAdded = bookingServiceDAO.addBookingServices(bookingServices);
+                    if (!servicesAdded) {
+                        System.err.println("Warning: Failed to save some booking services");
                     }
                 }
             }

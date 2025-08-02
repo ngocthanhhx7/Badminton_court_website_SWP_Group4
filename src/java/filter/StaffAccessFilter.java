@@ -38,7 +38,8 @@ public class StaffAccessFilter implements Filter {
                 UserDTO user = (UserDTO) sessionUser;
                 userRole = user.getRole();
             } else if (sessionUser instanceof AdminDTO) {
-                // Admin không có role field, nhưng có thể coi như có quyền cao nhất
+                // Admin không có role field, nhưng có thể coi như có quyền cinstanceof AdminDTO) {
+                // Admin không có rao nhất
                 // Không cần chuyển hướng admin khỏi trang home
                 chain.doFilter(request, response);
                 return;

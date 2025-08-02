@@ -28,7 +28,7 @@
                                     <li><a href="./home">home</a></li>
                                     <li><a href="./court">Courts</a></li>
                                     <li><a href="./about">About</a></li>
-                                    <li><a href="./blog">blog <i class="ti-angle-down"></i></a>
+                                    <li><a href="blog.jsp">blog <i class="ti-angle-down"></i></a>
                                     </li>
                                     <li><a href="">pages <i class="ti-angle-down"></i></a>
                                         <ul class="submenu">

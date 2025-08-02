@@ -4,13 +4,17 @@ import com.google.gson.JsonObject;
 import com.vnpay.common.Config;
 import dao.BookingDAO;
 import dao.BookingNoteDAO;
+import dao.BookingServiceDAO;
 import dao.CourtDAO;
 import dao.CourtScheduleDAO;
+import dao.ServiceDAO;
 import dao.UserDAO;
 import models.BookingDTO;
 import models.BookingDetailDTO;
+import models.BookingServiceDTO;
 import models.CourtDTO;
 import models.CourtScheduleDTO;
+import models.ServiceDTO;
 import models.UserDTO;
 
 import jakarta.servlet.ServletException;
@@ -41,6 +45,8 @@ public class BookingController extends HttpServlet {
     private BookingDAO bookingDAO;
     private CourtDAO courtDAO;
     private CourtScheduleDAO scheduleDAO;
+    private ServiceDAO serviceDAO;
+    private BookingServiceDAO bookingServiceDAO;
 
     @Override
     public void init() throws ServletException {
@@ -48,6 +54,8 @@ public class BookingController extends HttpServlet {
         bookingDAO = new BookingDAO();
         courtDAO = new CourtDAO();
         scheduleDAO = new CourtScheduleDAO();
+        serviceDAO = new ServiceDAO();
+        bookingServiceDAO = new BookingServiceDAO();
     }
 
     @Override
@@ -224,6 +232,15 @@ public class BookingController extends HttpServlet {
             request.setAttribute("error", "Vui lòng chọn lịch sân.");
         }
 
+        // Load available services for selection
+        try {
+            List<ServiceDTO> availableServices = serviceDAO.getAllActiveServices();
+            request.setAttribute("availableServices", availableServices);
+        } catch (SQLException e) {
+            System.err.println("Error loading services: " + e.getMessage());
+            e.printStackTrace();
+        }
+
         request.setAttribute("now", new java.util.Date());
 
         request.getRequestDispatcher("booking-form.jsp").forward(request, response);
@@ -284,8 +301,50 @@ public class BookingController extends HttpServlet {
                         .endTime(endDateTime)
                         .hourlyRate(new BigDecimal("100000"))
                         .build();
+                        
                 if (bookingDAO.addBookingDetail(detail)) {
-                    request.getRequestDispatcher("vn_pay.jsp").forward(request, response);
+                    // Process selected services
+                    List<BookingServiceDTO> bookingServices = new ArrayList<>();
+                    Map<String, String[]> parameterMap = request.getParameterMap();
+                    
+                    for (String paramName : parameterMap.keySet()) {
+                        if (paramName.startsWith("service_") && paramName.endsWith("_quantity")) {
+                            String serviceIdStr = paramName.replace("service_", "").replace("_quantity", "");
+                            try {
+                                Integer serviceId = Integer.parseInt(serviceIdStr);
+                                int quantity = Integer.parseInt(request.getParameter(paramName));
+                                
+                                if (quantity > 0) {
+                                    // Get service details
+                                    ServiceDTO service = serviceDAO.getServiceById(serviceId);
+                                    if (service != null) {
+                                        BigDecimal unitPrice = BigDecimal.valueOf(service.getPrice());
+                                        BookingServiceDTO bookingService = BookingServiceDTO.builder()
+                                                .bookingId(bookingId)
+                                                .serviceId(serviceId)
+                                                .quantity(quantity)
+                                                .unitPrice(unitPrice)
+                                                .subtotal(unitPrice.multiply(BigDecimal.valueOf(quantity)))
+                                                .build();
+                                        bookingServices.add(bookingService);
+                                    }
+                                }
+                            } catch (NumberFormatException e) {
+                                System.err.println("Invalid service parameter: " + paramName);
+                            }
+                        }
+                    }
+                    
+                    // Save booking services if any selected
+                    if (!bookingServices.isEmpty()) {
+                        boolean servicesAdded = bookingServiceDAO.addBookingServices(bookingServices);
+                        if (!servicesAdded) {
+                            System.err.println("Warning: Failed to save some booking services");
+                        }
+                    }
+                    
+                    // Redirect to payment processing - services are handled by ajaxServlet
+                    response.sendRedirect("booking-form.jsp?success=1");
                 } else {
                     request.setAttribute("error", "Failed to create booking details");
                     showBookingForm(request, response);

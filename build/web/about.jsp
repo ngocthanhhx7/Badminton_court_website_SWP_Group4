@@ -85,6 +85,8 @@
         <%
             }
         %>
+        
+        <jsp:include page="chat-gemini.jsp" />
 
         <!-- header-end -->
 

@@ -31,6 +31,26 @@ public class ServiceDAO {
         return null;
     }
 
+    public ServiceDTO getServiceById(Integer serviceId) throws SQLException {
+        return getServiceByID(serviceId);
+    }
+
+    public ServiceDTO getServiceById(Long serviceId) throws SQLException {
+        return getServiceByID(serviceId.intValue());
+    }
+
+    public List<ServiceDTO> getAllActiveServices() throws SQLException {
+        List<ServiceDTO> list = new ArrayList<>();
+        String sql = "SELECT * FROM services WHERE Status = 'Active' ORDER BY ServiceName ASC";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(mapResultSetToService(rs));
+            }
+        }
+        return list;
+    }
+
     private ServiceDTO mapResultSetToService(ResultSet rs) throws SQLException {
         ServiceDTO service = new ServiceDTO();
         service.setServiceID(rs.getInt("ServiceID"));
