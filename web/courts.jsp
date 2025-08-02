@@ -47,22 +47,7 @@
 
         <link rel="stylesheet" href="css/owl.carousel.min.css">
         <link rel="stylesheet" href="css/page-transitions.css">
-        <script src="js/jquery.min.js"></script>
-        <script src="js/owl.carousel.min.js"></script>
         <script src="js/page-transitions.js"></script>
-
-        <script>
-            $(document).ready(function () {
-                $('.about_active').owlCarousel({
-                    items: 1,
-                    loop: true,
-                    autoplay: true,
-                    autoplayTimeout: 6000,
-                    nav: false,
-                    dots: true
-                });
-            });
-        </script>
     </head>
 
     <body>

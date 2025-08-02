@@ -45,26 +45,10 @@
 
         <link rel="stylesheet" href="css/owl.carousel.min.css">
         <link rel="stylesheet" href="css/page-transitions.css">
-        <script src="js/jquery.min.js"></script>
-        <script src="js/owl.carousel.min.js"></script>
-        <script src="js/effects.js"></script>
         <script src="js/page-transitions.js"></script>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-        <script>
-            $(document).ready(function () {
-                $('.about_active').owlCarousel({
-                    items: 1,
-                    loop: true,
-                    autoplay: true,
-                    autoplayTimeout: 6000,
-                    nav: false,
-                    dots: true
-                });
-            });
-        </script>
-        <script src="js/chat.js"></script>
     </head>
 
     <body>
