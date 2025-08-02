@@ -43,7 +43,7 @@
         .page-header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 60px 0;
+            padding: 120px 0;
             margin-bottom: 30px;
             text-align: center;
             position: relative;
@@ -132,9 +132,10 @@
             color: #155724;
         }
 
-        .status-inactive {
-            background: #f8d7da;
-            color: #721c24;
+        .status-closed {
+            background: #e2e3e5;
+            color: #495057;
+            text-decoration: line-through;
         }
 
         .post-meta {
@@ -357,6 +358,7 @@
 </head>
 
 <body class="partner-search-page">
+    
     <div class="main-wrapper">
         <!-- Header -->
         <jsp:include page="header-user.jsp"/>
@@ -388,8 +390,9 @@
                     <i class="fa fa-check-circle"></i>
                     <c:choose>
                         <c:when test="${param.success == 'activated'}">Post activated successfully!</c:when>
-                        <c:when test="${param.success == 'deactivated'}">Post deactivated successfully!</c:when>
-                        <c:when test="${param.success == 'deleted'}">Post deleted successfully!</c:when>
+                        <c:when test="${param.success == 'deactivated'}">Post closed successfully!</c:when>
+                        <c:when test="${param.success == 'closed'}">Post closed successfully!</c:when>
+                        <c:when test="${param.success == 'restored'}">Post restored successfully!</c:when>
                         <c:when test="${param.success == 'closed'}">Post closed successfully!</c:when>
                         <c:otherwise>Action completed successfully!</c:otherwise>
                     </c:choose>
@@ -402,8 +405,9 @@
                     <i class="fa fa-exclamation-triangle"></i>
                     <c:choose>
                         <c:when test="${param.error == 'activation_failed'}">Failed to activate post. Please try again.</c:when>
-                        <c:when test="${param.error == 'deactivation_failed'}">Failed to deactivate post. Please try again.</c:when>
+                        <c:when test="${param.error == 'deactivation_failed'}">Failed to close post. Please try again.</c:when>
                         <c:when test="${param.error == 'deletion_failed'}">Failed to delete post. Please try again.</c:when>
+                        <c:when test="${param.error == 'restore_failed'}">Failed to restore post. Please try again.</c:when>
                         <c:when test="${param.error == 'close_failed'}">Failed to close post. Please try again.</c:when>
                         <c:otherwise>An error occurred. Please try again.</c:otherwise>
                     </c:choose>
@@ -475,8 +479,8 @@
                             <div class="post-card">
                                 <div class="post-header">
                                     <h3 class="post-title">${post.title}</h3>
-                                    <span class="post-status ${post.active ? 'status-active' : 'status-inactive'}">
-                                        ${post.active ? 'Active' : 'Inactive'}
+                                    <span class="post-status ${post.active ? 'status-active' : 'status-closed'}">
+                                        ${post.active ? 'Active' : 'Closed'}
                                     </span>
                                 </div>
 
@@ -530,7 +534,7 @@
                                     <button onclick="togglePostStatus('${post.id}', '${post.active}')" 
                                             class="btn-post btn-toggle">
                                         <i class="fa fa-${post.active ? 'pause' : 'play'}"></i> 
-                                        ${post.active ? 'Deactivate' : 'Activate'}
+                                        ${post.active ? 'Close' : 'Activate'}
                                     </button>
                                     <button onclick="deletePost('${post.id}')" class="btn-post btn-delete">
                                         <i class="fa fa-trash"></i> Delete
@@ -572,7 +576,7 @@
             const isActive = isActiveStr === 'true';
             const action = isActive ? 'deactivate' : 'activate';
             const confirmMessage = isActive ? 
-                'Are you sure you want to deactivate this post? It will no longer be visible to others.' :
+                'Are you sure you want to close this post? It will no longer be visible to others.' :
                 'Are you sure you want to activate this post? It will be visible to others.';
             
             if (confirm(confirmMessage)) {
@@ -598,7 +602,7 @@
         }
 
         function deletePost(postId) {
-            if (confirm('Are you sure you want to delete this post? This action cannot be undone.')) {
+            if (confirm('Are you sure you want to delete this post? The post will be marked as closed but can be restored later.')) {
                 const form = document.createElement('form');
                 form.method = 'POST';
                 form.action = 'partner-search';

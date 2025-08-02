@@ -131,11 +131,10 @@
                             <div class="col-xl-5 col-lg-5">
                                 <div class="about_info">
                                     <div class="section_title mb-20px">
-                                        <span>About Us</span>
+                                        <span>Về chúng tôi</span>
                                         <h3>${about.title}<br>${about.subtitle}</h3>
                                     </div>
                                     <p>${about.content}</p>
-                                    <a href="#" class="line-button">Learn More</a>
                                 </div>
                             </div>
                             <div class="col-xl-7 col-lg-7">

@@ -140,6 +140,33 @@ public class PartnerSearchDAO {
         return posts;
     }
 
+    public List<PartnerSearchPostDTO> getActivePostsByUser(int userId) {
+        List<PartnerSearchPostDTO> posts = new ArrayList<>();
+        String sql = """
+            SELECT p.*, u.FullName, u.SportLevel, u.Gender,
+                   (SELECT COUNT(*) FROM PartnerSearchResponses r WHERE r.PostID = p.PostID) as ResponseCount
+            FROM PartnerSearchPosts p
+            JOIN Users u ON p.UserID = u.UserID
+            WHERE p.UserID = ? AND p.Status = 'Active' AND (p.ExpiresAt IS NULL OR p.ExpiresAt > GETDATE())
+            ORDER BY p.CreatedAt DESC
+        """;
+
+        try (Connection conn = DBUtils.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, userId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    PartnerSearchPostDTO post = mapResultSetToPost(rs);
+                    posts.add(post);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return posts;
+    }
+
     public boolean createPost(PartnerSearchPostDTO post) {
         String sql = """
             INSERT INTO PartnerSearchPosts 

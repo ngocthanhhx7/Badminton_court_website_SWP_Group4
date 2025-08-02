@@ -11,6 +11,7 @@ const closeChatbot = document.querySelector("#close-chatbot");
 // Api setup
 const API_KEY = "AIzaSyD1ClTMuvLuwlugJpmAH1tzGe_pnzSd3Lw";
 const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`;
+const CHATBOT_API_URL = "/chatbot-api";
 
 const userData = {
     message: null,
@@ -19,6 +20,23 @@ const userData = {
         mime_type: null
     }
 };
+
+// Website context for the chatbot
+const websiteContext = `
+Bạn là trợ lý AI của trang web BadmintonHub - một hệ thống đặt sân cầu lông trực tuyến. 
+
+Thông tin về hệ thống:
+- Website: BadmintonHub - Hệ thống đặt sân cầu lông
+- Chức năng chính: Đặt sân cầu lông, xem lịch trống, quản lý đặt sân
+- Giờ hoạt động: Thứ 2 - Chủ nhật từ 6:00 - 22:00
+- Liên hệ: Hotline 0123-456-789, Email: booking@badmintonhub.com
+
+Các chức năng có thể hỗ trợ:
+1. Hướng dẫn cách đặt sân
+2. Thông tin về giá cả và chính sách
+3. Hỗ trợ khách hàng
+
+`;
 
 
 const chatHistory = [];
@@ -33,26 +51,157 @@ const createMessageElement = (content, ...classes) => {
     return div;
 };
 
+// Function to call chatbot API
+const callChatbotAPI = async (action, params = {}) => {
+    try {
+        const response = await fetch(CHATBOT_API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action, ...params })
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        return await response.json();
+    } catch (error) {
+        console.error("Error calling chatbot API:", error);
+        return { error: error.message };
+    }
+};
+
+// Function to detect user intent and extract information
+const detectIntent = (message) => {
+    const lowerMessage = message.toLowerCase();
+    
+    // Check for date patterns
+    const datePatterns = [
+        /(hôm nay|today)/,
+        /(ngày mai|tomorrow)/,
+        /(\d{1,2}\/\d{1,2}\/\d{4})/,
+        /(\d{4}-\d{2}-\d{2})/
+    ];
+    
+    let detectedDate = null;
+    for (const pattern of datePatterns) {
+        const match = lowerMessage.match(pattern);
+        if (match) {
+            if (match[1] === "hôm nay" || match[1] === "today") {
+                detectedDate = new Date().toISOString().split('T')[0];
+            } else if (match[1] === "ngày mai" || match[1] === "tomorrow") {
+                const tomorrow = new Date();
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                detectedDate = tomorrow.toISOString().split('T')[0];
+            } else if (match[2]) {
+                // Handle DD/MM/YYYY format
+                const parts = match[2].split('/');
+                if (parts.length === 3) {
+                    detectedDate = `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
+                }
+            } else if (match[3]) {
+                // Handle YYYY-MM-DD format
+                detectedDate = match[3];
+            }
+            break;
+        }
+    }
+    
+    // Check for court patterns
+    const courtPatterns = [
+        /(sân \d+|court \d+)/i,
+        /(sân indoor|sân outdoor)/i
+    ];
+    
+    let detectedCourt = null;
+    for (const pattern of courtPatterns) {
+        const match = lowerMessage.match(pattern);
+        if (match) {
+            detectedCourt = match[1];
+            break;
+        }
+    }
+    
+    
+    if (lowerMessage.includes("đặt sân") || lowerMessage.includes("booking") || 
+        lowerMessage.includes("hướng dẫn") || lowerMessage.includes("cách đặt")) {
+        return { intent: "booking_guide", date: detectedDate, court: detectedCourt };
+    }
+    
+    if (lowerMessage.includes("giá") || lowerMessage.includes("price") || 
+        lowerMessage.includes("phí") || lowerMessage.includes("cost")) {
+        return { intent: "price_info", date: detectedDate, court: detectedCourt };
+    }
+    
+    if (lowerMessage.includes("liên hệ") || lowerMessage.includes("contact") || 
+        lowerMessage.includes("hotline") || lowerMessage.includes("email")) {
+        return { intent: "contact_info", date: detectedDate, court: detectedCourt };
+    }
+    
+    return { intent: "general", date: detectedDate, court: detectedCourt };
+};
+
 // Generate bot response using API
 const generateBotResponse = async (incomingMessageDiv) => {
     const messageElement = incomingMessageDiv.querySelector(".message-text");
     
-    // chatHistory.push({
-    //     role: "user",
-    //     parts: [{ text: `Using the details provided above, please address this query: ${userData.message}` }, ...(userData.file.data ? [{ inline_data: userData.file }] : [])],
-    // });
+    // Detect user intent
+    const intent = detectIntent(userData.message);
+    
+    let systemMessage = websiteContext;
+    let enhancedUserMessage = userData.message;
+    
+    // Handle specific intents
+    if (intent.intent === "check_availability") {
+        try {
+            const date = intent.date || new Date().toISOString().split('T')[0];
+            const apiResult = await callChatbotAPI("getAvailableSchedules", { date });
+            
+            if (apiResult.success) {
+                const data = apiResult.data;
+                systemMessage += `\n\nDữ liệu lịch trống cho ngày ${data.date}:\n`;
+                systemMessage += `- Tổng số slot trống: ${data.totalAvailable}\n`;
+                
+                for (const [courtName, courtInfo] of Object.entries(data.courts)) {
+                    systemMessage += `- ${courtName}: ${courtInfo.count} slot trống\n`;
+                    systemMessage += `  Khung giờ: ${courtInfo.timeSlots.join(', ')}\n`;
+                }
+            } else {
+                systemMessage += `\n\nKhông thể lấy dữ liệu lịch trống: ${apiResult.error}`;
+            }
+        } catch (error) {
+            systemMessage += `\n\nLỗi khi lấy dữ liệu: ${error.message}`;
+        }
+    } else if (intent.intent === "booking_guide") {
+        try {
+            const apiResult = await callChatbotAPI("getBookingInfo");
+            if (apiResult.success) {
+                const data = apiResult.data;
+                systemMessage += `\n\nThông tin đặt sân:\n`;
+                systemMessage += `- Các bước đặt sân: ${data.bookingSteps}\n`;
+                systemMessage += `- Giờ hoạt động: ${data.workingHours}\n`;
+                systemMessage += `- Chính sách hủy: ${data.cancellationPolicy}\n`;
+                systemMessage += `- Liên hệ: ${data.contactInfo}\n`;
+            }
+        } catch (error) {
+            systemMessage += `\n\nLỗi khi lấy thông tin đặt sân: ${error.message}`;
+        }
+    }
 
-    chatHistory.push({
-        role: "user",
-        parts: [{ text: userData.message }, ...(userData.file.data ? [{ inline_data: userData.file }] : [])],
-    });
+    // Prepare chat history with system context
+    const messagesWithContext = [
+        { role: "user", parts: [{ text: systemMessage }] },
+        { role: "model", parts: [{ text: "Tôi hiểu rồi. Tôi là trợ lý AI của BadmintonHub và có thể giúp bạn với các thông tin về đặt sân cầu lông." }] },
+        ...chatHistory,
+        { role: "user", parts: [{ text: enhancedUserMessage }, ...(userData.file.data ? [{ inline_data: userData.file }] : [])] }
+    ];
     
     // API request options
     const requestOptions = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-            contents: chatHistory
+            contents: messagesWithContext
         })
     }
 

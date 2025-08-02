@@ -110,7 +110,7 @@ public class HomepageController extends HttpServlet {
                 : allOffers;
 
         int page = 1;
-        int courtsPerPage = 2;
+        int courtsPerPage = 3;
 
         if (pageParam != null) {
             try {
@@ -163,11 +163,6 @@ public class HomepageController extends HttpServlet {
         processRequest(request, response);
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
         return "Short description";

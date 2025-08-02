@@ -72,9 +72,6 @@
             <hr class="line">
 
             <div class="info-row"><span class="info-label">Username:</span> <%= user.getUsername() %></div>
-            <div class="info-row"><span class="info-label">Password:</span> 
-                <%= "*".repeat(user.getPassword().length()) %>
-            </div>
 
             <div class="info-row"><span class="info-label">Email:</span> <%= user.getEmail() %></div>
             <div class="info-row"><span class="info-label">Full Name:</span> <%= user.getFullName() %></div>

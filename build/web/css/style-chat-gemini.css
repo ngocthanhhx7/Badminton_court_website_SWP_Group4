@@ -8,11 +8,6 @@
     font-family: "Inter", sans-serif;
 }
 
-/*body {
-    width: 100%;
-    min-height: 100vh;
-    background: linear-gradient(#EEEEFF, #87CEFA);
-}*/
 
   #chatbot-toggler {
       z-index: 9999;
@@ -351,6 +346,78 @@ em-emoji-picker {
 
 body.show-emoji-picker em-emoji-picker {
     visibility: visible;
+}
+
+/* Court booking specific styles */
+.chat-body .message-text strong {
+    font-weight: 600;
+    color: #1E90FF;
+}
+
+.chat-body .message-text .court-slot {
+    background: #f8f9ff;
+    border: 1px solid #e0e6ff;
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin: 4px 0;
+    font-size: 0.9rem;
+}
+
+.chat-body .message-text .court-slot .court-name {
+    font-weight: 600;
+    color: #1E90FF;
+}
+
+.chat-body .message-text .court-slot .time-slot {
+    color: #666;
+    font-size: 0.85rem;
+}
+
+.chat-body .message-text .court-slot .price {
+    color: #28a745;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.chat-body .message-text .booking-steps {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 8px;
+    padding: 12px;
+    margin: 8px 0;
+}
+
+.chat-body .message-text .booking-steps ol {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.chat-body .message-text .booking-steps li {
+    margin: 4px 0;
+    color: #856404;
+}
+
+.chat-body .message-text .info-box {
+    background: #d1ecf1;
+    border: 1px solid #bee5eb;
+    border-radius: 8px;
+    padding: 12px;
+    margin: 8px 0;
+    color: #0c5460;
+}
+
+.chat-body .message-text .contact-info {
+    background: #d4edda;
+    border: 1px solid #c3e6cb;
+    border-radius: 8px;
+    padding: 12px;
+    margin: 8px 0;
+    color: #155724;
+}
+
+.chat-body .message-text .emoji {
+    font-size: 1.2em;
+    margin: 0 2px;
 }
 
 

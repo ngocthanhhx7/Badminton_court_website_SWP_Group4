@@ -1,0 +1,179 @@
+package controller.user;
+
+import dao.CourtScheduleDAO;
+import models.CourtScheduleDTO;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+@WebServlet(name = "ChatbotController", urlPatterns = {"/chatbot-api"})
+public class ChatbotController extends HttpServlet {
+    
+    private final CourtScheduleDAO courtScheduleDAO = new CourtScheduleDAO();
+    private final Gson gson = new Gson();
+    
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        
+        try {
+            // Parse the request body
+            JsonObject requestBody = gson.fromJson(request.getReader(), JsonObject.class);
+            String action = requestBody.get("action").getAsString();
+            
+            JsonObject result = new JsonObject();
+            
+            switch (action) {
+                case "getAvailableSchedules":
+                    handleGetAvailableSchedules(requestBody, result);
+                    break;
+                case "getSchedulesByDate":
+                    handleGetSchedulesByDate(requestBody, result);
+                    break;
+                case "getSchedulesByCourt":
+                    handleGetSchedulesByCourt(requestBody, result);
+                    break;
+                case "getBookingInfo":
+                    handleGetBookingInfo(result);
+                    break;
+                default:
+                    result.addProperty("error", "Unknown action");
+                    break;
+            }
+            
+            response.getWriter().write(gson.toJson(result));
+            
+        } catch (Exception e) {
+            JsonObject error = new JsonObject();
+            error.addProperty("error", "Internal server error: " + e.getMessage());
+            response.getWriter().write(gson.toJson(error));
+        }
+    }
+    
+    private void handleGetAvailableSchedules(JsonObject requestBody, JsonObject result) {
+        try {
+            String dateStr = requestBody.get("date").getAsString();
+            LocalDate date = LocalDate.parse(dateStr, DateTimeFormatter.ISO_LOCAL_DATE);
+            
+            List<CourtScheduleDTO> schedules = courtScheduleDAO.getAllAvailableSchedules(date);
+            
+            JsonObject data = new JsonObject();
+            data.addProperty("date", dateStr);
+            data.addProperty("totalAvailable", schedules.size());
+            
+            // Group by court
+            java.util.Map<String, java.util.List<CourtScheduleDTO>> courtGroups = 
+                schedules.stream().collect(java.util.stream.Collectors.groupingBy(
+                    schedule -> schedule.getCourtName() + " (" + schedule.getCourtType() + ")"
+                ));
+            
+            JsonObject courts = new JsonObject();
+            for (java.util.Map.Entry<String, java.util.List<CourtScheduleDTO>> entry : courtGroups.entrySet()) {
+                JsonObject courtInfo = new JsonObject();
+                courtInfo.addProperty("count", entry.getValue().size());
+                
+                java.util.List<String> timeSlots = entry.getValue().stream()
+                    .map(schedule -> schedule.getStartTime().toString() + " - " + schedule.getEndTime().toString())
+                    .collect(java.util.stream.Collectors.toList());
+                courtInfo.add("timeSlots", gson.toJsonTree(timeSlots));
+                
+                courts.add(entry.getKey(), courtInfo);
+            }
+            data.add("courts", courts);
+            
+            result.addProperty("success", true);
+            result.add("data", data);
+            
+        } catch (Exception e) {
+            result.addProperty("error", "Error getting available schedules: " + e.getMessage());
+        }
+    }
+    
+    private void handleGetSchedulesByDate(JsonObject requestBody, JsonObject result) {
+        try {
+            String dateStr = requestBody.get("date").getAsString();
+            LocalDate date = LocalDate.parse(dateStr, DateTimeFormatter.ISO_LOCAL_DATE);
+            
+            List<CourtScheduleDTO> schedules = courtScheduleDAO.getAllAvailableSchedules(date);
+            
+            JsonObject data = new JsonObject();
+            data.addProperty("date", dateStr);
+            data.addProperty("totalSchedules", schedules.size());
+            
+            java.util.List<JsonObject> scheduleList = schedules.stream()
+                .map(schedule -> {
+                    JsonObject scheduleObj = new JsonObject();
+                    scheduleObj.addProperty("courtName", schedule.getCourtName());
+                    scheduleObj.addProperty("courtType", schedule.getCourtType());
+                    scheduleObj.addProperty("startTime", schedule.getStartTime().toString());
+                    scheduleObj.addProperty("endTime", schedule.getEndTime().toString());
+                    scheduleObj.addProperty("price", schedule.getPrice());
+                    return scheduleObj;
+                })
+                .collect(java.util.stream.Collectors.toList());
+            
+            data.add("schedules", gson.toJsonTree(scheduleList));
+            
+            result.addProperty("success", true);
+            result.add("data", data);
+            
+        } catch (Exception e) {
+            result.addProperty("error", "Error getting schedules by date: " + e.getMessage());
+        }
+    }
+    
+    private void handleGetSchedulesByCourt(JsonObject requestBody, JsonObject result) {
+        try {
+            Integer courtId = requestBody.get("courtId").getAsInt();
+            String dateStr = requestBody.get("date").getAsString();
+            LocalDate date = LocalDate.parse(dateStr, DateTimeFormatter.ISO_LOCAL_DATE);
+            
+            List<CourtScheduleDTO> schedules = courtScheduleDAO.getAvailableSchedules(courtId, date);
+            
+            JsonObject data = new JsonObject();
+            data.addProperty("courtId", courtId);
+            data.addProperty("date", dateStr);
+            data.addProperty("totalAvailable", schedules.size());
+            
+            java.util.List<JsonObject> scheduleList = schedules.stream()
+                .map(schedule -> {
+                    JsonObject scheduleObj = new JsonObject();
+                    scheduleObj.addProperty("startTime", schedule.getStartTime().toString());
+                    scheduleObj.addProperty("endTime", schedule.getEndTime().toString());
+                    scheduleObj.addProperty("price", schedule.getPrice());
+                    return scheduleObj;
+                })
+                .collect(java.util.stream.Collectors.toList());
+            
+            data.add("schedules", gson.toJsonTree(scheduleList));
+            
+            result.addProperty("success", true);
+            result.add("data", data);
+            
+        } catch (Exception e) {
+            result.addProperty("error", "Error getting schedules by court: " + e.getMessage());
+        }
+    }
+    
+    private void handleGetBookingInfo(JsonObject result) {
+        JsonObject data = new JsonObject();
+        data.addProperty("bookingSteps", "1. Chọn ngày đặt sân\n2. Chọn sân và khung giờ phù hợp\n3. Điền thông tin cá nhân\n4. Xác nhận đặt sân\n5. Thanh toán");
+        data.addProperty("contactInfo", "Hotline: 0123-456-789 | Email: booking@badmintonhub.com");
+        data.addProperty("workingHours", "Thứ 2 - Chủ nhật: 6:00 - 22:00");
+        data.addProperty("cancellationPolicy", "Hủy đặt sân trước 24h được hoàn tiền 100%, trước 12h được hoàn tiền 50%");
+        
+        result.addProperty("success", true);
+        result.add("data", data);
+    }
+} 

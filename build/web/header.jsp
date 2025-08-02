@@ -25,11 +25,8 @@
                                     <li><a href="./home">home</a></li>
                                     <li><a href="./court">Courts</a></li>
                                     <li><a href="./about">About</a></li>
-                                    <li><a href="./booking?action=schedule">Schedules</a></li>
                                     <li><a href="#">pages <i class="ti-angle-down"></i></a>
                                         <ul class="submenu">
-                                            <li><a href="./blog">blog</a></li>
-                                            <li><a href="elements.jsp">elements</a></li>
                                             <li><a href="/contact">Contact</a></li>
                                         </ul>
                                     </li>

@@ -50,6 +50,9 @@ public class PartnerSearchController extends HttpServlet {
                 case "search":
                     searchPosts(request, response);
                     break;
+                case "close":
+                    closePost(request, response);
+                    break;
                 default:
                     showPartnerSearchList(request, response);
                     break;
@@ -93,6 +96,9 @@ public class PartnerSearchController extends HttpServlet {
                     break;
                 case "delete":
                     deletePost(request, response);
+                    break;
+                case "restore":
+                    restorePost(request, response);
                     break;
                 default:
                     response.sendRedirect("partner-search");
@@ -235,9 +241,11 @@ public class PartnerSearchController extends HttpServlet {
         }
 
         try {
-            List<PartnerSearchPostDTO> posts = partnerSearchDAO.getPostsByUser(user.getUserID());
-            request.setAttribute("myPosts", posts);
-            request.getRequestDispatcher("partner-search-my-posts.jsp").forward(request, response);
+            // Only get ACTIVE posts of the user
+            List<PartnerSearchPostDTO> posts = partnerSearchDAO.getActivePostsByUser(user.getUserID());
+            request.setAttribute("partnerPosts", posts);  // Use same attribute name as main list page
+            request.setAttribute("isMyPostsPage", true);   // Flag to identify this is my-posts page
+            request.getRequestDispatcher("partner-search-list.jsp").forward(request, response);  // Reuse list JSP
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", "Error loading posts: " + e.getMessage());
@@ -395,7 +403,18 @@ public class PartnerSearchController extends HttpServlet {
         }
 
         try {
-            int postId = Integer.parseInt(request.getParameter("postId"));
+            // Handle both "postId" (from POST) and "id" (from GET) parameters
+            String postIdStr = request.getParameter("postId");
+            if (postIdStr == null) {
+                postIdStr = request.getParameter("id");
+            }
+            
+            if (postIdStr == null) {
+                response.sendRedirect("partner-search");
+                return;
+            }
+            
+            int postId = Integer.parseInt(postIdStr);
             PartnerSearchPostDTO post = partnerSearchDAO.getPostById(postId);
             
             if (post == null || post.getUserID() != user.getUserID()) {
@@ -455,7 +474,7 @@ public class PartnerSearchController extends HttpServlet {
         try {
             int postId = Integer.parseInt(request.getParameter("id"));
             
-            if (partnerSearchDAO.updatePostStatus(postId, "Inactive", user.getUserID())) {
+            if (partnerSearchDAO.updatePostStatus(postId, "Closed", user.getUserID())) {
                 response.sendRedirect("partner-search?action=my-posts&success=deactivated");
             } else {
                 response.sendRedirect("partner-search?action=my-posts&error=deactivation_failed");
@@ -480,10 +499,37 @@ public class PartnerSearchController extends HttpServlet {
         try {
             int postId = Integer.parseInt(request.getParameter("id"));
             
-            if (partnerSearchDAO.deletePost(postId, user.getUserID())) {
-                response.sendRedirect("partner-search?action=my-posts&success=deleted");
+            // Soft delete: change status to "Closed" instead of physically deleting
+            if (partnerSearchDAO.updatePostStatus(postId, "Closed", user.getUserID())) {
+                response.sendRedirect("partner-search?action=my-posts&success=closed");
             } else {
                 response.sendRedirect("partner-search?action=my-posts&error=deletion_failed");
+            }
+            
+        } catch (NumberFormatException e) {
+            response.sendRedirect("partner-search?action=my-posts");
+        }
+    }
+
+    private void restorePost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        
+        HttpSession session = request.getSession();
+        UserDTO user = (UserDTO) session.getAttribute("acc");
+        
+        if (user == null) {
+            response.sendRedirect("login.jsp");
+            return;
+        }
+
+        try {
+            int postId = Integer.parseInt(request.getParameter("id"));
+            
+            // Restore post by changing status back to "Active"
+            if (partnerSearchDAO.updatePostStatus(postId, "Active", user.getUserID())) {
+                response.sendRedirect("partner-search?action=my-posts&success=restored");
+            } else {
+                response.sendRedirect("partner-search?action=my-posts&error=restore_failed");
             }
             
         } catch (NumberFormatException e) {

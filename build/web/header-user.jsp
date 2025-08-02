@@ -34,7 +34,7 @@
                                         <ul class="submenu">
                                             <li><a href="booking?action=history">History Bookings</a></li>
                                             <li><a href="./contact">Contact</a></li>
-                                            <li><a href="booking?action=schedule">View Schedule</a></li>
+                                            <li><a href="partner-search">Find Partner</a></li>
                                             
                                             
                                         </ul>

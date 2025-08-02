@@ -44,7 +44,13 @@
                 />
             </svg>
             <!-- prettier-ignore -->
-            <div class="message-text"> Xin chào 👋<br /> Tôi có thể giúp gì cho bạn hôm nay? </div>
+            <div class="message-text"> 
+                Xin chào 👋<br /> 
+                Tôi là trợ lý AI của BadmintonHub! Tôi có thể giúp bạn:<br /><br />
+                💰 <strong>Thông tin giá cả</strong><br />
+                📋 <strong>Hướng dẫn đặt sân</strong><br />
+                📞 <strong>Thông tin liên hệ</strong><br /><br />
+            </div>
             </div>
         </div>
         <!-- Chatbot Footer -->
