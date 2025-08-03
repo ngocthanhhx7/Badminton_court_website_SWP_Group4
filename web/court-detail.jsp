@@ -16,6 +16,8 @@
     <link rel="stylesheet" href="css/font-awesome.min.css">
     <link rel="stylesheet" href="css/style.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <style>
         /* Your existing styles */
@@ -678,7 +680,7 @@
 
     <!-- bradcam_area_start -->
     <div class="bradcam_area breadcam_bg_1">
-        <h3>Court Details</h3>
+        <h3>Chi tiết ${court.courtName}</h3>
     </div>
     <!-- bradcam_area_end -->
 
@@ -722,35 +724,35 @@
                                     <div class="feature-icon">
                                         <i class="fa fa-check-circle"></i>
                                     </div>
-                                    <h5>Professional Grade</h5>
-                                    <p>High-quality flooring and equipment</p>
+                                    <h5>Cơ sở vật chất</h5>
+                                    <p>Cơ sở vật chất đạt tiêu chuẩn chất lượng cao</p>
                                 </div>
                                 <div class="feature-item">
                                     <div class="feature-icon">
                                         <i class="fa fa-lightbulb-o"></i>
                                     </div>
-                                    <h5>LED Lighting</h5>
-                                    <p>Optimal lighting for perfect visibility</p>
+                                    <h5>Hệ thống ánh sáng</h5>
+                                    <p>Hệ thống chiếu sáng đầy đủ đàm bảo trải nghiệm tối nhất</p>
                                 </div>
                                 <div class="feature-item">
                                     <div class="feature-icon">
                                         <i class="fa fa-snowflake-o"></i>
                                     </div>
-                                    <h5>Climate Control</h5>
-                                    <p>Comfortable temperature year-round</p>
+                                    <h5>Hệ thống điều hòa</h5>
+                                    <p>Có hệ thống làm lạnh và làm ấm hoạt động quanh năm</p>
                                 </div>
                                 <div class="feature-item">
                                     <div class="feature-icon">
                                         <i class="fa fa-shield"></i>
                                     </div>
-                                    <h5>Safety First</h5>
-                                    <p>Non-slip surface and safety equipment</p>
+                                    <h5>Sự an toàn</h5>
+                                    <p>Có huấn luyện viên và đội ngũ hỗ trợ cùng với cơ sở vật chất tuyệt vời</p>
                                 </div>
                             </div>
                             
                             <div class="rating-section">
                                 <h4 class="rating-title">
-                                    <i class="fa fa-star"></i> Customer Rating
+                                    <i class="fa fa-star"></i> Đánh giá của người dùng
                                 </h4>
                                 <div class="stars-container">
                                     <c:choose>
@@ -772,7 +774,7 @@
                                             <fmt:formatNumber value="${avgRating}" maxFractionDigits="1" minFractionDigits="1"/> out of 5 stars
                                         </c:when>
                                         <c:otherwise>
-                                            No ratings yet
+                                            Không có đánh giá
                                         </c:otherwise>
                                     </c:choose>
                                 </div>
@@ -781,7 +783,7 @@
                             <!-- NEW: Comments Section -->
                             <div class="comments-section">
                                 <h4 class="comments-title">
-                                    <i class="fa fa-comments"></i> Customer Reviews
+                                    <i class="fa fa-comments"></i> Các đánh giá
                                 </h4>
                                 <c:choose>
                                     <c:when test="${not empty notes}">
@@ -794,7 +796,7 @@
                                     <c:otherwise>
                                         <div class="no-comments">
                                             <i class="fa fa-comment-o" style="font-size: 2rem; margin-bottom: 10px; display: block;"></i>
-                                            No reviews available yet. Be the first to leave a review!
+                                            Chưa có đánh giá nào cho sân, bạn hãy là người đầu tiên làm việc đó!
                                         </div>
                                     </c:otherwise>
                                 </c:choose>
@@ -806,11 +808,11 @@
                                     <!-- Action Buttons for Logged-in Users -->
                                     <div class="action-buttons">
                                         <a href="booking?action=schedule" class="btn-schedule" onclick="scrollToSchedule()">
-                                            <i class="fa fa-clock-o"></i> View Schedule Below
+                                            <i class="fa fa-clock-o"></i> Xem lịch sân
                                         </a>
                                         
                                         <a href="court" class="btn-back">
-                                            <i class="fa fa-arrow-left"></i> Back to Courts
+                                            <i class="fa fa-arrow-left"></i> Vê trang danh sách sân
                                         </a>
                                     </div>
                                 </c:when>
@@ -818,20 +820,20 @@
                                     <!-- Login Prompt for Non-logged-in Users -->
                                     <div class="login-prompt">
                                         <i class="fa fa-info-circle"></i>
-                                        <strong>Please login to book this court</strong>
+                                        <strong>Cần đăng nhập để đặt sân</strong>
                                     </div>
                                     
                                     <div class="action-buttons">
                                         <a href="Login" class="btn-book">
-                                            <i class="fa fa-sign-in"></i> Login to Book
+                                            <i class="fa fa-sign-in"></i> Đăng nhập để đặt
                                         </a>
                                         
                                         <a href="booking?action=schedule" class="btn-schedule" onclick="scrollToSchedule()">
-                                            <i class="fa fa-clock-o"></i> View Schedule Below
+                                            <i class="fa fa-clock-o"></i> Xem lịch sân
                                         </a>
                                         
                                         <a href="court" class="btn-back">
-                                            <i class="fa fa-arrow-left"></i> Back to Courts
+                                            <i class="fa fa-arrow-left"></i> Quay lại trang dánh sách
                                         </a>
                                     </div>
                                 </c:otherwise>
@@ -847,10 +849,10 @@
                 <div class="col-lg-8 text-center">
                     <div class="alert alert-warning" style="padding: 40px; border-radius: 15px;">
                         <i class="fa fa-exclamation-triangle" style="font-size: 3rem; color: #f39c12; margin-bottom: 20px;"></i>
-                        <h3>Court Not Found</h3>
-                        <p>The requested court could not be found. Please check the URL or return to the courts listing.</p>
+                        <h3>Không tìm thấy sân</h3>
+                        <p>Không thấy sân bạn cần tìm. Hãy check lại tại danh sách sân.</p>
                         <a href="court" class="btn btn-primary" style="margin-top: 20px;">
-                            <i class="fa fa-arrow-left"></i> Back to Courts
+                            <i class="fa fa-arrow-left"></i> Quay lại trang danh sách
                         </a>
                     </div>
                 </div>
@@ -866,14 +868,14 @@
                 <div class="col-12">
                     <div class="schedule-card">
                         <div class="schedule-header">
-                            <h3><i class="fa fa-calendar"></i> ${court.courtName} Schedule</h3>
-                            <p>Available time slots for this court</p>
+                            <h3><i class="fa fa-calendar"></i> Lịch ${court.courtName} </h3>
+                            <p>Cách ca đặt của sân này</p>
                         </div>
                         
                         <div class="date-selector">
                             <div class="date-nav">
                                 <a href="court-detail?courtId=${court.courtId}&date=<fmt:formatDate value='${prevDate}' pattern='yyyy-MM-dd' />#schedule-section" class="date-nav-btn">
-                                    <i class="fa fa-chevron-left"></i> Previous Day
+                                    <i class="fa fa-chevron-left"></i> Hôm trước
                                 </a>
                                 <div class="current-date">
                                     <c:choose>
@@ -886,7 +888,7 @@
                                     </c:choose>
                                 </div>
                                 <a href="court-detail?courtId=${court.courtId}&date=<fmt:formatDate value='${nextDate}' pattern='yyyy-MM-dd' />#schedule-section" class="date-nav-btn">
-                                    Next Day <i class="fa fa-chevron-right"></i>
+                                    Hôm sau <i class="fa fa-chevron-right"></i>
                                 </a>
                             </div>
                             
@@ -894,7 +896,7 @@
                             <div class="date-picker-container">
                                 <div class="date-picker-title">
                                     <i class="fa fa-calendar-o"></i>
-                                    Select a Specific Date
+                                    Chọn ngày
                                 </div>
                                 <form class="date-picker-form" method="GET" action="court-detail?courtId=${court.courtId}">
                                     <input type="hidden" name="courtId" value="${court.courtId}">
@@ -905,7 +907,7 @@
                                            min="<fmt:formatDate value='${now}' pattern='yyyy-MM-dd' />"
                                            required>
                                     <button type="submit" class="btn-date-submit">
-                                        <i class="fa fa-search"></i> View Schedule
+                                        <i class="fa fa-search"></i> Xem lịch
                                     </button>
                                 </form>
                             </div>
@@ -920,10 +922,10 @@
                                 </div>
                                 <div class="selected-slots-list" id="selectedSlotsList"></div>
                                 <button type="button" class="btn-book-selected" id="bookSelectedBtn" onclick="bookSelectedSlots()" disabled>
-                                    <i class="fa fa-calendar-check-o"></i> Book Selected Slots
+                                    <i class="fa fa-calendar-check-o"></i> Đặt các ca
                                 </button>
                                 <button type="button" class="btn-clear-selection" onclick="clearAllSelections()">
-                                    <i class="fa fa-times"></i> Clear Selection
+                                    <i class="fa fa-times"></i> dọn sạch
                                 </button>
                             </div>
                         </c:if>
@@ -1030,71 +1032,94 @@
     </div>
     <!-- Schedule Section End -->
 
-    <!-- footer -->
-    <footer class="footer">
-        <div class="footer_top">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-3 col-md-6 col-lg-3">
-                        <div class="footer_widget">
-                            <h3 class="footer_title">address</h3>
-                            <p class="footer_text">Khu công nghệ cao <br>Hòa Lạc, Hà Nội</p>
-                            <a href="#" class="line-button">Get Direction</a>
+            <!-- footer -->
+        <footer class="footer" >
+            <div class="footer_top">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-3 col-md-6 col-lg-3">
+                            <div class="footer_widget">
+                                <h3 class="footer_title">
+                                    Địa chỉ
+                                </h3>
+                                <p class="footer_text" >  Khu công nghệ cao <br>
+                                    Hòa Lạc, Hà Nội</p>
+                                <a href="https://maps.app.goo.gl/G2ptJTLHi6u6nAHF9" class="line-button">Chỉ dẫn</a>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-xl-3 col-md-6 col-lg-3">
-                        <div class="footer_widget">
-                            <h3 class="footer_title">Reservation</h3>
-                            <p class="footer_text">+10 367 267 2678 <br>thanhnnhe186491@fpt.edu.vn</p>
+                        <div class="col-xl-3 col-md-6 col-lg-3">
+                            <div class="footer_widget">
+                                <h3 class="footer_title">
+                                    Liên hệ
+                                </h3>
+                                <p class="footer_text" >0981944060<br>
+                                    thanhnnhe186491@fpt.edu.vn</p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-xl-2 col-md-6 col-lg-2">
-                        <div class="footer_widget">
-                            <h3 class="footer_title">Navigation</h3>
-                            <ul>
-                                <li><a href="./home">Home</a></li>
-                                <li><a href="./court">Courts</a></li>
-                                <li><a href="about.jsp">About</a></li>
-                                <li><a href="blog.jsp">News</a></li>
-                            </ul>
+                        <div class="col-xl-2 col-md-6 col-lg-2">
+                            <div class="footer_widget">
+                                <h3 class="footer_title">
+                                    Liên kết
+                                </h3>
+                                <ul>
+                                    <li><a href="./home">Trang chủ</a></li>
+                                    <li><a href="./court">Danh sách sân</a></li>
+                                    <li><a href="./about">Giới thiệu</a></li>
+                                </ul>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-xl-4 col-md-6 col-lg-4">
-                        <div class="footer_widget">
-                            <h3 class="footer_title">Newsletter</h3>
-                            <form action="#" class="newsletter_form">
-                                <input type="text" placeholder="Enter your mail">
-                                <button type="submit">Sign Up</button>
-                            </form>
-                            <p class="newsletter_text">Subscribe newsletter to get updates</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="copy-right_text">
-            <div class="container">
-                <div class="footer_border"></div>
-                <div class="row">
-                    <div class="col-xl-8 col-md-7 col-lg-9">
-                        <p class="copy_right">
-                            Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved
-                        </p>
-                    </div>
-                    <div class="col-xl-4 col-md-5 col-lg-3">
-                        <div class="socail_links">
-                            <ul>
-                                <li><a href="#"><i class="fa fa-facebook-square"></i></a></li>
-                                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                <li><a href="#"><i class="fa fa-instagram"></i></a></li>
-                            </ul>
+                        <div class="col-xl-4 col-md-6 col-lg-4">
+                            <div class="footer_widget">
+                                <h3 class="footer_title">
+                                    Bảng tin
+                                </h3>
+                                <form action="#" class="newsletter_form">
+                                    <input type="text" placeholder="Enter your mail">
+                                    <button type="submit" >Đăng ký</button>
+                                </form>
+                                <p class="newsletter_text">Đăng ký để cập nhật</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </footer>
-    <!-- footer_end -->
+            <div class="copy-right_text">
+                <div class="container">
+                    <div class="footer_border"></div>
+                    <div class="row">
+                        <div class="col-xl-8 col-md-7 col-lg-9">
+                            <p class="copy_right">
+                                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                                Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved
+                                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                            </p>
+                        </div>
+                        <div class="col-xl-4 col-md-5 col-lg-3">
+                            <div class="socail_links">
+                                <ul>
+                                    <li>
+                                        <a href="#">
+                                            <i class="fa fa-facebook-square"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="fa fa-twitter"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="fa fa-instagram"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- footer_end -->
 
     <!-- JS here -->
     <script src="js/vendor/modernizr-3.5.0.min.js"></script>

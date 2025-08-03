@@ -60,9 +60,6 @@
 
     <link rel="stylesheet" href="css/owl.carousel.min.css">
     <link rel="stylesheet" href="css/page-transitions.css">
-    <script src="js/jquery.min.js"></script>
-    <script src="js/owl.carousel.min.js"></script>
-    <script src="js/effects.js"></script>
     <script src="js/page-transitions.js"></script>
 
     <body>
@@ -83,7 +80,7 @@
                     </tr>
                     <tr>
                         <td>Password:</td>
-                        <td><input type="text" name="password" value="<%= user.getPassword() %>" /></td>
+                        <td><input type="text" name="password" value="<%= user.getPassword() %> " /></td>
                     </tr>
                     <tr>
                         <td>Date:</td>

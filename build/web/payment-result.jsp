@@ -221,15 +221,67 @@
                                         <span class="detail-label">
                                             <i class="fa fa-ticket"></i> Booking ID
                                         </span>
-                                        <span class="detail-value">#${bookingId}</span>
+                                        <span class="detail-value">
+                                            <c:choose>
+                                                <c:when test="${not empty booking}">
+                                                    #${booking.bookingId}
+                                                </c:when>
+                                                <c:otherwise>
+                                                    #${bookingId}
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </span>
                                     </div>
+                                    
+                                    <c:if test="${not empty booking}">
+                                        <!-- Display booking details if available -->
+                                        <c:forEach var="detail" items="${booking.bookingDetails}">
+                                            <div class="detail-item">
+                                                <span class="detail-label">
+                                                    <i class="fa fa-map-marker"></i> Court
+                                                </span>
+                                                <span class="detail-value">${detail.courtName} (${detail.courtType})</span>
+                                            </div>
+                                            
+                                            <div class="detail-item">
+                                                <span class="detail-label">
+                                                    <i class="fa fa-clock-o"></i> Time Slot
+                                                </span>
+                                                <span class="detail-value">
+                                                    <fmt:formatDate value="${detail.startTime}" pattern="MMM dd, yyyy 'at' HH:mm" /> - 
+                                                    <fmt:formatDate value="${detail.endTime}" pattern="HH:mm" />
+                                                </span>
+                                            </div>
+                                        </c:forEach>
+                                        
+                                        <!-- Display booking services if any -->
+                                        <c:if test="${not empty booking.bookingServices}">
+                                            <div class="detail-item">
+                                                <span class="detail-label">
+                                                    <i class="fa fa-plus-circle"></i> Additional Services
+                                                </span>
+                                                <span class="detail-value">
+                                                    <c:forEach var="service" items="${booking.bookingServices}" varStatus="status">
+                                                        ${service.serviceName} (x${service.quantity})<c:if test="${!status.last}">, </c:if>
+                                                    </c:forEach>
+                                                </span>
+                                            </div>
+                                        </c:if>
+                                    </c:if>
                                     
                                     <div class="detail-item">
                                         <span class="detail-label">
                                             <i class="fa fa-money"></i> Amount Paid
                                         </span>
                                         <span class="detail-value amount-highlight">
-                                            <fmt:formatNumber value="${amount}" type="currency" currencySymbol="₫" />
+                                            <c:choose>
+                                                <c:when test="${not empty amount}">
+                                                    <fmt:formatNumber value="${amount}" type="number" groupingUsed="true" />₫
+                                                </c:when>
+                                                <c:otherwise>
+                                                    ${param.vnp_Amount / 100}₫
+                                                </c:otherwise>
+                                            </c:choose>
                                         </span>
                                     </div>
                                     
@@ -237,14 +289,33 @@
                                         <span class="detail-label">
                                             <i class="fa fa-credit-card"></i> Payment Method
                                         </span>
-                                        <span class="detail-value">VNPay</span>
+                                        <span class="detail-value">
+                                            <c:choose>
+                                                <c:when test="${not empty paymentMethod}">
+                                                    ${paymentMethod}
+                                                </c:when>
+                                                <c:otherwise>
+                                                    VNPay
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </span>
                                     </div>
+                                    
+                                    <c:if test="${not empty transactionNo}">
+                                        <div class="detail-item">
+                                            <span class="detail-label">
+                                                <i class="fa fa-barcode"></i> Transaction No
+                                            </span>
+                                            <span class="detail-value">${transactionNo}</span>
+                                        </div>
+                                    </c:if>
                                     
                                     <div class="detail-item">
                                         <span class="detail-label">
                                             <i class="fa fa-calendar"></i> Payment Date
                                         </span>
                                         <span class="detail-value">
+                                            <jsp:useBean id="now" class="java.util.Date" />
                                             <fmt:formatDate value="${now}" pattern="MMM dd, yyyy 'at' HH:mm" />
                                         </span>
                                     </div>
@@ -254,7 +325,7 @@
                                             <i class="fa fa-check"></i> Status
                                         </span>
                                         <span class="detail-value" style="color: #28a745; font-weight: 600;">
-                                            Confirmed
+                                            Confirmed & Paid
                                         </span>
                                     </div>
                                 </div>

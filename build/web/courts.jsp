@@ -79,7 +79,7 @@
 
         <!-- bradcam_area_start -->
         <div class="bradcam_area breadcam_bg_1">
-            <h3>Laxaries Courts</h3>
+            <h3>Danh sách sân</h3>
         </div>
         <!-- bradcam_area_end -->
 
@@ -89,7 +89,6 @@
 
                 <!-- Form tìm kiếm -->
                 <form method="get" action="./court" class="mb-10 max-w-4xl mx-auto flex flex-wrap gap-2 md:gap-4 items-center justify-center">
-                    <!-- Ô tìm kiếm -->
                     <input 
                         type="text" 
                         name="search" 
@@ -124,7 +123,6 @@
                 </form>
 
 
-                <!-- Thông báo -->
                 <c:if test="${message != null}">
                     <p class="text-center text-secondary font-medium text-lg mb-6">${message}</p>
                 </c:if>
@@ -162,7 +160,6 @@
                 <!-- Phân trang -->
                 <c:if test="${totalPages > 1}">
                     <div class="flex justify-center mt-8 space-x-2">
-                        <!-- Nút lùi lại -->
                         <c:if test="${currentPage > 1}">
                             <a href="court?page=${currentPage - 1}&search=${param.search}&status=${param.status}&courtType=${param.courtType}"
                                class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition duration-200">
@@ -170,7 +167,6 @@
                             </a>
                         </c:if>
 
-                        <!-- Hiển thị số trang -->
                         <c:forEach begin="1" end="${totalPages}" var="i">
                             <a href="court?page=${i}&search=${param.search}&status=${param.status}&courtType=${param.courtType}"
                                class="px-4 py-2 rounded ${i == currentPage ? 'bg-secondary text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-300'} transition duration-200">
@@ -178,7 +174,6 @@
                             </a>
                         </c:forEach>
 
-                        <!-- Nút tiến -->
                         <c:if test="${currentPage < totalPages}">
                             <a href="court?page=${currentPage + 1}&search=${param.search}&status=${param.status}&courtType=${param.courtType}"
                                class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition duration-200">
@@ -200,8 +195,8 @@
                     <div class="row">
                         <div class="col-xl-12">
                             <div class="section_title text-center mb-100">
-                                <span>Our Offers</span>
-                                <h3>Ongoing Offers</h3>
+                                <span>Ưu đãi của chúng tôi</span>
+                                <h3>Ưu đãi đang hoạt động</h3>
                             </div>
                         </div>
                     </div>
@@ -218,7 +213,7 @@
                                         <li>${offer.capacity} người</li>
                                         <li>${offer.isVIP ? "VIP Service" : "Standard Service"}</li>
                                     </ul>
-                                    <a href="bookCourt?offerID=${offer.offerID}" class="book_now">book now</a>
+                                    <a href="./court" class="book_now">Đặt nhanh</a>
                                 </div>
                             </div>
                         </c:forEach>
@@ -279,45 +274,44 @@
                         <div class="col-xl-3 col-md-6 col-lg-3">
                             <div class="footer_widget">
                                 <h3 class="footer_title">
-                                    address
+                                    Địa chỉ
                                 </h3>
                                 <p class="footer_text" >  Khu công nghệ cao <br>
                                     Hòa Lạc, Hà Nội</p>
-                                <a href="#" class="line-button">Get Direction</a>
+                                <a href="https://maps.app.goo.gl/G2ptJTLHi6u6nAHF9" class="line-button">Chỉ dẫn</a>
                             </div>
                         </div>
                         <div class="col-xl-3 col-md-6 col-lg-3">
                             <div class="footer_widget">
                                 <h3 class="footer_title">
-                                    Reservation
+                                    Liên hệ
                                 </h3>
-                                <p class="footer_text" >+10 367 267 2678 <br>
+                                <p class="footer_text" >0981944060<br>
                                     thanhnnhe186491@fpt.edu.vn</p>
                             </div>
                         </div>
                         <div class="col-xl-2 col-md-6 col-lg-2">
                             <div class="footer_widget">
                                 <h3 class="footer_title">
-                                    Navigation
+                                    Liên kết
                                 </h3>
                                 <ul>
-                                    <li><a href="./home">Home</a></li>
-                                    <li><a href="./court">Courts</a></li>
-                                    <li><a href="about.jsp">About</a></li>
-                                    <li><a href="blog.jsp">News</a></li>
+                                    <li><a href="./home">Trang chủ</a></li>
+                                    <li><a href="./court">Danh sách sân</a></li>
+                                    <li><a href="./about">Giới thiệu</a></li>
                                 </ul>
                             </div>
                         </div>
                         <div class="col-xl-4 col-md-6 col-lg-4">
                             <div class="footer_widget">
                                 <h3 class="footer_title">
-                                    Newsletter
+                                    Bảng tin
                                 </h3>
                                 <form action="#" class="newsletter_form">
                                     <input type="text" placeholder="Enter your mail">
-                                    <button type="submit" >Sign Up</button>
+                                    <button type="submit" >Đăng ký</button>
                                 </form>
-                                <p class="newsletter_text">Subscribe newsletter to get updates</p>
+                                <p class="newsletter_text">Đăng ký để cập nhật</p>
                             </div>
                         </div>
                     </div>

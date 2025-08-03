@@ -251,6 +251,7 @@ public class EmailUtils {
     // Gửi email hủy đặt sân đơn giản (không có chi tiết sân)
     public static void sendSimpleCancellationEmail(String recipientEmail, String customerName, 
             String bookingId) throws MessagingException {
+        
         String subject = "Xác nhận hủy đặt sân - BadmintonHub";
         String currentTime = java.time.LocalDateTime.now()
                 .format(java.time.format.DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy"));
@@ -297,7 +298,171 @@ public class EmailUtils {
                 + "</div>"
                 + "</div>"
                 + "</body></html>";
+        
+        System.out.println("HTML content length: " + htmlContent.length());
+        System.out.println("Calling sendEmail method...");
         sendEmail(recipientEmail, subject, htmlContent);
+        System.out.println("sendEmail method completed successfully");
+        System.out.println("=== SIMPLE CANCELLATION EMAIL SENT ===");
+    }
+
+    // Gửi email thông báo đặt sân bởi Staff cho Customer
+    public static void sendStaffBookingConfirmationEmail(String recipientEmail, String customerName, 
+            String bookingId, String courtInfo, String dateInfo, String timeInfo) throws MessagingException {
+        String subject = "Xác nhận đặt sân thành công - BadmintonHub";
+        String currentTime = java.time.LocalDateTime.now()
+                .format(java.time.format.DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy"));
+
+        String htmlContent = "<html><body style='font-family:Arial,sans-serif;font-size:14px; color:#333;'>"
+                + "<div style='max-width:600px; margin:0 auto; padding:20px; border:1px solid #ddd; border-radius:8px;'>"
+                + "<div style='text-align:center; background-color:#007bff; color:white; padding:20px; border-radius:8px 8px 0 0; margin:-20px -20px 20px -20px;'>"
+                + "<h1 style='margin:0; font-size:24px;'>🏸 BadmintonHub</h1>"
+                + "<h2 style='margin:10px 0 0 0; font-size:18px; font-weight:normal;'>Xác nhận đặt sân thành công</h2>"
+                + "</div>"
+                
+                + "<p>Xin chào <b style='color:#007bff;'>" + customerName + "</b>,</p>"
+                + "<p>Nhân viên của chúng tôi đã đặt sân dùm bạn. Vui lòng kiểm tra thông tin đặt sân dưới đây:</p>"
+                
+                + "<div style='background-color:#f8f9fa; padding:20px; border-radius:8px; margin:20px 0;'>"
+                + "<h3 style='color:#007bff; margin-top:0;'>📋 Thông tin đặt sân:</h3>"
+                + "<table style='width:100%; border-collapse:collapse;'>"
+                + "<tr><td style='padding:8px 0; border-bottom:1px solid #dee2e6;'><b>Mã đặt sân:</b></td><td style='padding:8px 0; border-bottom:1px solid #dee2e6; color:#007bff; font-weight:bold;'>#" + bookingId + "</td></tr>"
+                + "<tr><td style='padding:8px 0; border-bottom:1px solid #dee2e6;'><b>Sân:</b></td><td style='padding:8px 0; border-bottom:1px solid #dee2e6;'>" + courtInfo + "</td></tr>"
+                + "<tr><td style='padding:8px 0; border-bottom:1px solid #dee2e6;'><b>Ngày:</b></td><td style='padding:8px 0; border-bottom:1px solid #dee2e6;'>" + dateInfo + "</td></tr>"
+                + "<tr><td style='padding:8px 0;'><b>Thời gian:</b></td><td style='padding:8px 0; color:#28a745; font-weight:bold;'>" + timeInfo + "</td></tr>"
+                + "</table>"
+                + "</div>"
+                
+                + "<div style='background-color:#e8f5e8; border:1px solid #28a745; border-radius:8px; padding:15px; margin:20px 0;'>"
+                + "<p style='margin:0; color:#28a745;'><b>✅ Trạng thái:</b> Đã xác nhận - Đặt bởi nhân viên</p>"
+                + "</div>"
+                
+                + "<h3 style='color:#007bff;'>📝 Lưu ý quan trọng:</h3>"
+                + "<ul style='line-height:1.6;'>"
+                + "<li>Vui lòng có mặt <b>15 phút trước</b> giờ đặt sân</li>"
+                + "<li>Mang theo giày thể thao phù hợp</li>"
+                + "<li>Thanh toán có thể thực hiện tại quầy lễ tân</li>"
+                + "<li>Liên hệ với chúng tôi nếu cần thay đổi hoặc hủy sân</li>"
+                + "</ul>"
+                
+                + "<div style='text-align:center; margin:30px 0;'>"
+                + "<p style='margin:10px 0;'>📞 <b>Hotline:</b> 0123-456-789</p>"
+                + "<p style='margin:10px 0;'>📧 <b>Email:</b> support@badmintonhub.com</p>"
+                + "<p style='margin:10px 0;'>🌐 <b>Website:</b> www.badmintonhub.com</p>"
+                + "</div>"
+                
+                + "<div style='border-top:1px solid #dee2e6; padding-top:20px; margin-top:30px; text-align:center; color:#6c757d; font-size:12px;'>"
+                + "<p>Email này được gửi tự động vào lúc " + currentTime + "</p>"
+                + "<p>Trân trọng,<br><b style='color:#007bff;'>Đội ngũ BadmintonHub</b></p>"
+                + "</div>"
+                + "</div>"
+                + "</body></html>";
+        
+        sendEmail(recipientEmail, subject, htmlContent);
+        System.out.println("=== STAFF BOOKING CONFIRMATION EMAIL SENT ===");
+    }
+
+    // Gửi email thông báo cho Staff về booking mới
+    public static void sendNewBookingNotificationToStaff(String staffEmail, String customerName, 
+            String bookingId, String courtName, String courtType, String startTime, 
+            String endTime, String amount) throws MessagingException {
+        String subject = "[STAFF NOTIFICATION] New Booking - BadmintonHub";
+        String currentTime = java.time.LocalDateTime.now()
+                .format(java.time.format.DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy"));
+
+        String htmlContent = "<html><body style='font-family:Arial,sans-serif;font-size:14px; color:#333;'>"
+                + "<div style='max-width:600px; margin:0 auto; padding:20px; border:1px solid #ddd; border-radius:8px;'>"
+                + "<div style='text-align:center; background-color:#28a745; color:white; padding:20px; border-radius:8px 8px 0 0; margin:-20px -20px 20px -20px;'>"
+                + "<h1 style='margin:0; font-size:24px;'>🏸 BadmintonHub - Staff Portal</h1>"
+                + "<h2 style='margin:10px 0 0 0; font-size:18px; font-weight:normal;'>New Booking Alert</h2>"
+                + "</div>"
+                
+                + "<p><b>🆕 NEW BOOKING RECEIVED</b></p>"
+                + "<p>A new booking has been created and requires your attention.</p>"
+                
+                + "<div style='background-color:#f8f9fa; padding:20px; border-radius:8px; margin:20px 0;'>"
+                + "<h3 style='color:#28a745; margin-top:0;'>📋 Booking Details:</h3>"
+                + "<table style='width:100%; border-collapse:collapse;'>"
+                + "<tr><td style='padding:8px 0; border-bottom:1px solid #dee2e6;'><b>Booking ID:</b></td><td style='padding:8px 0; border-bottom:1px solid #dee2e6; color:#28a745; font-weight:bold;'>#" + bookingId + "</td></tr>"
+                + "<tr><td style='padding:8px 0; border-bottom:1px solid #dee2e6;'><b>Customer:</b></td><td style='padding:8px 0; border-bottom:1px solid #dee2e6;'>" + customerName + "</td></tr>"
+                + "<tr><td style='padding:8px 0; border-bottom:1px solid #dee2e6;'><b>Court:</b></td><td style='padding:8px 0; border-bottom:1px solid #dee2e6;'>" + courtName + " (" + courtType + ")</td></tr>"
+                + "<tr><td style='padding:8px 0; border-bottom:1px solid #dee2e6;'><b>Time:</b></td><td style='padding:8px 0; border-bottom:1px solid #dee2e6;'>" + startTime + " - " + endTime + "</td></tr>"
+                + "<tr><td style='padding:8px 0;'><b>Amount:</b></td><td style='padding:8px 0; color:#28a745; font-weight:bold; font-size:16px;'>" + amount + " VNĐ</td></tr>"
+                + "</table>"
+                + "</div>"
+                
+                + "<div style='background-color:#e8f5e8; border:1px solid #28a745; border-radius:8px; padding:15px; margin:20px 0;'>"
+                + "<p style='margin:0; color:#28a745;'><b>✅ Status:</b> New booking created at " + currentTime + "</p>"
+                + "</div>"
+                
+                + "<h3 style='color:#28a745;'>📝 Staff Actions Required:</h3>"
+                + "<ul style='line-height:1.6;'>"
+                + "<li>Review booking details and confirm availability</li>"
+                + "<li>Prepare court and equipment if needed</li>"
+                + "<li>Contact customer if any issues arise</li>"
+                + "<li>Update booking status in the system</li>"
+                + "</ul>"
+                
+                + "<div style='text-align:center; margin:30px 0;'>"
+                + "<a href='http://localhost:8080/SWP_Project/booking?action=my-bookings&customerId=" + bookingId + "' "
+                + "style='background-color:#28a745; color:white; padding:12px 24px; text-decoration:none; border-radius:6px; font-weight:bold;'>"
+                + "📱 View Booking Details</a>"
+                + "</div>"
+                
+                + "<div style='border-top:1px solid #dee2e6; padding-top:20px; margin-top:30px; text-align:center; color:#6c757d; font-size:12px;'>"
+                + "<p>This is an automated staff notification sent at " + currentTime + "</p>"
+                + "<p><b style='color:#28a745;'>BadmintonHub Staff System</b></p>"
+                + "</div>"
+                + "</div>"
+                + "</body></html>";
+        sendEmail(staffEmail, subject, htmlContent);
+    }
+
+    // Gửi email thông báo cho Staff về booking bị hủy
+    public static void sendCancelBookingNotificationToStaff(String staffEmail, String customerName, 
+            String bookingId) throws MessagingException {
+        String subject = "[STAFF NOTIFICATION] Booking Cancelled - BadmintonHub";
+        String currentTime = java.time.LocalDateTime.now()
+                .format(java.time.format.DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy"));
+
+        String htmlContent = "<html><body style='font-family:Arial,sans-serif;font-size:14px; color:#333;'>"
+                + "<div style='max-width:600px; margin:0 auto; padding:20px; border:1px solid #ddd; border-radius:8px;'>"
+                + "<div style='text-align:center; background-color:#dc3545; color:white; padding:20px; border-radius:8px 8px 0 0; margin:-20px -20px 20px -20px;'>"
+                + "<h1 style='margin:0; font-size:24px;'>🏸 BadmintonHub - Staff Portal</h1>"
+                + "<h2 style='margin:10px 0 0 0; font-size:18px; font-weight:normal;'>Booking Cancellation Alert</h2>"
+                + "</div>"
+                
+                + "<p><b>❌ BOOKING CANCELLED</b></p>"
+                + "<p>A booking has been cancelled and requires your attention.</p>"
+                
+                + "<div style='background-color:#f8f9fa; padding:20px; border-radius:8px; margin:20px 0;'>"
+                + "<h3 style='color:#dc3545; margin-top:0;'>📋 Cancelled Booking Details:</h3>"
+                + "<table style='width:100%; border-collapse:collapse;'>"
+                + "<tr><td style='padding:8px 0; border-bottom:1px solid #dee2e6;'><b>Booking ID:</b></td><td style='padding:8px 0; border-bottom:1px solid #dee2e6; color:#dc3545; font-weight:bold;'>#" + bookingId + "</td></tr>"
+                + "<tr><td style='padding:8px 0; border-bottom:1px solid #dee2e6;'><b>Customer:</b></td><td style='padding:8px 0; border-bottom:1px solid #dee2e6;'>" + customerName + "</td></tr>"
+                + "<tr><td style='padding:8px 0;'><b>Cancelled At:</b></td><td style='padding:8px 0; color:#dc3545; font-weight:bold;'>" + currentTime + "</td></tr>"
+                + "</table>"
+                + "</div>"
+                
+                + "<div style='background-color:#ffe6e6; border:1px solid #dc3545; border-radius:8px; padding:15px; margin:20px 0;'>"
+                + "<p style='margin:0; color:#dc3545;'><b>❌ Status:</b> Booking cancelled and court slot released</p>"
+                + "</div>"
+                + 
+                "<h3 style='color:#dc3545;'>📝 Staff Actions Required:</h3>"
+                + "<ul style='line-height:1.6;'>"
+                + "<li>Confirm court slot is now available for other bookings</li>"
+                + "<li>Process refund if applicable</li>"
+                + "<li>Update court schedule and availability</li>"
+                + "<li>Clean and prepare court for next booking</li>"
+                + "</ul>"
+                
+                + "<div style='border-top:1px solid #dee2e6; padding-top:20px; margin-top:30px; text-align:center; color:#6c757d; font-size:12px;'>"
+                + "<p>This is an automated staff notification sent at " + currentTime + "</p>"
+                + "<p><b style='color:#dc3545;'>BadmintonHub Staff System</b></p>"
+                + "</div>"
+                + "</div>"
+                + "</body></html>";
+        sendEmail(staffEmail, subject, htmlContent);
     }
 
     // Hàm gửi email public để sử dụng từ bên ngoài

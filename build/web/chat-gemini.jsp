@@ -47,6 +47,9 @@
             <div class="message-text"> 
                 Xin chào 👋<br /> 
                 Tôi là trợ lý AI của BadmintonHub! Tôi có thể giúp bạn:<br /><br />
+                🏸 <strong>Thông tin sân cầu lông</strong><br />
+                📅 <strong>Kiểm tra lịch trống</strong><br />
+                🛍️ <strong>Thông tin dịch vụ</strong><br />
                 💰 <strong>Thông tin giá cả</strong><br />
                 📋 <strong>Hướng dẫn đặt sân</strong><br />
                 📞 <strong>Thông tin liên hệ</strong><br /><br />

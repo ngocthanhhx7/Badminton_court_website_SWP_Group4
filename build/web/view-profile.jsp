@@ -71,26 +71,18 @@
 
             <hr class="line">
 
-            <div class="info-row"><span class="info-label">Username:</span> <%= user.getUsername() %></div>
+            <div class="info-row"><span class="info-label">Tên đăng nhập:</span> <%= user.getUsername() %></div>
 
             <div class="info-row"><span class="info-label">Email:</span> <%= user.getEmail() %></div>
-            <div class="info-row"><span class="info-label">Full Name:</span> <%= user.getFullName() %></div>
-            <div class="info-row"><span class="info-label">DOB:</span> <%= user.getDob() %></div>
-            <div class="info-row"><span class="info-label">Gender:</span> <%= user.getGender() %></div>
-            <div class="info-row"><span class="info-label">Phone:</span> <%= user.getPhone() %></div>
-            <div class="info-row"><span class="info-label">Address:</span> <%= user.getAddress() %></div>
-            <div class="info-row"><span class="info-label">Sport Level:</span> <%= user.getSportLevel() %></div>
-            <div class="info-row"><span class="info-label">Role:</span> <%= user.getRole() %></div>
+            <div class="info-row"><span class="info-label">Tên đầy đủ:</span> <%= user.getFullName() %></div>
+            <div class="info-row"><span class="info-label">Sinh nhật:</span> <%= user.getDob() %></div>
+            <div class="info-row"><span class="info-label">Giới tính:</span> <%= user.getGender() %></div>
+            <div class="info-row"><span class="info-label">SDT:</span> <%= user.getPhone() %></div>
+            <div class="info-row"><span class="info-label">Địa chỉ:</span> <%= user.getAddress() %></div>
+            <div class="info-row"><span class="info-label">Trình độ cầu lông:</span> <%= user.getSportLevel() %></div>
+            <div class="info-row"><span class="info-label">Quyền trong trang web:</span> <%= user.getRole() %></div>
 
             <hr class="line">
-
-            <div class="social-buttons">
-                <a href="https://www.facebook.com" target="_blank"><button type="button" class="neo-button"><i class="fa fa-facebook"></i></button></a>
-                <a href="https://www.linkedin.com" target="_blank"><button type="button" class="neo-button"><i class="fa fa-linkedin"></i></button></a>
-                <a href="https://www.google.com" target="_blank"><button type="button" class="neo-button"><i class="fa fa-google"></i></button></a>
-                <a href="https://www.youtube.com" target="_blank"><button type="button" class="neo-button"><i class="fa fa-youtube"></i></button></a>
-                <a href="https://www.twitter.com" target="_blank"><button type="button" class="neo-button"><i class="fa fa-twitter"></i></button></a>
-            </div>
 
             <div class="button-row">
                 <a href="./edit-profile.jsp" class="btn">Chỉnh sửa thông tin</a>

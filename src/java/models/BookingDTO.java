@@ -26,6 +26,7 @@ public class BookingDTO {
     private String customerPhone;
     
     private List<BookingDetailDTO> bookingDetails;
+    private List<BookingServiceDTO> bookingServices;
     private String createdAtStr;
     private String updatedAtStr;
     

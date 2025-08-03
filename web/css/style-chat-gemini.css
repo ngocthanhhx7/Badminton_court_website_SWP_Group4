@@ -379,6 +379,67 @@ body.show-emoji-picker em-emoji-picker {
     font-size: 0.85rem;
 }
 
+.chat-body .message-text .court-info {
+    background: #e8f4fd;
+    border: 1px solid #bee5eb;
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin: 6px 0;
+    font-size: 0.9rem;
+}
+
+.chat-body .message-text .court-info .court-name {
+    font-weight: 600;
+    color: #1E90FF;
+}
+
+.chat-body .message-text .court-info .court-type {
+    color: #666;
+    font-size: 0.85rem;
+}
+
+.chat-body .message-text .court-info .court-status {
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.chat-body .message-text .court-info .court-status.available {
+    color: #28a745;
+}
+
+.chat-body .message-text .court-info .court-status.unavailable {
+    color: #dc3545;
+}
+
+.chat-body .message-text .court-info .court-status.maintenance {
+    color: #ffc107;
+}
+
+.chat-body .message-text .service-info {
+    background: #f0f8ff;
+    border: 1px solid #d1ecf1;
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin: 6px 0;
+    font-size: 0.9rem;
+}
+
+.chat-body .message-text .service-info .service-name {
+    font-weight: 600;
+    color: #1E90FF;
+}
+
+.chat-body .message-text .service-info .service-type {
+    color: #666;
+    font-size: 0.85rem;
+}
+
+.chat-body .message-text .service-info .service-price {
+    color: #28a745;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
 .chat-body .message-text .booking-steps {
     background: #fff3cd;
     border: 1px solid #ffeaa7;
@@ -418,6 +479,30 @@ body.show-emoji-picker em-emoji-picker {
 .chat-body .message-text .emoji {
     font-size: 1.2em;
     margin: 0 2px;
+}
+
+.chat-body .message-text .availability-summary {
+    background: #e8f5e8;
+    border: 1px solid #c3e6cb;
+    border-radius: 8px;
+    padding: 12px;
+    margin: 8px 0;
+    color: #155724;
+}
+
+.chat-body .message-text .availability-summary .total-slots {
+    font-weight: 600;
+    color: #28a745;
+}
+
+.chat-body .message-text .time-slots {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    padding: 8px 10px;
+    margin: 4px 0;
+    font-size: 0.85rem;
+    color: #495057;
 }
 
 

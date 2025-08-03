@@ -45,19 +45,36 @@ public class CourtDAO {
 
     public List<CourtDTO> getAllCourts() {
         String sql = "SELECT * FROM Courts ORDER BY CourtID DESC";
-        try (Connection connection = DBUtils.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-            List<CourtDTO> courts = new ArrayList<>();
-
-            while (resultSet.next()) {
-                CourtDTO court = mapResultSetToCourt(resultSet);
-                courts.add(court);
+        System.out.println("CourtDAO: Executing getAllCourts with SQL: " + sql);
+        
+        try (Connection connection = DBUtils.getConnection()) {
+            if (connection == null) {
+                System.err.println("CourtDAO: Database connection is null!");
+                return new ArrayList<>();
             }
+            
+            System.out.println("CourtDAO: Database connection established successfully");
+            
+            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                ResultSet resultSet = preparedStatement.executeQuery();
+                List<CourtDTO> courts = new ArrayList<>();
 
-            return courts;
+                while (resultSet.next()) {
+                    try {
+                        CourtDTO court = mapResultSetToCourt(resultSet);
+                        courts.add(court);
+                        System.out.println("CourtDAO: Processed court: " + court.getCourtName());
+                    } catch (Exception e) {
+                        System.err.println("CourtDAO: Error mapping court from ResultSet: " + e.getMessage());
+                        e.printStackTrace();
+                    }
+                }
+
+                System.out.println("CourtDAO: getAllCourts completed. Total courts: " + courts.size());
+                return courts;
+            }
         } catch (Exception e) {
+            System.err.println("CourtDAO: Error in getAllCourts: " + e.getMessage());
             e.printStackTrace();
             return new ArrayList<>();
         }
@@ -411,20 +428,32 @@ public class CourtDAO {
         }
         
         String sql = "SELECT * FROM Courts WHERE CourtType = ? AND Status = 'Available' ORDER BY CourtID DESC";
-        try (Connection connection = DBUtils.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
-            preparedStatement.setString(1, courtType.trim());
-            ResultSet resultSet = preparedStatement.executeQuery();
-            List<CourtDTO> courts = new ArrayList<>();
-
-            while (resultSet.next()) {
-                CourtDTO court = mapResultSetToCourt(resultSet);
-                courts.add(court);
+        System.out.println("CourtDAO: Executing getCourtsByType with SQL: " + sql);
+        try (Connection connection = DBUtils.getConnection()) {
+            if (connection == null) {
+                System.err.println("CourtDAO: Database connection is null for getCourtsByType!");
+                return new ArrayList<>();
             }
-
-            return courts;
+            System.out.println("CourtDAO: Database connection established successfully for getCourtsByType");
+            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                preparedStatement.setString(1, courtType.trim());
+                ResultSet resultSet = preparedStatement.executeQuery();
+                List<CourtDTO> courts = new ArrayList<>();
+                while (resultSet.next()) {
+                    try {
+                        CourtDTO court = mapResultSetToCourt(resultSet);
+                        courts.add(court);
+                        System.out.println("CourtDAO: Processed court by type: " + court.getCourtName());
+                    } catch (Exception e) {
+                        System.err.println("CourtDAO: Error mapping court by type from ResultSet: " + e.getMessage());
+                        e.printStackTrace();
+                    }
+                }
+                System.out.println("CourtDAO: getCourtsByType completed. Total courts by type: " + courts.size());
+                return courts;
+            }
         } catch (Exception e) {
+            System.err.println("CourtDAO: Error in getCourtsByType: " + e.getMessage());
             e.printStackTrace();
             return new ArrayList<>();
         }

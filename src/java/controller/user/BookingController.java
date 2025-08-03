@@ -16,6 +16,7 @@ import models.CourtDTO;
 import models.CourtScheduleDTO;
 import models.ServiceDTO;
 import models.UserDTO;
+import utils.EmailUtils;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -83,6 +84,9 @@ public class BookingController extends HttpServlet {
             case "my-bookings":
                 showMyBookings(request, response);
                 break;
+            case "cancel":
+                cancelBooking(request, response);
+                break;
             default:
                 showBookingForm(request, response);
                 break;
@@ -111,7 +115,7 @@ public class BookingController extends HttpServlet {
         }
     }
 
-    private void showMyBookings(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void showBookingFormOld(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String courtIdParam = request.getParameter("courtId");
 
         if (courtIdParam != null) {
@@ -440,7 +444,7 @@ public class BookingController extends HttpServlet {
             } else {
                 request.setAttribute("error", "Failed to save your rating.");
             }
-            response.sendRedirect("booking?action=history");
+            response.sendRedirect("booking?action=my-bookings");
         } catch (Exception e) {
             e.printStackTrace();
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid input for rating.");
@@ -468,10 +472,122 @@ public class BookingController extends HttpServlet {
     }
     
     
+    
+    private void showMyBookings(HttpServletRequest request, HttpServletResponse response) 
+            throws IOException, ServletException {
+        HttpSession session = request.getSession();
+        UserDTO user = (UserDTO) session.getAttribute("acc");
+        
+        if (user == null) {
+            response.sendRedirect("Login.jsp");
+            return;
+        }
+        
+        try {
+            // Check if user is admin or staff to view all bookings or specific customer
+            String role = user.getRole();
+            List<BookingDTO> bookingList;
+            
+            if ("Admin".equalsIgnoreCase(role) || "Staff".equalsIgnoreCase(role)) {
+                // Admin/Staff can view bookings of a specific customer or all bookings
+                String customerIdParam = request.getParameter("customerId");
+                if (customerIdParam != null && !customerIdParam.isEmpty()) {
+                    try {
+                        Long customerId = Long.parseLong(customerIdParam);
+                        bookingList = bookingDAO.getAllBookingHistoryByCustomer(customerId);
+                        
+                        // Get customer info for display
+                        UserDAO userDAO = new UserDAO();
+                        UserDTO customer = userDAO.getUserByID(customerId.intValue());
+                        request.setAttribute("customerInfo", customer);
+                    } catch (NumberFormatException e) {
+                        request.setAttribute("error", "Invalid customer ID");
+                        bookingList = new ArrayList<>();
+                    }
+                } else {
+                    // If no specific customer, show all bookings (can be implemented later)
+                    bookingList = new ArrayList<>(); 
+                    request.setAttribute("message", "Please specify a customer ID to view bookings");
+                }
+            } else {
+                // Regular customer - show their own bookings
+                bookingList = bookingDAO.getAllBookingHistoryByCustomer(Long.valueOf(user.getUserID()));
+            }
+            
+            // Set additional properties for each booking
+            LocalDateTime today = LocalDateTime.now();
+            CourtScheduleDAO courtScheduleDAO = new CourtScheduleDAO();
+            
+            for (BookingDTO booking : bookingList) {
+                LocalDateTime bookingDate = booking.getCreatedAt();
+                
+                // Determine if booking can be cancelled or rated
+                if (bookingDate.isBefore(today) || bookingDate.equals(today)) {
+                    booking.setCancel(false);
+                    booking.setCanRating(true);
+                } else {
+                    booking.setCancel(true);
+                    booking.setCanRating(false);
+                }
+                
+                // Check if booking is expired based on court schedule
+                String note = booking.getNotes();
+                boolean isExpire = false;
+                try {
+                    if (note != null && !note.isEmpty()) {
+                        String[] arr = note.split(",");
+                        if (arr.length > 0) {
+                            int courtScheduleId = Integer.parseInt(arr[0]);
+                            CourtScheduleDTO dto = courtScheduleDAO.getScheduleById(courtScheduleId);
+                            if (dto != null) {
+                                LocalDateTime scheduleStart = LocalDateTime.of(dto.getScheduleDate(), dto.getEndTime());
+                                if (scheduleStart.isBefore(LocalDateTime.now())) {
+                                    isExpire = true;
+                                }
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    // Handle parsing errors silently
+                }
+                booking.setCanRating(isExpire);
+            }
+            
+            request.setAttribute("bookingList", bookingList);
+            request.setAttribute("currentUser", user);
+            request.getRequestDispatcher("my-booking-history.jsp").forward(request, response);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("error", "An error occurred while fetching booking history: " + e.getMessage());
+            request.getRequestDispatcher("my-booking-history.jsp").forward(request, response);
+        }
+    }
+    
+    
      private void cancelBooking(HttpServletRequest request, HttpServletResponse response)throws IOException, ServletException{
+         
+         HttpSession session = request.getSession();
+         UserDTO user = (UserDTO) session.getAttribute("acc");
+         
          BookingDAO bookingDAO = new BookingDAO();
+         // Support both draftId and bookingId parameters
          String id = request.getParameter("draftId");
+         if (id == null) {
+             id = request.getParameter("bookingId");
+         }
+         
+         if (id == null) {
+             response.sendRedirect("booking?action=my-bookings");
+             return;
+         }
+         
          BookingDTO bookingDTO = bookingDAO.getBookingById(Long.parseLong(id));
+         if (bookingDTO == null) {
+             response.sendRedirect("booking?action=my-bookings");
+             return;
+         }
+         
          String note = bookingDTO.getNotes();
          CourtScheduleDAO courtScheduleDAO = new CourtScheduleDAO();
          
@@ -481,14 +597,34 @@ public class BookingController extends HttpServlet {
                int courtSchedulerID = Integer.parseInt(x);
                courtScheduleDAO.updateScheduleStatus(Long.valueOf(courtSchedulerID), "Available");
            }catch(Exception e){
-               
+               // Handle parsing errors silently
            }     
          }
      
+         // Update booking status to cancelled
+         bookingDAO.updateBookingStatus(Long.parseLong(id), "Cancelled");
          
-         bookingDAO.updateBookingStatus(Integer.parseInt(id), "Cancelled");
-//         request.getRequestDispatcher("booking-draft-list.jsp").forward(request, response);
-         response.sendRedirect("booking?action=draft");
+         // Send cancellation email to customer only
+         if (user != null) {
+             try {
+                 // Send simple cancellation email to customer
+                 EmailUtils.sendSimpleCancellationEmail(
+                     user.getEmail(),
+                     user.getFullName(),
+                     id
+                 );
+             } catch (Exception emailException) {
+                 // Don't break the cancellation process if email fails
+             }
+         }
+         
+         // Check where to redirect based on referrer
+         String referer = request.getHeader("Referer");
+         if (referer != null && referer.contains("my-bookings")) {
+             response.sendRedirect("booking?action=my-bookings");
+         } else {
+             response.sendRedirect("booking?action=draft");
+         }
      }
     
 }

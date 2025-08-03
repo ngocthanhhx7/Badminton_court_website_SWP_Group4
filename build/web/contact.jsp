@@ -33,9 +33,6 @@
 
     <link rel="stylesheet" href="css/owl.carousel.min.css">
     <link rel="stylesheet" href="css/page-transitions.css">
-    <script src="js/jquery.min.js"></script>
-    <script src="js/owl.carousel.min.js"></script>
-    <script src="js/effects.js"></script>
     <script src="js/page-transitions.js"></script>
 
     <body>
@@ -64,7 +61,7 @@
         <!-- header-end -->
 
         <!-- bradcam_area_start -->
-        <div class="bradcam_area breadcam_bg_2">
+        <div class="bradcam_area breadcam_bg_1">
             <h3>Get in Touch</h3>
         </div>
         <!-- bradcam_area_end -->
@@ -172,45 +169,44 @@
                         <div class="col-xl-3 col-md-6 col-lg-3">
                             <div class="footer_widget">
                                 <h3 class="footer_title">
-                                    address
+                                    Địa chỉ
                                 </h3>
                                 <p class="footer_text" >  Khu công nghệ cao <br>
                                     Hòa Lạc, Hà Nội</p>
-                                <a href="#" class="line-button">Get Direction</a>
+                                <a href="https://maps.app.goo.gl/G2ptJTLHi6u6nAHF9" class="line-button">Chỉ dẫn</a>
                             </div>
                         </div>
                         <div class="col-xl-3 col-md-6 col-lg-3">
                             <div class="footer_widget">
                                 <h3 class="footer_title">
-                                    Reservation
+                                    Liên hệ
                                 </h3>
-                                <p class="footer_text" >+10 367 267 2678 <br>
+                                <p class="footer_text" >0981944060<br>
                                     thanhnnhe186491@fpt.edu.vn</p>
                             </div>
                         </div>
                         <div class="col-xl-2 col-md-6 col-lg-2">
                             <div class="footer_widget">
                                 <h3 class="footer_title">
-                                    Navigation
+                                    Liên kết
                                 </h3>
                                 <ul>
-                                    <li><a href="./home">Home</a></li>
-                                    <li><a href="./court">Courts</a></li>
-                                    <li><a href="about.jsp">About</a></li>
-                                    <li><a href="blog.jsp">News</a></li>
+                                    <li><a href="./home">Trang chủ</a></li>
+                                    <li><a href="./court">Danh sách sân</a></li>
+                                    <li><a href="./about">Giới thiệu</a></li>
                                 </ul>
                             </div>
                         </div>
                         <div class="col-xl-4 col-md-6 col-lg-4">
                             <div class="footer_widget">
                                 <h3 class="footer_title">
-                                    Newsletter
+                                    Bảng tin
                                 </h3>
                                 <form action="#" class="newsletter_form">
                                     <input type="text" placeholder="Enter your mail">
-                                    <button type="submit" >Sign Up</button>
+                                    <button type="submit" >Đăng ký</button>
                                 </form>
-                                <p class="newsletter_text">Subscribe newsletter to get updates</p>
+                                <p class="newsletter_text">Đăng ký để cập nhật</p>
                             </div>
                         </div>
                     </div>

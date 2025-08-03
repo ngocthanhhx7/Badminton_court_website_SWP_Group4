@@ -25,16 +25,16 @@
                         <div class="main-menu d-none d-lg-block">
                             <nav>
                                 <ul id="navigation">
-                                    <li><a href="./home">home</a></li>
-                                    <li><a href="./court">Courts</a></li>
-                                    <li><a href="./about">About</a></li>
-                                    <li><a href="blog.jsp">blog <i class="ti-angle-down"></i></a>
+                                    <li><a href="./home">Trang chủ</a></li>
+                                    <li><a href="./court">Danh sách sân</a></li>
+                                    <li><a href="./about">Giới thiệu</a></li>
                                     </li>
-                                    <li><a href="">pages <i class="ti-angle-down"></i></a>
+                                    <li><a href="">Khác <i class="ti-angle-down"></i></a>
                                         <ul class="submenu">
-                                            <li><a href="booking?action=history">History Bookings</a></li>
-                                            <li><a href="./contact">Contact</a></li>
-                                            <li><a href="partner-search">Find Partner</a></li>
+                                            <li><a href="booking?action=history">lịch sử đặt sân</a></li>
+                                            <li><a href="contact.jsp">Liên hệ nhanh</a></li>
+                                            <li><a href="partner-search">Tìm đối</a></li>
+                                            <li><a href="blog.jsp">Tin tức</a></li>
                                             
                                             
                                         </ul>
@@ -66,16 +66,16 @@
                                                     </div>
                                                 </li>
                                                 <li><hr class="dropdown-divider"></li>
-                                                <li><a class="dropdown-item" href="view-profile.jsp"><i class="fa fa-user me-2"></i>View Profile</a></li>
-                                                <li><a class="dropdown-item" href="change-password.jsp"><i class="fa fa-key me-2"></i>Change Password</a></li>
+                                                <li><a class="dropdown-item" href="view-profile.jsp"><i class="fa fa-user me-2"></i>Hồ sơ</a></li>
+                                                <li><a class="dropdown-item" href="change-password.jsp"><i class="fa fa-key me-2"></i>Đổi mật khẩu</a></li>
                                                 <li><hr class="dropdown-divider"></li>
-                                                <li><a class="dropdown-item text-danger" href="./logout"><i class="fa fa-sign-out me-2"></i>Logout</a></li>
+                                                <li><a class="dropdown-item text-danger" href="./logout"><i class="fa fa-sign-out me-2"></i>Đăng xuất</a></li>
                                             </ul>
                                         </div>
                                     </c:when>
                                     <c:otherwise>
                                         <div class="dropdown d-flex align-items-center">
-                                            <span class="me-2" style="color: #fff;">Welcome, <a href="view-profile.jsp" class="text-primary fw-bold">${sessionScope.acc.username}</a></span>
+                                            <span class="me-2" style="color: #fff;">Xin chào, <a href="view-profile.jsp" class="text-primary fw-bold">${sessionScope.acc.username}</a></span>
                                             <% 
                                                 Object accObj = session.getAttribute("acc");
                                                 String avatarUrl = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
@@ -97,12 +97,12 @@
                                                     </div>
                                                 </li>
                                                 <li><hr class="dropdown-divider"></li>
-                                                <li><a class="dropdown-item" href="view-profile.jsp"><i class="fa fa-user me-2"></i>View Profile</a></li>
-                                                <li><a class="dropdown-item" href="booking?action=my-bookings"><i class="fa fa-history me-2"></i>Booking History</a></li>
-                                                <li><a class="dropdown-item" href="partner-search?action=my-posts"><i class="fa fa-users me-2"></i>My Partner Posts</a></li>
-                                                <li><a class="dropdown-item" href="change-password.jsp"><i class="fa fa-key me-2"></i>Change Password</a></li>
+                                                <li><a class="dropdown-item" href="view-profile.jsp"><i class="fa fa-user me-2"></i>Hồ sơ</a></li>
+                                                <li><a class="dropdown-item" href="booking?action=history"><i class="fa fa-history me-2"></i>lịch sử đặt sân</a></li>
+                                                <li><a class="dropdown-item" href="partner-search?action=my-posts"><i class="fa fa-users me-2"></i>Bài tìm đối của tôi</a></li>
+                                                <li><a class="dropdown-item" href="change-password.jsp"><i class="fa fa-key me-2"></i>Đổi mật khẩu</a></li>
                                                 <li><hr class="dropdown-divider"></li>
-                                                <li><a class="dropdown-item text-danger" href="./logout"><i class="fa fa-sign-out me-2"></i>Logout</a></li>
+                                                <li><a class="dropdown-item text-danger" href="./logout"><i class="fa fa-sign-out me-2"></i>Đăng xuất</a></li>
                                             </ul>
                                         </div>
                                     </c:otherwise>

@@ -29,12 +29,33 @@ Thông tin về hệ thống:
 - Website: BadmintonHub - Hệ thống đặt sân cầu lông
 - Chức năng chính: Đặt sân cầu lông, xem lịch trống, quản lý đặt sân
 - Giờ hoạt động: Thứ 2 - Chủ nhật từ 6:00 - 22:00
-- Liên hệ: Hotline 0123-456-789, Email: booking@badmintonhub.com
+- Liên hệ: Hotline 0981944060, Email: booking@badmintonhub.com
 
 Các chức năng có thể hỗ trợ:
 1. Hướng dẫn cách đặt sân
 2. Thông tin về giá cả và chính sách
-3. Hỗ trợ khách hàng
+3. Thông tin về các sân cầu lông (Indoor/Outdoor)
+4. Thông tin về các dịch vụ (thuê vợt, giày, bóng, nước uống, massage...)
+5. Kiểm tra lịch trống và slot còn trống
+6. Hỗ trợ khách hàng
+
+Khi người dùng hỏi về sân, bạn có thể cung cấp thông tin về:
+- Danh sách tất cả các sân
+- Sân theo loại (Indoor/Outdoor)
+- Trạng thái sân (Available/Unavailable/Maintenance)
+- Mô tả chi tiết từng sân
+
+Khi người dùng hỏi về dịch vụ, bạn có thể cung cấp thông tin về:
+- Danh sách tất cả dịch vụ
+- Giá cả từng dịch vụ
+- Đơn vị tính (giờ, cái, lần...)
+- Mô tả chi tiết dịch vụ
+
+Khi người dùng hỏi về lịch trống, bạn có thể cung cấp thông tin về:
+- Slot còn trống theo ngày
+- Khung giờ cụ thể
+- Giá từng slot
+- Sân cụ thể
 
 `;
 
@@ -51,9 +72,22 @@ const createMessageElement = (content, ...classes) => {
     return div;
 };
 
+// Function to test database connection
+const testDatabaseConnection = async () => {
+    try {
+        const result = await callChatbotAPI("testConnection");
+        console.log("Database connection test result:", result);
+        return result;
+    } catch (error) {
+        console.error("Error testing database connection:", error);
+        return { error: error.message };
+    }
+};
+
 // Function to call chatbot API
 const callChatbotAPI = async (action, params = {}) => {
     try {
+        console.log("Calling chatbot API with action:", action, "params:", params);
         const response = await fetch(CHATBOT_API_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -64,7 +98,9 @@ const callChatbotAPI = async (action, params = {}) => {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         
-        return await response.json();
+        const result = await response.json();
+        console.log("Chatbot API response:", result);
+        return result;
     } catch (error) {
         console.error("Error calling chatbot API:", error);
         return { error: error.message };
@@ -122,7 +158,38 @@ const detectIntent = (message) => {
         }
     }
     
+    // Check for court type patterns
+    const courtTypePatterns = [
+        /(indoor|ngoài trời|outdoor)/i,
+        /(sân trong nhà|sân ngoài trời)/i
+    ];
     
+    let detectedCourtType = null;
+    for (const pattern of courtTypePatterns) {
+        const match = lowerMessage.match(pattern);
+        if (match) {
+            detectedCourtType = match[1];
+            break;
+        }
+    }
+    
+    // Check for service patterns
+    const servicePatterns = [
+        /(dịch vụ|service)/i,
+        /(thuê vợt|thuê giày|thuê bóng)/i,
+        /(nước uống|đồ ăn|massage)/i
+    ];
+    
+    let detectedService = null;
+    for (const pattern of servicePatterns) {
+        const match = lowerMessage.match(pattern);
+        if (match) {
+            detectedService = match[1];
+            break;
+        }
+    }
+    
+    // Intent detection
     if (lowerMessage.includes("đặt sân") || lowerMessage.includes("booking") || 
         lowerMessage.includes("hướng dẫn") || lowerMessage.includes("cách đặt")) {
         return { intent: "booking_guide", date: detectedDate, court: detectedCourt };
@@ -136,6 +203,21 @@ const detectIntent = (message) => {
     if (lowerMessage.includes("liên hệ") || lowerMessage.includes("contact") || 
         lowerMessage.includes("hotline") || lowerMessage.includes("email")) {
         return { intent: "contact_info", date: detectedDate, court: detectedCourt };
+    }
+    
+    if (lowerMessage.includes("sân") || lowerMessage.includes("court") || 
+        lowerMessage.includes("danh sách sân") || lowerMessage.includes("các sân")) {
+        return { intent: "court_info", date: detectedDate, court: detectedCourt, courtType: detectedCourtType };
+    }
+    
+    if (lowerMessage.includes("dịch vụ") || lowerMessage.includes("service") || 
+        lowerMessage.includes("thuê") || lowerMessage.includes("mua")) {
+        return { intent: "service_info", date: detectedDate, service: detectedService };
+    }
+    
+    if (lowerMessage.includes("lịch trống") || lowerMessage.includes("slot") || 
+        lowerMessage.includes("khung giờ") || lowerMessage.includes("available")) {
+        return { intent: "check_availability", date: detectedDate, court: detectedCourt };
     }
     
     return { intent: "general", date: detectedDate, court: detectedCourt };
@@ -159,15 +241,23 @@ const generateBotResponse = async (incomingMessageDiv) => {
             
             if (apiResult.success) {
                 const data = apiResult.data;
-                systemMessage += `\n\nDữ liệu lịch trống cho ngày ${data.date}:\n`;
-                systemMessage += `- Tổng số slot trống: ${data.totalAvailable}\n`;
+                systemMessage += `\n\n📅 <strong>Lịch trống cho ngày ${data.date}:</strong>\n`;
+                systemMessage += `<div class="availability-summary">📊 Tổng số slot trống: <span class="total-slots">${data.totalAvailable}</span></div>\n\n`;
                 
-                for (const [courtName, courtInfo] of Object.entries(data.courts)) {
-                    systemMessage += `- ${courtName}: ${courtInfo.count} slot trống\n`;
-                    systemMessage += `  Khung giờ: ${courtInfo.timeSlots.join(', ')}\n`;
+                if (Object.keys(data.courts).length > 0) {
+                    systemMessage += `<div class="court-info">🏸 <strong>Chi tiết theo sân:</strong>\n`;
+                    for (const [courtName, courtInfo] of Object.entries(data.courts)) {
+                        systemMessage += `\n🏸 <span class="court-name">${courtName}</span>\n`;
+                        systemMessage += `📊 Số slot trống: <span class="total-slots">${courtInfo.count}</span>\n`;
+                        systemMessage += `<div class="time-slots">⏰ Khung giờ: ${courtInfo.timeSlots.join(', ')}</div>\n`;
+                        systemMessage += `---\n`;
+                    }
+                    systemMessage += `</div>`;
+                } else {
+                    systemMessage += `❌ Không có slot trống nào cho ngày này.`;
                 }
             } else {
-                systemMessage += `\n\nKhông thể lấy dữ liệu lịch trống: ${apiResult.error}`;
+                systemMessage += `\n\n❌ Không thể lấy dữ liệu lịch trống: ${apiResult.error}`;
             }
         } catch (error) {
             systemMessage += `\n\nLỗi khi lấy dữ liệu: ${error.message}`;
@@ -177,14 +267,98 @@ const generateBotResponse = async (incomingMessageDiv) => {
             const apiResult = await callChatbotAPI("getBookingInfo");
             if (apiResult.success) {
                 const data = apiResult.data;
-                systemMessage += `\n\nThông tin đặt sân:\n`;
-                systemMessage += `- Các bước đặt sân: ${data.bookingSteps}\n`;
-                systemMessage += `- Giờ hoạt động: ${data.workingHours}\n`;
-                systemMessage += `- Chính sách hủy: ${data.cancellationPolicy}\n`;
-                systemMessage += `- Liên hệ: ${data.contactInfo}\n`;
+                systemMessage += `\n\n📋 <strong>Thông tin đặt sân:</strong>\n`;
+                systemMessage += `<div class="booking-steps">📝 <strong>Các bước đặt sân:</strong>\n${data.bookingSteps}</div>\n`;
+                systemMessage += `<div class="info-box">🕒 <strong>Giờ hoạt động:</strong> ${data.workingHours}</div>\n`;
+                systemMessage += `<div class="info-box">⚠️ <strong>Chính sách hủy:</strong> ${data.cancellationPolicy}</div>\n`;
+                systemMessage += `<div class="contact-info">📞 <strong>Liên hệ:</strong> ${data.contactInfo}</div>\n`;
             }
         } catch (error) {
             systemMessage += `\n\nLỗi khi lấy thông tin đặt sân: ${error.message}`;
+        }
+    } else if (intent.intent === "court_info") {
+        try {
+            // First test database connection
+            const connectionTest = await testDatabaseConnection();
+            if (!connectionTest.success) {
+                systemMessage += `\n\n❌ <strong>Lỗi kết nối database:</strong> ${connectionTest.message}`;
+                systemMessage += `\n\nVui lòng kiểm tra:\n`;
+                systemMessage += `• Kết nối database có hoạt động không\n`;
+                systemMessage += `• Bảng Courts có tồn tại không\n`;
+                systemMessage += `• Có dữ liệu sân trong database không\n`;
+                systemMessage += `\nLiên hệ hỗ trợ: Hotline 0981944060`;
+            } else {
+                let apiResult;
+                if (intent.courtType) {
+                    // Map Vietnamese court types to English
+                    const courtTypeMap = {
+                        'indoor': 'Indoor',
+                        'ngoài trời': 'Outdoor',
+                        'outdoor': 'Outdoor',
+                        'sân trong nhà': 'Indoor',
+                        'sân ngoài trời': 'Outdoor'
+                    };
+                    const mappedCourtType = courtTypeMap[intent.courtType.toLowerCase()] || intent.courtType;
+                    apiResult = await callChatbotAPI("getCourtsByType", { courtType: mappedCourtType });
+                } else {
+                    apiResult = await callChatbotAPI("getAllCourts");
+                }
+                
+                if (apiResult.success) {
+                    const data = apiResult.data;
+                    systemMessage += `\n\n🏸 <strong>Thông tin về sân cầu lông:</strong>\n`;
+                    systemMessage += `📊 Tổng số sân: <span class="total-slots">${data.totalCourts}</span>\n\n`;
+                    
+                    if (data.courts && data.courts.length > 0) {
+                        systemMessage += `<div class="court-info">📋 <strong>Danh sách sân:</strong>\n`;
+                        data.courts.forEach(court => {
+                            const statusClass = court.status.toLowerCase();
+                            systemMessage += `\n🏸 <span class="court-name">${court.courtName}</span>\n`;
+                            systemMessage += `📍 Loại: <span class="court-type">${court.courtType}</span>\n`;
+                            systemMessage += `🔧 Trạng thái: <span class="court-status ${statusClass}">${court.status}</span>\n`;
+                            if (court.description) {
+                                systemMessage += `📝 Mô tả: ${court.description}\n`;
+                            }
+                            systemMessage += `---\n`;
+                        });
+                        systemMessage += `</div>`;
+                    } else {
+                        systemMessage += `❌ Không có sân nào trong hệ thống.`;
+                    }
+                } else {
+                    systemMessage += `\n\n❌ Không thể lấy thông tin sân: ${apiResult.error}`;
+                }
+            }
+        } catch (error) {
+            systemMessage += `\n\n❌ Lỗi khi lấy thông tin sân: ${error.message}`;
+        }
+    } else if (intent.intent === "service_info") {
+        try {
+            const apiResult = await callChatbotAPI("getAllServices");
+            
+            if (apiResult.success) {
+                const data = apiResult.data;
+                systemMessage += `\n\n🛍️ <strong>Thông tin về dịch vụ:</strong>\n`;
+                systemMessage += `📊 Tổng số dịch vụ: <span class="total-slots">${data.totalServices}</span>\n\n`;
+                
+                if (data.services && data.services.length > 0) {
+                    systemMessage += `<div class="service-info">📋 <strong>Danh sách dịch vụ:</strong>\n`;
+                    data.services.forEach(service => {
+                        systemMessage += `\n🛍️ <span class="service-name">${service.serviceName}</span>\n`;
+                        systemMessage += `🏷️ Loại: <span class="service-type">${service.serviceType}</span>\n`;
+                        systemMessage += `💰 Giá: <span class="service-price">${service.price.toLocaleString('vi-VN')} VNĐ/${service.unit}</span>\n`;
+                        if (service.description) {
+                            systemMessage += `📝 Mô tả: ${service.description}\n`;
+                        }
+                        systemMessage += `---\n`;
+                    });
+                    systemMessage += `</div>`;
+                }
+            } else {
+                systemMessage += `\n\n❌ Không thể lấy thông tin dịch vụ: ${apiResult.error}`;
+            }
+        } catch (error) {
+            systemMessage += `\n\nLỗi khi lấy thông tin dịch vụ: ${error.message}`;
         }
     }
 

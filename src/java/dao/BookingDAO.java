@@ -420,6 +420,20 @@ public void updateBookingStatus(int bookingID, String newStatus) {
         .collect(Collectors.toList());
     }
     
+    
+    // Method to get all booking history for a customer (all statuses)
+    public List<BookingDTO> getAllBookingHistoryByCustomer(Long customerId) {
+        List<BookingDTO> bookings = getBookingsByCustomer(customerId);
+        BookingServiceDAO bookingServiceDAO = new BookingServiceDAO();
+        
+        for (BookingDTO booking : bookings) {
+            booking.setBookingDetails(getBookingDetails(booking.getBookingId()));
+            booking.setBookingServices(bookingServiceDAO.getBookingServices(booking.getBookingId()));
+        }
+        
+        return bookings;
+    }
+    
     public List<BookingDTO> getBookingsByCustomerAndBookingDetailDraft(Long customerId) {
         List<BookingDTO> bookings = getBookingsByCustomer(customerId);
         System.out.println(bookings.size());

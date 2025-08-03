@@ -22,12 +22,12 @@
                         <div class="main-menu  d-none d-lg-block">
                             <nav>
                                 <ul id="navigation">
-                                    <li><a href="./home">home</a></li>
-                                    <li><a href="./court">Courts</a></li>
-                                    <li><a href="./about">About</a></li>
-                                    <li><a href="#">pages <i class="ti-angle-down"></i></a>
+                                    <li><a href="./home">Trang chủ</a></li>
+                                    <li><a href="./court">Danh sách sân</a></li>
+                                    <li><a href="./about">Giới thiệu</a></li>
+                                    <li><a href="">Khác <i class="ti-angle-down"></i></a>
                                         <ul class="submenu">
-                                            <li><a href="/contact">Contact</a></li>
+                                            <li><a href="contact.jsp">Liên hệ nhanh</a></li>
                                         </ul>
                                     </li>
                                     
@@ -45,8 +45,8 @@
                     <div class="col-xl-5 col-lg-4 d-none d-lg-block">
                         <div class="book_room d-flex align-items-center justify-content-end">
                             <div class="book_btn d-flex gap-2">
-                                <a href="./Login" class="btn btn-outline-primary">Login</a>
-                                <a href="./register" class="btn btn-primary">Register</a>
+                                <a href="./Login" class="btn btn-outline-primary">Đăng Nhập</a>
+                                <a href="./register" class="btn btn-primary">Đăng xuất</a>
                             </div>
                         </div>
                     </div>

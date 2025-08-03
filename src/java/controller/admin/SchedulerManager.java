@@ -7,6 +7,7 @@ package controller.admin;
 import dao.BookingDAO;
 import dao.CourtScheduleDAO;
 import dao.UserDAO;
+import utils.EmailUtils;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -179,6 +180,39 @@ public class SchedulerManager extends HttpServlet {
                     courtScheduleDAO.updateScheduleStatus(courtScheduleId, "Booked");
                 }
                 if (bookingDAO.addBookingDetail(detail)) {
+                    // Send booking confirmation email to customer
+                    try {
+                        UserDAO userDAO = new UserDAO();
+                        UserDTO customer = userDAO.getUserByID(Integer.parseInt(userID));
+                        
+                        if (customer != null) {
+                            // Get court information for email
+                            CourtScheduleDAO scheduleDAO = new CourtScheduleDAO();
+                            CourtScheduleDTO schedule = scheduleDAO.getScheduleById(courtScheduleId.intValue());
+                            
+                            if (schedule != null) {
+                                String courtInfo = schedule.getCourtName() + " (" + schedule.getCourtType() + ")";
+                                String timeInfo = schedule.getStartTimeStr() + " - " + schedule.getEndTimeStr();
+                                String dateInfo = schedule.getScheduleDate().toString();
+                                
+                                // Send booking confirmation email to customer only
+                                EmailUtils.sendStaffBookingConfirmationEmail(
+                                    customer.getEmail(),
+                                    customer.getFullName(),
+                                    bookingId.toString(),
+                                    courtInfo,
+                                    dateInfo,
+                                    timeInfo
+                                );
+                                
+                                System.out.println("Staff created booking " + bookingId + " for customer " + customer.getEmail() + " - Confirmation email sent");
+                            }
+                        }
+                    } catch (Exception emailException) {
+                        System.err.println("Error sending booking confirmation email: " + emailException.getMessage());
+                        // Don't break the booking process if email fails
+                    }
+                    
                     doGet(request, response);
                 }
             }
@@ -215,9 +249,52 @@ public class SchedulerManager extends HttpServlet {
 
     private void updateStatus(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String status = request.getParameter("status");
-
         Long bookingID = Long.parseLong(request.getParameter("bookingId"));
+        
         BookingDAO bookingDAO = new BookingDAO();
+        
+        // If staff is cancelling a booking, send cancellation email to customer
+        if ("Cancelled".equalsIgnoreCase(status)) {
+            try {
+                // Get booking details and customer information
+                BookingDTO booking = bookingDAO.getBookingById(bookingID);
+                if (booking != null) {
+                    UserDAO userDAO = new UserDAO();
+                    UserDTO customer = userDAO.getUserByID(booking.getCustomerId().intValue());
+                    
+                    if (customer != null) {
+                        // Update court schedules to Available if booking is cancelled
+                        String note = booking.getNotes();
+                        if (note != null && !note.isEmpty()) {
+                            CourtScheduleDAO courtScheduleDAO = new CourtScheduleDAO();
+                            String[] arr = note.split(",");
+                            for (String x : arr) {
+                                try {
+                                    int courtSchedulerID = Integer.parseInt(x);
+                                    courtScheduleDAO.updateScheduleStatus(Long.valueOf(courtSchedulerID), "Available");
+                                } catch (Exception e) {
+                                    // Handle parsing errors silently
+                                }
+                            }
+                        }
+                        
+                        // Send cancellation email to customer
+                        EmailUtils.sendSimpleCancellationEmail(
+                            customer.getEmail(),
+                            customer.getFullName(),
+                            bookingID.toString()
+                        );
+                        
+                        System.out.println("Staff cancelled booking " + bookingID + " - Email sent to customer: " + customer.getEmail());
+                    }
+                }
+            } catch (Exception e) {
+                System.err.println("Error sending cancellation email for booking " + bookingID + ": " + e.getMessage());
+                // Don't break the cancellation process if email fails
+            }
+        }
+        
+        // Update booking status
         bookingDAO.updateBookingStatus(bookingID, status);
         response.sendRedirect("scheduler-manager?action=list");
     }
