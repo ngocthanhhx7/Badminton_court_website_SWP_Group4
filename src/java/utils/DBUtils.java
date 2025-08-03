@@ -71,10 +71,20 @@ public class DBUtils {
     }
     
     public static void main(String[] args) {
+        System.out.println("Testing database connection...");
+        System.out.println("Server: " + serverName);
+        System.out.println("Database: " + dbName);
+        System.out.println("Port: " + portNumber);
+        System.out.println("User: " + userID);
+        
         if(DBUtils.getConnection() != null) {
             System.out.println("Connect successfully");
         } else {
-            System.out.println("Connect failed");
+            System.out.println("Connect failed - please check:");
+            System.out.println("1. SQL Server is running");
+            System.out.println("2. Database 'BadmintonHub' exists");
+            System.out.println("3. User 'sa' with password '123' has access");
+            System.out.println("4. Port 1433 is open");
         }
     }
 }

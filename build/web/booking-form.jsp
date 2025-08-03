@@ -89,6 +89,8 @@
                 box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
                 color: white;
             }
+            
+
             .schedule-item {
                 background: white;
                 border: 2px solid #e9ecef;
@@ -594,6 +596,8 @@
                                                            placeholder="Any special requests or notes for your booking..."></textarea>
                                             </div>
                                             
+
+                                            
                                             <div class="form-group">
                                                 <button type="submit" class="btn-book">
                                                     <i class="fa fa-credit-card"></i> Proceed to Payment
@@ -745,29 +749,31 @@
                 });
             });
             
-            // Service quantity calculation
-            function updateTotalAmount() {
-                var baseAmount = parseFloat('${sum}'); // Court booking amount
-                var serviceAmount = 0;
-                
-                // Calculate service costs
-                $('.service-qty-input').each(function() {
-                    var quantity = parseInt($(this).val()) || 0;
-                    var price = parseFloat($(this).data('price')) || 0;
-                    serviceAmount += quantity * price;
-                });
-                
-                var totalAmount = baseAmount + serviceAmount;
-                
-                // Update hidden field
-                $('#totalAmount').val(totalAmount);
-                
-                // Update display
-                $('#paymentAmountDisplay').text('(' + totalAmount.toLocaleString('vi-VN') + ' VND)');
-                
-                // Update total amount display in summary
-                $('.total-amount').text(totalAmount.toLocaleString('vi-VN') + ' VND');
-            }
+                         // Service quantity calculation
+             function updateTotalAmount() {
+                 var baseAmount = parseFloat('${sum}'); // Court booking amount
+                 var serviceAmount = 0;
+                 
+                 // Calculate service costs
+                 $('.service-qty-input').each(function() {
+                     var quantity = parseInt($(this).val()) || 0;
+                     var price = parseFloat($(this).data('price')) || 0;
+                     serviceAmount += quantity * price;
+                 });
+                 
+                 var totalAmount = baseAmount + serviceAmount;
+                 
+                 // Update hidden field
+                 $('#totalAmount').val(totalAmount);
+                 
+                 // Update display
+                 $('#paymentAmountDisplay').text('(' + totalAmount.toLocaleString('vi-VN') + ' VND)');
+                 
+                 // Update total amount display in summary
+                 $('.total-amount').text(totalAmount.toLocaleString('vi-VN') + ' VND');
+             }
+             
+
         </script>
     </body>
 </html>

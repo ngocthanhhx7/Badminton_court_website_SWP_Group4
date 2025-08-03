@@ -52,15 +52,26 @@ public class AboutSectionDAO {
         ResultSet rs = null;
         try {
             conn = DBUtils.getConnection();
+            if (conn == null) {
+                System.err.println("Database connection is null in getAllActiveSections - check database server and connection settings");
+                return sections; // Return empty list instead of throwing exception
+            }
             ptm = conn.prepareStatement(GET_ACTIVE_SECTIONS);
             rs = ptm.executeQuery();
             while (rs.next()) {
                 sections.add(mapResultSetToSection(rs));
             }
+        } catch (SQLException e) {
+            System.err.println("SQL Error in getAllActiveSections: " + e.getMessage());
+            e.printStackTrace();
+            throw e; // Re-throw to maintain method signature
+        } catch (Exception e) {
+            System.err.println("Unexpected error in getAllActiveSections: " + e.getMessage());
+            e.printStackTrace();
         } finally {
-            if (rs != null) rs.close();
-            if (ptm != null) ptm.close();
-            if (conn != null) conn.close();
+            if (rs != null) try { rs.close(); } catch (SQLException e) { /* ignore */ }
+            if (ptm != null) try { ptm.close(); } catch (SQLException e) { /* ignore */ }
+            if (conn != null) try { conn.close(); } catch (SQLException e) { /* ignore */ }
         }
         return sections;
     }

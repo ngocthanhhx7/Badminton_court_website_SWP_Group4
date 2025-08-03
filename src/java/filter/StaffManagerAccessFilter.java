@@ -35,28 +35,28 @@ public class StaffManagerAccessFilter implements Filter {
             UserDTO user = (UserDTO) sessionUser;
             String userRole = user.getRole();
             
-            // Nếu là Staff, chặn truy cập vào các trang manager
-            if ("staff".equalsIgnoreCase(userRole)) {
-                String requestURI = httpRequest.getRequestURI();
-                
-                // Danh sách các URL manager mà Staff không được phép truy cập
-                String[] restrictedUrls = {
-                    "/user-manager",
-                    "/admin-manager", 
-                    "/court-manager",
-                    "/service-manager",
-                    "/court-rates-manager"
-                };
-                
-                // Kiểm tra xem URL hiện tại có trong danh sách bị chặn không
-                for (String restrictedUrl : restrictedUrls) {
-                    if (requestURI.contains(restrictedUrl)) {
-                        // Chuyển hướng Staff về trang access-denied
-                        httpResponse.sendRedirect(httpRequest.getContextPath() + "/access-denied.jsp");
-                        return;
+                            // If it's Staff, block access to manager pages
+                if ("staff".equalsIgnoreCase(userRole)) {
+                    String requestURI = httpRequest.getRequestURI();
+                    
+                    // List of manager URLs that Staff are not allowed to access
+                    String[] restrictedUrls = {
+                        "/user-manager",
+                        "/admin-manager", 
+                        "/court-manager",
+                        "/service-manager",
+                        "/court-rates-manager"
+                    };
+                    
+                    // Check if current URL is in the blocked list
+                    for (String restrictedUrl : restrictedUrls) {
+                        if (requestURI.contains(restrictedUrl)) {
+                            // Redirect Staff to access-denied page
+                            httpResponse.sendRedirect(httpRequest.getContextPath() + "/access-denied.jsp");
+                            return;
+                        }
                     }
                 }
-            }
         }
 
         // Cho phép request tiếp tục nếu không phải Staff hoặc không phải trang manager bị chặn

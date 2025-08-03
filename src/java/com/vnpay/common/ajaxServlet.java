@@ -39,6 +39,7 @@ import models.BookingServiceDTO;
 import models.CourtScheduleDTO;
 import models.ServiceDTO;
 import models.UserDTO;
+import models.AdminDTO;
 
 /**
  *
@@ -49,13 +50,27 @@ public class ajaxServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
-        UserDTO user = (UserDTO) session.getAttribute("acc");
+        Object sessionUser = session.getAttribute("acc");
+        String accType = (String) session.getAttribute("accType");
         CourtScheduleDAO scheduleDAO = new CourtScheduleDAO();
         BookingDAO bookingDAO = new BookingDAO();
         ServiceDAO serviceDAO = new ServiceDAO();
         BookingServiceDAO bookingServiceDAO = new BookingServiceDAO();
 
-        if (user == null) {
+        if (sessionUser == null) {
+            resp.sendRedirect("Login.jsp");
+            return;
+        }
+        
+        // Handle both UserDTO and AdminDTO
+        Long userId = null;
+        if ("admin".equals(accType) && sessionUser instanceof AdminDTO) {
+            AdminDTO admin = (AdminDTO) sessionUser;
+            userId = Long.valueOf(admin.getAdminID());
+        } else if ("user".equals(accType) && sessionUser instanceof UserDTO) {
+            UserDTO user = (UserDTO) sessionUser;
+            userId = Long.valueOf(user.getUserID());
+        } else {
             resp.sendRedirect("Login.jsp");
             return;
         }
@@ -71,7 +86,7 @@ public class ajaxServlet extends HttpServlet {
                     .collect(Collectors.toList());
 
             BookingDTO booking = BookingDTO.builder()
-                    .customerId((long) user.getUserID())
+                    .customerId(userId)
                     .status("Pending")
                     .notes(notes)
                     .build();

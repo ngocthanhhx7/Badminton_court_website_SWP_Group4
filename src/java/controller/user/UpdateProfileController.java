@@ -18,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import models.UserDTO;
 import models.AdminDTO;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class UpdateProfileController extends HttpServlet {
 
@@ -28,7 +29,6 @@ public class UpdateProfileController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
@@ -41,15 +41,6 @@ public class UpdateProfileController extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -81,7 +72,8 @@ public class UpdateProfileController extends HttpServlet {
         String specialCharRegex = ".*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?].*";
         String upperCaseRegex = ".*[A-Z].*";
 
-        if (password != null && password.length() > 0) {
+        // Chỉ validate mật khẩu nếu người dùng nhập mật khẩu mới
+        if (password != null && !password.trim().isEmpty()) {
             if (password.length() <= 6
                     || !password.matches(upperCaseRegex)
                     || !password.matches(specialCharRegex)) {
@@ -90,11 +82,10 @@ public class UpdateProfileController extends HttpServlet {
                 request.getRequestDispatcher("edit-profile.jsp").forward(request, response);
                 return;
             }
-        } else {
-            password = user.getPassword(); 
+            // Hash mật khẩu mới trước khi lưu
+            user.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
         }
-
-        user.setPassword(password);
+        // Nếu không nhập mật khẩu mới, giữ nguyên mật khẩu cũ
 
         String fullName = request.getParameter("fullName");
         String dobStr = request.getParameter("dob");
@@ -141,7 +132,15 @@ public class UpdateProfileController extends HttpServlet {
         user.setAddress(address);
         user.setSportLevel(sportLevel);
 
-        new UserDAO().updateUser(user);
+        // Sử dụng phương thức phù hợp dựa trên việc có thay đổi mật khẩu hay không
+        UserDAO userDAO = new UserDAO();
+        if (password != null && !password.trim().isEmpty()) {
+            // Có thay đổi mật khẩu
+            userDAO.updateUser(user);
+        } else {
+            // Không thay đổi mật khẩu
+            userDAO.updateUserProfileWithoutPassword(user);
+        }
         request.getSession().setAttribute("currentUser", user);
 
         response.sendRedirect("view-profile.jsp?success=true");
@@ -163,12 +162,6 @@ public class UpdateProfileController extends HttpServlet {
             return;
         }
 
-        if (password == null || password.trim().isEmpty()) {
-            request.setAttribute("error", "Password không được để trống.");
-            request.getRequestDispatcher("edit-profile-admin.jsp").forward(request, response);
-            return;
-        }
-
         if (fullName == null || fullName.trim().isEmpty()) {
             request.setAttribute("error", "Full Name không được để trống.");
             request.getRequestDispatcher("edit-profile-admin.jsp").forward(request, response);
@@ -183,13 +176,26 @@ public class UpdateProfileController extends HttpServlet {
 
         // Update admin information
         admin.setUsername(username);
-        admin.setPassword(password);
         admin.setFullName(fullName);
         admin.setEmail(email);
         admin.setStatus(status);
+        
+        // Chỉ cập nhật mật khẩu nếu người dùng nhập mật khẩu mới
+        if (password != null && !password.trim().isEmpty()) {
+            // Hash mật khẩu mới trước khi lưu
+            admin.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
+        }
 
         try {
-            boolean updated = adminDAO.updateAdmin(admin);
+            boolean updated;
+            if (password != null && !password.trim().isEmpty()) {
+                // Có thay đổi mật khẩu
+                updated = adminDAO.updateAdmin(admin);
+            } else {
+                // Không thay đổi mật khẩu
+                updated = adminDAO.updateAdminProfileWithoutPassword(admin);
+            }
+            
             if (updated) {
                 request.getSession().setAttribute("acc", admin);
                 response.sendRedirect("view-profile-admin.jsp?success=true");
@@ -204,51 +210,6 @@ public class UpdateProfileController extends HttpServlet {
         }
     }
 
-//    @Override
-//    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-//            throws ServletException, IOException {
-//        HttpSession session = request.getSession();
-//        Object sessionUser = session.getAttribute("currentUser");
-//        if (sessionUser == null) {
-//            sessionUser = session.getAttribute("acc");
-//        }
-//        // Chỉ xử lý cho UserDTO, không xử lý cho AdminDTO
-//        if (!(sessionUser instanceof UserDTO)) {
-//            response.sendRedirect("./Login");
-//            return;
-//        }
-//        UserDTO user = (UserDTO) sessionUser;
-//        if (user == null) {
-//            response.sendRedirect("./Login");
-//            return;
-//        }
-//        try {
-//            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-//            user.setFullName(request.getParameter("fullname").trim());
-//            user.setDob(sdf.parse(request.getParameter("dob")));
-//            user.setGender(request.getParameter("gender"));
-//            user.setPhone(request.getParameter("phone").trim());
-//            user.setAddress(request.getParameter("address").trim());
-//            String sportLevel = request.getParameter("sportlevel");
-//            if (sportLevel == null || sportLevel.trim().isEmpty()) {
-//                sportLevel = user.getSportLevel() != null ? user.getSportLevel() : "Beginner";
-//            }
-//            user.setSportLevel(sportLevel);
-//            boolean updated = userDAO.updateUserProfile1(user);
-//            if (updated) {
-//                session.setAttribute("currentUser", user);
-//                session.setAttribute("acc", user);
-//                response.sendRedirect("./home");
-//            } else {
-//                request.setAttribute("message", "Cập nhật thất bại, vui lòng thử lại.");
-//                request.getRequestDispatcher("completeProfile.jsp").forward(request, response);
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            request.setAttribute("message", "Lỗi hệ thống: " + e.getMessage());
-//            request.getRequestDispatcher("completeProfile.jsp").forward(request, response);
-//        }
-//    }
 
     @Override
     public String getServletInfo() {

@@ -53,7 +53,7 @@ public List<CourtScheduleDTO> getAvailableSchedules(Integer courtId, LocalDate d
         String sql = "SELECT cs.*, c.CourtName, c.CourtType " +
             "FROM CourtSchedules cs " +
             "JOIN Courts c ON cs.CourtID = c.CourtID " +
-            "WHERE cs.ScheduleDate = ? AND cs.Status = 'Available' " +
+            "WHERE cs.ScheduleDate = ?  " +
             "ORDER BY c.CourtName, cs.StartTime";
         
         List<CourtScheduleDTO> schedules = new ArrayList<>();

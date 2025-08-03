@@ -212,7 +212,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-6 text-end">
-                                                    <a href="./forgotPassword.jsp" class="link-secondary text-decoration-none">Quên mật khẩu</a>
+                                                    <a href="./ForgotPasswordServlet" class="link-secondary text-decoration-none">Quên mật khẩu</a>
                                                 </div>
                                             </div>
                                         </div>

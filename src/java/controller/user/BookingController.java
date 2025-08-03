@@ -237,13 +237,8 @@ public class BookingController extends HttpServlet {
         }
 
         // Load available services for selection
-        try {
-            List<ServiceDTO> availableServices = serviceDAO.getAllActiveServices();
-            request.setAttribute("availableServices", availableServices);
-        } catch (SQLException e) {
-            System.err.println("Error loading services: " + e.getMessage());
-            e.printStackTrace();
-        }
+        List<ServiceDTO> availableServices = serviceDAO.getAllActiveServices();
+        request.setAttribute("availableServices", availableServices);
 
         request.setAttribute("now", new java.util.Date());
 

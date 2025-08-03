@@ -10,43 +10,10 @@ import java.util.List;
 import org.mindrot.jbcrypt.BCrypt;
 public class UserDAO {
 
-    private Connection conn;
-
     public UserDAO() {
-        this.conn = DBUtils.getConnection();
+        // Remove connection storage in constructor
     }
 
-//    public UserDTO login(String username, String password) {
-//        String query = "SELECT * FROM Users WHERE Username = ? AND Password = ?";
-//        try (Connection conn = DBUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
-//            ps.setString(1, username);
-//            ps.setString(2, password);
-//            try (ResultSet rs = ps.executeQuery()) {
-//                if (rs.next()) {
-//                    return new UserDTO(
-//                            rs.getInt("UserID"),
-//                            rs.getString("Username"),
-//                            rs.getString("Password"),
-//                            rs.getString("Email"),
-//                            rs.getString("FullName"),
-//                            rs.getDate("Dob"),
-//                            rs.getString("Gender"),
-//                            rs.getString("Phone"),
-//                            rs.getString("Address"),
-//                            rs.getString("SportLevel"),
-//                            rs.getString("Role"),
-//                            rs.getString("Status"),
-//                            rs.getInt("CreatedBy"),
-//                            rs.getTimestamp("CreatedAt"),
-//                            rs.getTimestamp("UpdatedAt")
-//                    );
-//                }
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
    public UserDTO login(String username, String password) {
     String query = "SELECT * FROM Users WHERE Username = ?";
     try (Connection conn = DBUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
@@ -85,7 +52,8 @@ public class UserDAO {
 
     public boolean isEmailOrUsernameExists(String email, String username) throws SQLException {
         String sql = "SELECT COUNT(*) FROM users WHERE email = ? OR username = ?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = DBUtils.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, email);
             ps.setString(2, username);
             ResultSet rs = ps.executeQuery();
@@ -98,7 +66,8 @@ public class UserDAO {
 
     public UserDTO getUserByEmail(String email) throws SQLException {
         String sql = "SELECT * FROM Users WHERE Email = ?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = DBUtils.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, email);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
@@ -111,7 +80,7 @@ public class UserDAO {
 
     public UserDTO loginWithEmailOrUsername(String input, String password) {
         String query = "SELECT * FROM Users WHERE (Username = ? OR Email = ?)";
-        try (PreparedStatement ps = conn.prepareStatement(query)) {
+        try (Connection conn = DBUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setString(1, input);
             ps.setString(2, input);
             try (ResultSet rs = ps.executeQuery()) {
@@ -148,7 +117,7 @@ public class UserDAO {
 
     public boolean isPhoneExists(String phone) throws SQLException {
         String sql = "SELECT COUNT(*) FROM users WHERE phone = ?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = DBUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, phone);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -157,10 +126,11 @@ public class UserDAO {
         }
         return false;
     }
+
 public boolean registerUserBasic(UserDTO user) throws SQLException {
     String sql = "INSERT INTO users (username, email, password, role, phone, createdAt, createdBy) " +
                  "VALUES (?, ?, ?, ?, ?, ?, ?)";
-    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+    try (Connection conn = DBUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
         ps.setString(1, user.getUsername());
         ps.setString(2, user.getEmail());
         ps.setString(3, user.getPassword());
@@ -186,42 +156,10 @@ public boolean registerUserBasic(UserDTO user) throws SQLException {
         return ps.executeUpdate() > 0;
     }
 }
-//    public boolean registerUserBasic(UserDTO user) throws SQLException {
-//        String sql = "INSERT INTO users (username, email, password, role, phone, createdAt, createdBy) VALUES (?, ?, ?, ?, ?, ?, ?)";
-//        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-//            ps.setString(1, user.getUsername());
-//            ps.setString(2, user.getEmail());
-//            ps.setString(3, user.getPassword());
-//            ps.setString(4, user.getRole());
-//            ps.setString(5, user.getPhone());
-//            ps.setTimestamp(6, user.getCreatedAt());
-//
-//            // Sửa đúng:
-//            if (user.getCreatedBy() != null) {
-//                ps.setInt(7, user.getCreatedBy());
-//            } else {
-//                ps.setNull(7, Types.INTEGER);
-//            }
-//
-//            return ps.executeUpdate() > 0;
-//        }
-//    }
 
-//    public UserDTO findUserByEmailOrUsername(String input) throws SQLException {
-//        String sql = "SELECT * FROM users WHERE email = ? OR username = ?";
-//        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-//            ps.setString(1, input);
-//            ps.setString(2, input);
-//            ResultSet rs = ps.executeQuery();
-//            if (rs.next()) {
-//                return mapResultSetToUser(rs);
-//            }
-//        }
-//        return null;
-//    }
 public UserDTO findUserByEmailOrUsername(String input) throws SQLException {
         String sql = "SELECT * FROM users WHERE email = ? OR username = ?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = DBUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, input);
             ps.setString(2, input);
             ResultSet rs = ps.executeQuery();
@@ -232,18 +170,9 @@ public UserDTO findUserByEmailOrUsername(String input) throws SQLException {
         return null;
     }
 
-    
-//    public boolean updatePassword(String email, String hashedPassword) throws SQLException {
-//        String sql = "UPDATE users SET password = ? WHERE email = ?";
-//        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-//            ps.setString(1, hashedPassword);
-//            ps.setString(2, email);
-//            return ps.executeUpdate() > 0;
-//        }
-//    }
 public boolean updatePassword(String email, String hashedPassword) throws SQLException {
         String sql = "UPDATE users SET password = ? WHERE email = ?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = DBUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, hashedPassword); // Password đã được hash ở UserService
             ps.setString(2, email);
             return ps.executeUpdate() > 0;
@@ -253,15 +182,16 @@ public boolean updatePassword(String email, String hashedPassword) throws SQLExc
     // Method để update password bằng UserID (thêm cho ChangePasswordController)
     public boolean updatePasswordByUserID(int userID, String hashedPassword) throws SQLException {
         String sql = "UPDATE users SET password = ?, UpdatedAt = GETDATE() WHERE UserID = ?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = DBUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, hashedPassword); // Password đã được hash ở controller/service
             ps.setInt(2, userID);
             return ps.executeUpdate() > 0;
         }
     }
+    
     public UserDTO getUserByID(int userID) throws SQLException {
         String sql = "SELECT * FROM users WHERE UserID = ?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = DBUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, userID);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -273,7 +203,7 @@ public boolean updatePassword(String email, String hashedPassword) throws SQLExc
 
     public boolean addUser(UserDTO user, int createdBy) throws SQLException {
         String sql = "INSERT INTO users (FullName, Gender, Dob, SportLevel, Role, Status, Email, Phone, Address, Username, Password, CreatedBy) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = DBUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, user.getFullName());
             ps.setString(2, user.getGender());
             ps.setDate(3, new java.sql.Date(user.getDob().getTime()));
@@ -293,7 +223,7 @@ public boolean updatePassword(String email, String hashedPassword) throws SQLExc
     public List<UserDTO> getAllEmployee() throws SQLException {
         List<UserDTO> users = new ArrayList<>();
         String sql = "SELECT * FROM users WHERE role = 'Employee'";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = DBUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 users.add(mapResultSetToUser(rs));
@@ -304,7 +234,7 @@ public boolean updatePassword(String email, String hashedPassword) throws SQLExc
 
     public UserDTO getEmployeeByID(int userID) throws SQLException {
         String sql = "SELECT * FROM users WHERE UserID = ? AND Role = 'Employee'";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = DBUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, userID);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -316,7 +246,7 @@ public boolean updatePassword(String email, String hashedPassword) throws SQLExc
 
     public boolean UpdateEmployee(UserDTO user) throws SQLException {
         String sql = "UPDATE users SET FullName = ?, Gender = ?, Dob = ?, SportLevel = ?, Status = ?, Phone = ?, Address = ? WHERE UserID = ?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = DBUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, user.getFullName());
             ps.setString(2, user.getGender());
             ps.setDate(3, new java.sql.Date(user.getDob().getTime()));
@@ -328,7 +258,7 @@ public boolean updatePassword(String email, String hashedPassword) throws SQLExc
             return ps.executeUpdate() > 0;
         }
     }
-//
+
     private UserDTO mapResultSetToUser(ResultSet rs) throws SQLException {
         UserDTO user = new UserDTO();
         user.setUserID(rs.getInt("UserID"));
@@ -348,7 +278,7 @@ public boolean updatePassword(String email, String hashedPassword) throws SQLExc
         user.setUpdatedAt(rs.getTimestamp("UpdatedAt"));
         return user;
     }
-//
+
     public void updateUser(UserDTO user) {
         String selectSql = "SELECT UpdatedAt FROM Users WHERE Email = ?";
         String updateSql = "UPDATE Users SET FullName = ?, Dob = ?, Gender = ?, Phone = ?, Address = ?, SportLevel = ?, Password = ?, CreatedAt = ?, UpdatedAt = ? WHERE Email = ?";
@@ -392,11 +322,59 @@ public boolean updatePassword(String email, String hashedPassword) throws SQLExc
             e.printStackTrace();
         }
     }
-//
+
+    public void updateUserProfileWithoutPassword(UserDTO user) {
+        String selectSql = "SELECT UpdatedAt, Password FROM Users WHERE Email = ?";
+        String updateSql = "UPDATE Users SET FullName = ?, Dob = ?, Gender = ?, Phone = ?, Address = ?, SportLevel = ?, CreatedAt = ?, UpdatedAt = ? WHERE Email = ?";
+
+        try (Connection conn = DBUtils.getConnection(); PreparedStatement selectPs = conn.prepareStatement(selectSql); PreparedStatement updatePs = conn.prepareStatement(updateSql)) {
+
+            // 1. Lấy UpdatedAt và Password hiện tại từ DB
+            Timestamp prevUpdatedAt = null;
+            String currentPassword = null;
+            selectPs.setString(1, user.getEmail());
+            try (ResultSet rs = selectPs.executeQuery()) {
+                if (rs.next()) {
+                    prevUpdatedAt = rs.getTimestamp("UpdatedAt");
+                    currentPassword = rs.getString("Password");
+                }
+            }
+
+            // 2. Nếu không có user thì thoát
+            if (prevUpdatedAt == null) {
+                System.out.println("User không tồn tại.");
+                return;
+            }
+
+            // 3. Thời gian mới
+            Timestamp now = new Timestamp(System.currentTimeMillis());
+
+            // 4. Update thông tin (không bao gồm password)
+            updatePs.setString(1, user.getFullName());
+            updatePs.setDate(2, new java.sql.Date(user.getDob().getTime()));
+            updatePs.setString(3, user.getGender());
+            updatePs.setString(4, user.getPhone());
+            updatePs.setString(5, user.getAddress());
+            updatePs.setString(6, user.getSportLevel());
+            updatePs.setTimestamp(7, prevUpdatedAt);
+            updatePs.setTimestamp(8, now);
+            updatePs.setString(9, user.getEmail());
+
+            updatePs.executeUpdate();
+
+            // 5. Cập nhật lại password trong user object để giữ nguyên
+            user.setPassword(currentPassword);
+
+            System.out.println("Cập nhật profile thành công (không đổi mật khẩu). CreatedAt: " + prevUpdatedAt + ", UpdatedAt: " + now);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public boolean registerUser(UserDTO user) throws SQLException {
         String sql = "INSERT INTO Users (Username, [Password], Email, FullName, Dob, Gender, Phone, [Address], SportLevel, [Role], [Status], CreatedBy, CreatedAt, UpdatedAt) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Active', ?, GETDATE(), GETDATE())";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = DBUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, user.getUsername());
             ps.setString(2, user.getPassword());
             ps.setString(3, user.getEmail());
@@ -448,6 +426,7 @@ public boolean updatePassword(String email, String hashedPassword) throws SQLExc
             return ps.executeUpdate() > 0;
         }
     }
+    
     // Hàm hash password đơn giản bằng MD5, giống trong servlet hoặc DAO
     private static String hashPassword(String password) {
         try {
@@ -463,6 +442,7 @@ public boolean updatePassword(String email, String hashedPassword) throws SQLExc
             throw new RuntimeException(e);
         }
     }
+    
     public boolean updateUserProfile1(UserDTO user) throws SQLException {
     String sql = "UPDATE Users "
                + "SET FullName = ?, Dob = ?, Gender = ?, Phone = ?, Address = ?, SportLevel = ? "
@@ -483,9 +463,10 @@ public boolean updatePassword(String email, String hashedPassword) throws SQLExc
         return ps.executeUpdate() > 0;
     }
 }
+    
     public void updateUserProfile(UserDTO user) throws SQLException {
         String sql = "UPDATE users SET FullName = ?, Password = ?, Dob = ?, Gender = ?, Phone = ?, Address = ?, SportLevel = ?, Role = ? WHERE UserID = ?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = DBUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, user.getFullName());
             ps.setString(2, BCrypt.hashpw(user.getPassword(), BCrypt.gensalt())); // BCrypt
             ps.setDate(3, new java.sql.Date(user.getDob().getTime()));
@@ -499,13 +480,11 @@ public boolean updatePassword(String email, String hashedPassword) throws SQLExc
         }
     }
 
-    // Hàm hash password đơn giản bằng MD5, giống trong servlet hoặc DAO
-    
     // Lấy tất cả user
     public List<UserDTO> getAllUsers() throws SQLException {
         List<UserDTO> list = new ArrayList<>();
         String sql = "SELECT * FROM users ORDER BY UserID DESC";
-        try (PreparedStatement ps = DBUtils.getConnection().prepareStatement(sql)) {
+        try (Connection conn = DBUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 list.add(mapResultSetToUser(rs));
@@ -518,7 +497,7 @@ public boolean updatePassword(String email, String hashedPassword) throws SQLExc
     public List<UserDTO> searchUsers(String keyword) throws SQLException {
         List<UserDTO> list = new ArrayList<>();
         String sql = "SELECT * FROM users WHERE username LIKE ? OR email LIKE ? OR FullName LIKE ? ORDER BY UserID DESC";
-        try (PreparedStatement ps = DBUtils.getConnection().prepareStatement(sql)) {
+        try (Connection conn = DBUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             String kw = "%" + keyword + "%";
             ps.setString(1, kw);
             ps.setString(2, kw);
@@ -534,7 +513,7 @@ public boolean updatePassword(String email, String hashedPassword) throws SQLExc
     // Thêm user đơn giản (dùng cho admin thêm user)
     public boolean addUserSimple(UserDTO user) throws SQLException {
         String sql = "INSERT INTO users (username, email, password, FullName, Dob, Gender, role, status, phone, address, SportLevel) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement ps = DBUtils.getConnection().prepareStatement(sql)) {
+        try (Connection conn = DBUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, user.getUsername());
             ps.setString(2, user.getEmail());
             ps.setString(3, user.getPassword());
@@ -562,7 +541,7 @@ public boolean updatePassword(String email, String hashedPassword) throws SQLExc
     // Cập nhật user đơn giản (dùng cho admin sửa user)
     public boolean updateUserSimple(UserDTO user) throws SQLException {
         String sql = "UPDATE users SET FullName=?, Dob=?, Gender=?, role=?, status=?, phone=?, address=? WHERE UserID=?";
-        try (PreparedStatement ps = DBUtils.getConnection().prepareStatement(sql)) {
+        try (Connection conn = DBUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, user.getFullName());
             
             // Xử lý Dob
@@ -600,19 +579,15 @@ public boolean updatePassword(String email, String hashedPassword) throws SQLExc
     // Xóa user theo UserID
     public boolean deleteUser(int userID) throws SQLException {
         String sql = "DELETE FROM users WHERE UserID = ?";
-        try (PreparedStatement ps = DBUtils.getConnection().prepareStatement(sql)) {
+        try (Connection conn = DBUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, userID);
             return ps.executeUpdate() > 0;
         }
     }
 
-    /**
-     * Xác minh user sau khi nhập đúng mã verify code
-     * Xóa VerifyCode và cập nhật trạng thái
-     */
     public boolean verifyUser(String email) throws SQLException {
         String sql = "UPDATE Users SET VerifyCode = NULL WHERE Email = ? AND VerifyCode IS NOT NULL";
-        try (PreparedStatement ps = DBUtils.getConnection().prepareStatement(sql)) {
+        try (Connection conn = DBUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, email);
             return ps.executeUpdate() > 0;
         }

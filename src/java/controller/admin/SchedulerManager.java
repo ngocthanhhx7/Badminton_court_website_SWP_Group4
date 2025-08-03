@@ -104,14 +104,31 @@ public class SchedulerManager extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        AdminDTO user = (AdminDTO) session.getAttribute("acc");
-        CourtScheduleDAO courtScheduleDAO = new CourtScheduleDAO();
-        BookingDAO bookingDAO = new BookingDAO();
-
-        if (user == null) {
+        Object sessionUser = session.getAttribute("acc");
+        
+        // Check if user is logged in and has proper role
+        if (sessionUser == null) {
             response.sendRedirect("Login.jsp");
             return;
         }
+        
+        // Handle both UserDTO and AdminDTO
+        String userRole = null;
+        if (sessionUser instanceof AdminDTO) {
+            // AdminDTO doesn't have role field, but admins have highest privileges
+            userRole = "Admin";
+        } else if (sessionUser instanceof UserDTO) {
+            userRole = ((UserDTO) sessionUser).getRole();
+        }
+        
+        // Check if user has admin/staff role
+        if (userRole == null || (!userRole.equalsIgnoreCase("Admin") && !userRole.equalsIgnoreCase("Staff"))) {
+            response.sendRedirect("access-denied.jsp");
+            return;
+        }
+        
+        CourtScheduleDAO courtScheduleDAO = new CourtScheduleDAO();
+        BookingDAO bookingDAO = new BookingDAO();
         String action = request.getParameter("action");
         if (action != null) {
             updateStatus(request, response);

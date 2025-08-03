@@ -80,10 +80,6 @@
                         <td><input type="text" name="username" value="<%= admin.getUsername() %>" required /></td>
                     </tr>
                     <tr>
-                        <td>Password:</td>
-                        <td><input type="password" name="password" value="<%= admin.getPassword() %>" required /></td>
-                    </tr>
-                    <tr>
                         <td>Full Name:</td>
                         <td><input type="text" name="fullName" value="<%= admin.getFullName() %>" required /></td>
                     </tr>

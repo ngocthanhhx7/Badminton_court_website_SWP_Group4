@@ -79,10 +79,6 @@
                         <td><input type="text" name="fullName" value="<%= user.getFullName() %>" /></td>
                     </tr>
                     <tr>
-                        <td>Password:</td>
-                        <td><input type="text" name="password" value="<%= user.getPassword() %> " /></td>
-                    </tr>
-                    <tr>
                         <td>Date:</td>
                         <td><input type="date" name="dob" value="<%= dobFormatted %>" /></td>
                     </tr>

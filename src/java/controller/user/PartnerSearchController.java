@@ -4,6 +4,7 @@ import dao.PartnerSearchDAO;
 import models.PartnerSearchPostDTO;
 import models.PartnerSearchResponseDTO;
 import models.UserDTO;
+import models.AdminDTO;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -182,10 +183,17 @@ public class PartnerSearchController extends HttpServlet {
             throws ServletException, IOException {
         
         HttpSession session = request.getSession();
-        UserDTO user = (UserDTO) session.getAttribute("acc");
+        Object sessionUser = session.getAttribute("acc");
+        String accType = (String) session.getAttribute("accType");
         
-        if (user == null) {
-            response.sendRedirect("login.jsp");
+        if (sessionUser == null) {
+            response.sendRedirect("Login.jsp");
+            return;
+        }
+        
+        // Partner search is only for regular users, not admins
+        if (!"user".equals(accType) || !(sessionUser instanceof UserDTO)) {
+            response.sendRedirect("access-denied.jsp");
             return;
         }
 
@@ -205,7 +213,7 @@ public class PartnerSearchController extends HttpServlet {
         UserDTO user = (UserDTO) session.getAttribute("acc");
         
         if (user == null) {
-            response.sendRedirect("login.jsp");
+            response.sendRedirect("Login.jsp");
             return;
         }
 
@@ -230,15 +238,16 @@ public class PartnerSearchController extends HttpServlet {
             throws ServletException, IOException {
         
         HttpSession session = request.getSession();
-        UserDTO user = (UserDTO) session.getAttribute("acc");
+        Object sessionUser = session.getAttribute("acc");
+        String accType = (String) session.getAttribute("accType");
         
-        // Temporary: Use test user if not logged in
-        if (user == null) {
-            // Create a test user for debugging
-            user = new UserDTO();
-            user.setUserID(1); // Use existing user ID
-            user.setFullName("Test User");
+        // Partner search is only for regular users, not admins
+        if (sessionUser == null || !"user".equals(accType) || !(sessionUser instanceof UserDTO)) {
+            response.sendRedirect("Login.jsp");
+            return;
         }
+        
+        UserDTO user = (UserDTO) sessionUser;
 
         try {
             // Only get ACTIVE posts of the user
@@ -257,12 +266,21 @@ public class PartnerSearchController extends HttpServlet {
             throws ServletException, IOException {
         
         HttpSession session = request.getSession();
-        UserDTO user = (UserDTO) session.getAttribute("acc");
+        Object sessionUser = session.getAttribute("acc");
+        String accType = (String) session.getAttribute("accType");
         
-        if (user == null) {
-            response.sendRedirect("login.jsp");
+        if (sessionUser == null) {
+            response.sendRedirect("Login.jsp");
             return;
         }
+        
+        // Partner search is only for regular users, not admins
+        if (!"user".equals(accType) || !(sessionUser instanceof UserDTO)) {
+            response.sendRedirect("access-denied.jsp");
+            return;
+        }
+        
+        UserDTO user = (UserDTO) sessionUser;
 
         try {
             PartnerSearchPostDTO post = new PartnerSearchPostDTO();
@@ -309,7 +327,7 @@ public class PartnerSearchController extends HttpServlet {
         UserDTO user = (UserDTO) session.getAttribute("acc");
         
         if (user == null) {
-            response.sendRedirect("login.jsp");
+            response.sendRedirect("Login.jsp");
             return;
         }
 
@@ -366,7 +384,7 @@ public class PartnerSearchController extends HttpServlet {
         UserDTO user = (UserDTO) session.getAttribute("acc");
         
         if (user == null) {
-            response.sendRedirect("login.jsp");
+            response.sendRedirect("Login.jsp");
             return;
         }
 
@@ -398,7 +416,7 @@ public class PartnerSearchController extends HttpServlet {
         UserDTO user = (UserDTO) session.getAttribute("acc");
         
         if (user == null) {
-            response.sendRedirect("login.jsp");
+            response.sendRedirect("Login.jsp");
             return;
         }
 
@@ -442,7 +460,7 @@ public class PartnerSearchController extends HttpServlet {
         UserDTO user = (UserDTO) session.getAttribute("acc");
         
         if (user == null) {
-            response.sendRedirect("login.jsp");
+            response.sendRedirect("Login.jsp");
             return;
         }
 
@@ -467,7 +485,7 @@ public class PartnerSearchController extends HttpServlet {
         UserDTO user = (UserDTO) session.getAttribute("acc");
         
         if (user == null) {
-            response.sendRedirect("login.jsp");
+            response.sendRedirect("Login.jsp");
             return;
         }
 
@@ -492,7 +510,7 @@ public class PartnerSearchController extends HttpServlet {
         UserDTO user = (UserDTO) session.getAttribute("acc");
         
         if (user == null) {
-            response.sendRedirect("login.jsp");
+            response.sendRedirect("Login.jsp");
             return;
         }
 
@@ -518,7 +536,7 @@ public class PartnerSearchController extends HttpServlet {
         UserDTO user = (UserDTO) session.getAttribute("acc");
         
         if (user == null) {
-            response.sendRedirect("login.jsp");
+            response.sendRedirect("Login.jsp");
             return;
         }
 

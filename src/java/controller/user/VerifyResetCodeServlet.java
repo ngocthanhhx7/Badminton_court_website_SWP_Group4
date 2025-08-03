@@ -65,7 +65,7 @@ public class VerifyResetCodeServlet extends HttpServlet {
                 // Forward to reset password page with verified email
                 request.setAttribute("email", email);
                 request.setAttribute("verified", true);
-                request.getRequestDispatcher("reset-password.jsp").forward(request, response);
+                request.getRequestDispatcher("resetPassword.jsp").forward(request, response);
                 
             } else {
                 // Check if code has expired or invalid

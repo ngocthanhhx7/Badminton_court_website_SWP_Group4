@@ -38,16 +38,15 @@ public class StaffAccessFilter implements Filter {
                 UserDTO user = (UserDTO) sessionUser;
                 userRole = user.getRole();
             } else if (sessionUser instanceof AdminDTO) {
-                // Admin không có role field, nhưng có thể coi như có quyền cinstanceof AdminDTO) {
-                // Admin không có rao nhất
-                // Không cần chuyển hướng admin khỏi trang home
+                // Admin doesn't have role field, but can be considered as having highest privileges
+                // No need to redirect admin away from home page
                 chain.doFilter(request, response);
                 return;
             }
             
-            // Chỉ kiểm tra chuyển hướng cho Staff (UserDTO với role = "Staff")
+            // Only check redirection for Staff (UserDTO with role = "Staff")
             if ("staff".equalsIgnoreCase(userRole) && httpRequest.getRequestURI().endsWith("/home")) {
-                // Chuyển hướng Staff về trang page-manager
+                // Redirect Staff to page-manager
                 httpResponse.sendRedirect(httpRequest.getContextPath() + "/page-manager");
                 return;
             }

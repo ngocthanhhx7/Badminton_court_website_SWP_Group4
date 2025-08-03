@@ -152,7 +152,7 @@
                             
                             <!-- Action Buttons -->
                             <div class="d-flex flex-column flex-sm-row justify-content-center action-buttons mt-4">
-                                <a href="booking?action=my-bookings" class="btn btn-primary btn-custom">
+                                <a href="booking?action=history" class="btn btn-primary btn-custom">
                                     <i class="fas fa-calendar-check me-2"></i>
                                     Xem Lịch Đặt Sân
                                 </a>

@@ -188,6 +188,18 @@ public class AdminDAO {
             return stmt.executeUpdate() > 0;
         }
     }
+
+    public boolean updateAdminProfileWithoutPassword(AdminDTO admin) throws SQLException {
+        String sql = "UPDATE Admins SET Username = ?, FullName = ?, Email = ?, Status = ?, UpdatedAt = GETDATE() WHERE AdminID = ?";
+        try (Connection conn = new DBUtils().getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, admin.getUsername());
+            stmt.setString(2, admin.getFullName());
+            stmt.setString(3, admin.getEmail());
+            stmt.setString(4, admin.getStatus());
+            stmt.setInt(5, admin.getAdminID());
+            return stmt.executeUpdate() > 0;
+        }
+    }
     // Cập nhật 
 
     public boolean updateAdminSimple(AdminDTO admin) throws SQLException {
