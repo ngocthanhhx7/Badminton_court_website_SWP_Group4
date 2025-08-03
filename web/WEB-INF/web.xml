@@ -87,6 +87,31 @@
         <filter-name>StaffAccessFilter</filter-name>
         <url-pattern>/home</url-pattern>
     </filter-mapping>
+    <!-- Staff Manager Access Filter - Chặn Staff truy cập trang manager -->
+    <filter>
+        <filter-name>StaffManagerAccessFilter</filter-name>
+        <filter-class>filter.StaffManagerAccessFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>StaffManagerAccessFilter</filter-name>
+        <url-pattern>/user-manager</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>StaffManagerAccessFilter</filter-name>
+        <url-pattern>/admin-manager</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>StaffManagerAccessFilter</filter-name>
+        <url-pattern>/court-manager</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>StaffManagerAccessFilter</filter-name>
+        <url-pattern>/service-manager</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>StaffManagerAccessFilter</filter-name>
+        <url-pattern>/court-rates-manager</url-pattern>
+    </filter-mapping>
     <!-- Manager Access Filter -->
     <filter>
         <filter-name>ManagerAccessFilter</filter-name>

@@ -80,7 +80,7 @@ public class CourtController extends HttpServlet {
                 : allOffers;
 
         int page = 1;
-        int courtsPerPage = 2;
+        int courtsPerPage = 3;
 
         if (pageParam != null) {
             try {

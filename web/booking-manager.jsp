@@ -22,7 +22,7 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <!-- Font Awesome for icons -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-        
+       
         <style>
             .booking-card {
                 transition: all 0.3s ease;
@@ -53,6 +53,17 @@
                 margin-bottom: 8px;
                 border-left: 3px solid #007bff;
             }
+            .service-item {
+                background: white;
+                border-radius: 6px;
+                padding: 10px;
+                margin-bottom: 8px;
+                border-left: 3px solid #28a745;
+            }
+            .service-badge {
+                font-size: 0.7rem;
+                padding: 0.2rem 0.4rem;
+            }
             .filter-section {
                 background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                 color: white;
@@ -82,20 +93,24 @@
                 color: #856404;
             }
 
+
             .status-select.status-confirmed {
                 background-color: #cce5ff;
                 color: #004085;
             }
+
 
             .status-select.status-completed {
                 background-color: #d4edda;
                 color: #155724;
             }
 
+
             .status-select.status-cancelled {
                 background-color: #f8d7da;
                 color: #721c24;
             }
+
 
         </style>
     </head>
@@ -106,17 +121,18 @@
             <div class="main-panel">
                 <div class="schedule-container">
                     <div class="container-fluid" style="margin-top: 120px;">
-                        
+                       
                         <!-- Page Header -->
                         <div class="row mb-4">
                             <div class="col-12">
                                 <h2 class="page-title">
                                     <i class="fas fa-calendar-check me-2"></i>
-                                    Quản lý đặt sân
+                                    Booking Management
                                 </h2>
-                                <p class="text-muted">Admin có thể xem toàn bộ lịch sử đặt sân</p>
+                                <p class="text-muted">Manage and view all court bookings</p>
                             </div>
                         </div>
+
 
                         <!-- Filter Section -->
                         <div class="filter-section">
@@ -124,21 +140,21 @@
                                 <input type="hidden" name="action" value="list">
                                 <div class="col-md-4">
                                     <label for="startDate" class="form-label">
-                                        <i class="fas fa-calendar-alt me-1"></i>Ngày bắt đầu
+                                        <i class="fas fa-calendar-alt me-1"></i>Start Date
                                     </label>
-                                    <input type="date" class="form-control" id="startDate" name="startDate" 
+                                    <input type="date" class="form-control" id="startDate" name="startDate"
                                            value="${param.startDate}">
                                 </div>
                                 <div class="col-md-4">
                                     <label for="endDate" class="form-label">
-                                        <i class="fas fa-calendar-alt me-1"></i>Ngày kết thúc
+                                        <i class="fas fa-calendar-alt me-1"></i>End Date
                                     </label>
-                                    <input type="date" class="form-control" id="endDate" name="endDate" 
+                                    <input type="date" class="form-control" id="endDate" name="endDate"
                                            value="${param.endDate}">
                                 </div>
                                 <div class="col-md-4">
                                     <button type="submit" class="btn btn-light me-2">
-                                        <i class="fas fa-search me-1"></i>Lọc
+                                        <i class="fas fa-search me-1"></i>Filter
                                     </button>
                                     <a href="scheduler-manager?action=list" class="btn btn-outline-light">
                                         <i class="fas fa-refresh me-1"></i>Reset
@@ -147,6 +163,7 @@
                             </form>
                         </div>
 
+
                         <!-- Statistics -->
                         <div class="row mb-4">
                             <div class="col-md-3 mb-2">
@@ -154,13 +171,13 @@
                                     <div class="stats-number text-primary">
                                         ${sum} ₫
                                     </div>
-                                    <div class="text-muted">Tổng thu nhập</div>
+                                    <div class="text-muted">Total Revenue</div>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="stats-card">
                                     <div class="stats-number">${totalBooking}</div>
-                                    <div class="text-muted">Số lượt booking</div>
+                                    <div class="text-muted">Total Bookings</div>
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -174,7 +191,7 @@
                                         </c:forEach>
                                         ${confirmedCount}
                                     </div>
-                                    <div class="text-muted">Hoàn Thành</div>
+                                    <div class="text-muted">Completed</div>
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -188,7 +205,7 @@
                                         </c:forEach>
                                         ${pendingCount}
                                     </div>
-                                    <div class="text-muted">Chờ thanh toán</div>
+                                    <div class="text-muted">Pending</div>
                                 </div>
                             </div>
 <!--                                        <div class="col-md-3">
@@ -206,6 +223,7 @@
                                             </div>
                                         </div>-->
                         </div>
+
 
                         <!-- Bookings List -->
                         <div class="row">
@@ -246,7 +264,8 @@
                                                                     </select>
                                                                 </form>
 
-                                                                
+
+                                                               
                                                                 <c:if test="${booking.expire}">
                                                                     <span class="badge bg-danger ms-2">
                                                                         <i class="fas fa-clock me-1"></i>Expired
@@ -286,15 +305,16 @@
                                                                     Created: ${booking.createdAtStr}
                                                                 </small>
                                                             </div>
-                                                            <button class="btn btn-outline-primary btn-sm" 
-                                                                    type="button" 
-                                                                    data-bs-toggle="collapse" 
-                                                                    data-bs-target="#booking-details-${booking.bookingId}" 
+                                                            <button class="btn btn-outline-primary btn-sm"
+                                                                    type="button"
+                                                                    data-bs-toggle="collapse"
+                                                                    data-bs-target="#booking-details-${booking.bookingId}"
                                                                     aria-expanded="false">
                                                                 <i class="fas fa-eye me-1"></i>View Details
                                                             </button>
                                                         </div>
                                                     </div>
+
 
                                                     <!-- Booking Details (Collapsible) -->
                                                     <div class="collapse" id="booking-details-${booking.bookingId}">
@@ -303,7 +323,7 @@
                                                                 <i class="fas fa-list me-2"></i>
                                                                 Court Bookings (${booking.bookingDetails.size()} courts)
                                                             </h6>
-                                                            
+                                                           
                                                             <c:set var="totalAmount" value="0"/>
                                                             <c:forEach var="detail" items="${booking.bookingDetails}">
                                                                 <div class="court-item">
@@ -327,42 +347,97 @@
                                                                         <div class="col-md-4 text-end">
                                                                             <div class="mb-1">
                                                                                 <small class="text-muted">Rate: </small>
-                                                                                <fmt:formatNumber value="${detail.hourlyRate}" type="currency" currencySymbol="đ"/>
+                                                                                <fmt:formatNumber value="${detail.hourlyRate}" type="currency" currencySymbol="$"/>
                                                                                 <small class="text-muted">/hour</small>
                                                                             </div>
                                                                             <strong class="text-primary">
-                                                                                Subtotal: <fmt:formatNumber value="${detail.subtotal}" type="currency" currencySymbol="đ"/>
+                                                                                Subtotal: <fmt:formatNumber value="${detail.subtotal}" type="currency" currencySymbol="$"/>
                                                                             </strong>
                                                                             <c:set var="totalAmount" value="${totalAmount + detail.subtotal}"/>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </c:forEach>
-                                                            
+                                                           
+                                                            <!-- Services Section -->
+                                                            <c:if test="${not empty booking.bookingServices}">
+                                                                <h6 class="mb-3 mt-4">
+                                                                    <i class="fas fa-concierge-bell me-2"></i>
+                                                                    Additional Services (${booking.bookingServices.size()} services)
+                                                                </h6>
+                                                               
+                                                                <c:set var="serviceTotal" value="0"/>
+                                                                <c:forEach var="service" items="${booking.bookingServices}">
+                                                                    <div class="service-item">
+                                                                        <div class="row align-items-center">
+                                                                            <div class="col-md-4">
+                                                                                <strong>
+                                                                                    <i class="fas fa-cube me-1"></i>
+                                                                                    ${service.serviceName}
+                                                                                </strong>
+                                                                                <br>
+                                                                                <small class="text-muted">
+                                                                                    <span class="badge bg-success service-badge">${service.serviceType}</span>
+                                                                                </small>
+                                                                            </div>
+                                                                            <div class="col-md-4">
+                                                                                <i class="fas fa-cubes me-1"></i>
+                                                                                <strong>Quantity: ${service.quantity} ${service.unit}</strong>
+                                                                                <br>
+                                                                                <small class="text-muted">
+                                                                                    ${service.description}
+                                                                                </small>
+                                                                            </div>
+                                                                            <div class="col-md-4 text-end">
+                                                                                <div class="mb-1">
+                                                                                    <small class="text-muted">Unit Price: </small>
+                                                                                    <fmt:formatNumber value="${service.unitPrice}" type="currency" currencySymbol="$"/>
+                                                                                </div>
+                                                                                <strong class="text-success">
+                                                                                    Subtotal: <fmt:formatNumber value="${service.subtotal}" type="currency" currencySymbol="$"/>
+                                                                                </strong>
+                                                                                <c:set var="serviceTotal" value="${serviceTotal + service.subtotal}"/>
+                                                                                <c:set var="totalAmount" value="${totalAmount + service.subtotal}"/>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </c:forEach>
+                                                               
+                                                                <!-- Service Subtotal -->
+                                                                <div class="row mt-2">
+                                                                    <div class="col-12 text-end">
+                                                                        <h6 class="text-info">
+                                                                            <i class="fas fa-concierge-bell me-1"></i>
+                                                                            Services Total: <fmt:formatNumber value="${serviceTotal}" type="currency" currencySymbol="$"/>
+                                                                        </h6>
+                                                                    </div>
+                                                                </div>
+                                                            </c:if>
+                                                           
                                                             <!-- Total Amount -->
                                                             <div class="row mt-3">
                                                                 <div class="col-12 text-end">
                                                                     <h5 class="text-success">
                                                                         <i class="fas fa-dollar-sign me-1"></i>
-                                                                        Tổng: <fmt:formatNumber value="${totalAmount}" type="currency" currencySymbol="đ"/>
+                                                                        Total Amount: <fmt:formatNumber value="${totalAmount}" type="currency" currencySymbol="$"/>
                                                                     </h5>
                                                                 </div>
                                                             </div>
-                                                            
+                                                           
                                                             <!-- Action Buttons -->
                                                             <div class="row mt-3">
                                                                 <div class="col-12 text-end">
                                                                     <c:if test="${booking.status == 'PENDING'}">
-                                                                        <button class="btn btn-success btn-sm me-2" 
+                                                                        <button class="btn btn-success btn-sm me-2"
                                                                                 onclick="updateBookingStatus(${booking.bookingId}, 'CONFIRMED')">
                                                                             <i class="fas fa-check me-1"></i>Confirm
                                                                         </button>
-                                                                        <button class="btn btn-danger btn-sm me-2" 
+                                                                        <button class="btn btn-danger btn-sm me-2"
                                                                                 onclick="updateBookingStatus(${booking.bookingId}, 'CANCELLED')">
                                                                             <i class="fas fa-times me-1"></i>Cancel
                                                                         </button>
                                                                     </c:if>
-<!--                                                                    <button class="btn btn-info btn-sm" 
+<!--                                                                    <button class="btn btn-info btn-sm"
                                                                             onclick="printBooking(${booking.bookingId})">
                                                                         <i class="fas fa-print me-1"></i>Print
                                                                     </button>-->
@@ -381,6 +456,7 @@
                 </div>
             </div>
         </div>
+
 
         <!-- Bootstrap JS -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -402,18 +478,18 @@
         <!-- End plugin js for this page -->
         <!-- Custom js for this page-->
         <!-- End custom js for this page-->
-        
+       
         <script>
             // Auto-hide alerts after 5 seconds
             $(document).ready(function () {
                 setTimeout(function () {
                     $('.alert').fadeOut('slow');
                 }, 5000);
-                
+               
                 // Set default dates if not provided
                 const today = new Date();
                 const lastMonth = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
-                
+               
                 if (!document.getElementById('startDate').value) {
                     document.getElementById('startDate').value = lastMonth.toISOString().split('T')[0];
                 }
@@ -421,6 +497,7 @@
                     document.getElementById('endDate').value = today.toISOString().split('T')[0];
                 }
             });
+
 
             // Function to update booking status
             function updateBookingStatus(bookingId, status) {
@@ -448,16 +525,18 @@
                 }
             }
 
+
             // Function to print booking details
             function printBooking(bookingId) {
                 window.open('print-booking?bookingId=' + bookingId, '_blank');
             }
 
+
             // Enhanced search functionality
             function searchBookings() {
                 const searchTerm = document.getElementById('searchInput').value.toLowerCase();
                 const bookingCards = document.querySelectorAll('.booking-card');
-                
+               
                 bookingCards.forEach(card => {
                     const text = card.textContent.toLowerCase();
                     if (text.includes(searchTerm)) {
@@ -470,3 +549,6 @@
         </script>
     </body>
 </html>
+
+
+

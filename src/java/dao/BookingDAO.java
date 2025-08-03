@@ -1,5 +1,6 @@
 package dao;
 
+
 import models.BookingDTO;
 import models.BookingDetailDTO;
 import utils.DBUtils;
@@ -14,18 +15,19 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import models.BookingView;
 
+
 public class BookingDAO {
-    
+   
     public Long createBooking(BookingDTO booking) {
         String sql = "INSERT INTO Bookings (CustomerID, Status, Notes, CreatedBy) VALUES (?, ?, ?, ?)";
         try (Connection connection = DBUtils.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            
+           
             ps.setLong(1, booking.getCustomerId());
             ps.setString(2, booking.getStatus());
             ps.setString(3, booking.getNotes());
             ps.setObject(4, booking.getCreatedBy());
-            
+           
             int result = ps.executeUpdate();
             if (result > 0) {
                 ResultSet rs = ps.getGeneratedKeys();
@@ -38,41 +40,41 @@ public class BookingDAO {
         }
         return null;
     }
-    
+   
     public boolean addBookingDetail(BookingDetailDTO detail) {
         String sql = "INSERT INTO BookingDetails (BookingID, CourtID, StartTime, EndTime, HourlyRate) VALUES (?, ?, ?, ?, ?)";
         try (Connection connection = DBUtils.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
-            
+           
             ps.setLong(1, detail.getBookingId());
             ps.setLong(2, detail.getCourtId());
             ps.setTimestamp(3, Timestamp.valueOf(detail.getStartTime()));
             ps.setTimestamp(4, Timestamp.valueOf(detail.getEndTime()));
             ps.setBigDecimal(5, detail.getHourlyRate());
-            
+           
             return ps.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
     }
-    
+   
     public List<BookingDTO> getBookingsByCustomer(Long customerId) {
         String sql = """
-            SELECT b.*, u.FullName, u.Email, u.Phone 
-            FROM Bookings b 
-            JOIN Users u ON b.CustomerID = u.UserID 
-            WHERE b.CustomerID = ? 
+            SELECT b.*, u.FullName, u.Email, u.Phone
+            FROM Bookings b
+            JOIN Users u ON b.CustomerID = u.UserID
+            WHERE b.CustomerID = ?
             ORDER BY b.CreatedAt DESC
         """;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         List<BookingDTO> bookings = new ArrayList<>();
         try (Connection connection = DBUtils.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
-            
+           
             ps.setLong(1, customerId);
             ResultSet rs = ps.executeQuery();
-            
+           
             while (rs.next()) {
                 BookingDTO booking = BookingDTO.builder()
                     .bookingId(rs.getLong("BookingID"))
@@ -80,7 +82,7 @@ public class BookingDAO {
                     .status(rs.getString("Status"))
                     .notes(rs.getString("Notes"))
                     .createdAt(rs.getTimestamp("CreatedAt").toLocalDateTime())
-                    .updatedAt(rs.getTimestamp("UpdatedAt") != null ? 
+                    .updatedAt(rs.getTimestamp("UpdatedAt") != null ?
                               rs.getTimestamp("UpdatedAt").toLocalDateTime() : null)
                     .createdAtStr(rs.getTimestamp("CreatedAt").toLocalDateTime().format(formatter))
                     .updatedAtStr(rs.getTimestamp("UpdatedAt") != null ? rs.getTimestamp("UpdatedAt").toLocalDateTime().format(formatter) : null)
@@ -95,22 +97,22 @@ public class BookingDAO {
         }
         return bookings;
     }
-    
+   
     public List<BookingDetailDTO> getBookingDetails(Long bookingId) {
         String sql = """
-            SELECT bd.*, c.CourtName, c.CourtType 
-            FROM BookingDetails bd 
-            JOIN Courts c ON bd.CourtID = c.CourtID 
+            SELECT bd.*, c.CourtName, c.CourtType
+            FROM BookingDetails bd
+            JOIN Courts c ON bd.CourtID = c.CourtID
             WHERE bd.BookingID = ?
         """;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         List<BookingDetailDTO> details = new ArrayList<>();
         try (Connection connection = DBUtils.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
-            
+           
             ps.setLong(1, bookingId);
             ResultSet rs = ps.executeQuery();
-            
+           
             while (rs.next()) {
                 BookingDetailDTO detail = BookingDetailDTO.builder()
                     .bookingDetailId(rs.getLong("BookingDetailID"))
@@ -132,39 +134,43 @@ public class BookingDAO {
         }
         return details;
     }
-    
+   
     public boolean updateBookingStatus(Long bookingId, String status) {
         String sql = "UPDATE Bookings SET Status = ?, UpdatedAt = GETDATE() WHERE BookingID = ?";
         try (Connection connection = DBUtils.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
-            
+           
             ps.setString(1, status);
             ps.setLong(2, bookingId);
-            
+           
             return ps.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
     }
-    
+   
     public List<BookingDTO> getAllBookings(LocalDate startDate, LocalDate endDate) {
         String sql = """
-            SELECT b.*, u.FullName, u.Email, u.Phone 
-            FROM Bookings b 
-            JOIN Users u ON b.CustomerID = u.UserID 
+            SELECT b.*, u.FullName, u.Email, u.Phone
+            FROM Bookings b
+            JOIN Users u ON b.CustomerID = u.UserID
             WHERE CAST(b.CreatedAt AS DATE) BETWEEN ? AND ?
             ORDER BY b.CreatedAt DESC
         """;
 
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         List<BookingDTO> bookings = new ArrayList<>();
+
 
         try (Connection conn = DBUtils.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
+
             ps.setDate(1, java.sql.Date.valueOf(startDate));
             ps.setDate(2, java.sql.Date.valueOf(endDate));
+
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -174,12 +180,12 @@ public class BookingDAO {
                     .status(rs.getString("Status"))
                     .notes(rs.getString("Notes"))
                     .createdAt(rs.getTimestamp("CreatedAt").toLocalDateTime())
-                    .updatedAt(rs.getTimestamp("UpdatedAt") != null 
-                               ? rs.getTimestamp("UpdatedAt").toLocalDateTime() 
+                    .updatedAt(rs.getTimestamp("UpdatedAt") != null
+                               ? rs.getTimestamp("UpdatedAt").toLocalDateTime()
                                : null)
                     .createdAtStr(rs.getTimestamp("CreatedAt").toLocalDateTime().format(formatter))
-                    .updatedAtStr(rs.getTimestamp("UpdatedAt") != null 
-                                  ? rs.getTimestamp("UpdatedAt").toLocalDateTime().format(formatter) 
+                    .updatedAtStr(rs.getTimestamp("UpdatedAt") != null
+                                  ? rs.getTimestamp("UpdatedAt").toLocalDateTime().format(formatter)
                                   : null)
                     .customerName(rs.getString("FullName"))
                     .customerEmail(rs.getString("Email"))
@@ -194,21 +200,23 @@ public class BookingDAO {
     }
 
 
-    
+
+
+   
     public BookingDTO getBookingById(Long bookingId) {
         String sql = """
-            SELECT b.*, u.FullName, u.Email, u.Phone 
-            FROM Bookings b 
-            JOIN Users u ON b.CustomerID = u.UserID 
+            SELECT b.*, u.FullName, u.Email, u.Phone
+            FROM Bookings b
+            JOIN Users u ON b.CustomerID = u.UserID
             WHERE b.BookingID = ?
         """;
-        
+       
         try (Connection connection = DBUtils.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
-            
+           
             ps.setLong(1, bookingId);
             ResultSet rs = ps.executeQuery();
-            
+           
             if (rs.next()) {
                 return BookingDTO.builder()
                     .bookingId(rs.getLong("BookingID"))
@@ -216,7 +224,7 @@ public class BookingDAO {
                     .status(rs.getString("Status"))
                     .notes(rs.getString("Notes"))
                     .createdAt(rs.getTimestamp("CreatedAt").toLocalDateTime())
-                    .updatedAt(rs.getTimestamp("UpdatedAt") != null ? 
+                    .updatedAt(rs.getTimestamp("UpdatedAt") != null ?
                               rs.getTimestamp("UpdatedAt").toLocalDateTime() : null)
                     .customerName(rs.getString("FullName"))
                     .customerEmail(rs.getString("Email"))
@@ -230,18 +238,24 @@ public class BookingDAO {
     }
 
 
+
+
     public double getWeeklyRevenue(int time, int year) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+
 
     public double getMonthlyRevenue(int time, int year) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
+
    
+
 
     public List<BookingView> getAllBookingViews() {
        List<BookingView> list = new ArrayList<>();
+
 
        String sql = "SELECT b.BookingID, u.FullName, u.Phone, u.Email, " +
                     "c.CourtName, bd.StartTime, bd.EndTime, " +
@@ -255,9 +269,11 @@ public class BookingDAO {
                     "LEFT JOIN BookingNotes n ON b.BookingID = n.BookingID " +
                     "ORDER BY bd.StartTime DESC";
 
+
        try (Connection con = DBUtils.getConnection();
             PreparedStatement ps = con.prepareStatement(sql);
             ResultSet rs = ps.executeQuery()) {
+
 
            while (rs.next()) {
                BookingView bv = new BookingView();
@@ -276,15 +292,19 @@ public class BookingDAO {
                list.add(bv);
            }
 
+
        } catch (Exception e) {
            e.printStackTrace();
        }
 
+
        return list;
    }
 
+
 public List<BookingView> getBookingViewsByPhone(String phone) {
     List<BookingView> list = new ArrayList<>();
+
 
     String sql = "SELECT b.BookingID, u.FullName, u.Phone, u.Email, " +
                  "c.CourtName, bd.StartTime, bd.EndTime, " +
@@ -299,11 +319,14 @@ public List<BookingView> getBookingViewsByPhone(String phone) {
                  "WHERE u.Phone LIKE ? " +
                  "ORDER BY bd.StartTime DESC";
 
+
     try (Connection con = DBUtils.getConnection();
          PreparedStatement ps = con.prepareStatement(sql)) {
 
+
         ps.setString(1, "%" + phone + "%");
         ResultSet rs = ps.executeQuery();
+
 
         while (rs.next()) {
             BookingView bv = new BookingView();
@@ -322,15 +345,19 @@ public List<BookingView> getBookingViewsByPhone(String phone) {
             list.add(bv);
         }
 
+
     } catch (Exception e) {
         e.printStackTrace();
     }
 
+
     return list;
 }
 
+
     public List<BookingView> getBookingViewsByDateRange(Date startDate, Date endDate) {
     List<BookingView> list = new ArrayList<>();
+
 
     String sql = "SELECT b.BookingID, u.FullName, u.Phone, u.Email, " +
                  "bd.StartTime, bd.EndTime, bd.HourlyRate, bd.Subtotal, " +
@@ -341,12 +368,15 @@ public List<BookingView> getBookingViewsByPhone(String phone) {
                  "LEFT JOIN BookingNotes n ON b.BookingID = n.BookingID " +
                  "WHERE bd.StartTime >= ? AND bd.StartTime < ?";
 
+
     try (Connection con = DBUtils.getConnection();
          PreparedStatement ps = con.prepareStatement(sql)) {
+
 
         ps.setTimestamp(1, new java.sql.Timestamp(startDate.getTime()));
         ps.setTimestamp(2, new java.sql.Timestamp(endDate.getTime()));
         ResultSet rs = ps.executeQuery();
+
 
         while (rs.next()) {
             BookingView bv = new BookingView();
@@ -363,40 +393,50 @@ public List<BookingView> getBookingViewsByPhone(String phone) {
             list.add(bv);
         }
 
+
     } catch (Exception e) {
         e.printStackTrace();
     }
 
+
     return list;
 }
+
 
 public void updateBookingStatus(int bookingID, String newStatus) {
     String sql = "UPDATE Bookings SET Status = ? WHERE BookingID = ?";
 
+
     try (Connection con = DBUtils.getConnection();
          PreparedStatement ps = con.prepareStatement(sql)) {
+
 
         ps.setString(1, newStatus);
         ps.setInt(2, bookingID);
         ps.executeUpdate();
 
+
     } catch (Exception e) {
         e.printStackTrace();
     }
 }
 
+
 // Trong BookingDAO.java
     public Map<String, Double> getRevenueByDate() {
         Map<String, Double> revenueMap = new LinkedHashMap<>();
+
 
         String sql = "SELECT CONVERT(DATE, bd.StartTime) AS BookingDate, SUM(bd.Subtotal) AS TotalRevenue " +
                      "FROM BookingDetails bd " +
                      "GROUP BY CONVERT(DATE, bd.StartTime) " +
                      "ORDER BY BookingDate";
 
+
         try (Connection con = DBUtils.getConnection();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
+
 
             while (rs.next()) {
                 String date = rs.getString("BookingDate");
@@ -404,14 +444,17 @@ public void updateBookingStatus(int bookingID, String newStatus) {
                 revenueMap.put(date, revenue);
             }
 
+
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+
         return revenueMap;
     }
 
-    
+
+   
     public List<BookingDTO> getBookingsByCustomerAndBookingDetail(Long customerId) {
         List<BookingDTO> bookings = getBookingsByCustomer(customerId);
         return bookings.stream()
@@ -419,21 +462,21 @@ public void updateBookingStatus(int bookingID, String newStatus) {
         .peek(b -> b.setBookingDetails(getBookingDetails(b.getBookingId())))
         .collect(Collectors.toList());
     }
-    
-    
+   
+   
     // Method to get all booking history for a customer (all statuses)
     public List<BookingDTO> getAllBookingHistoryByCustomer(Long customerId) {
         List<BookingDTO> bookings = getBookingsByCustomer(customerId);
         BookingServiceDAO bookingServiceDAO = new BookingServiceDAO();
-        
+       
         for (BookingDTO booking : bookings) {
             booking.setBookingDetails(getBookingDetails(booking.getBookingId()));
             booking.setBookingServices(bookingServiceDAO.getBookingServices(booking.getBookingId()));
         }
-        
+       
         return bookings;
     }
-    
+   
     public List<BookingDTO> getBookingsByCustomerAndBookingDetailDraft(Long customerId) {
         List<BookingDTO> bookings = getBookingsByCustomer(customerId);
         System.out.println(bookings.size());
@@ -442,12 +485,18 @@ public void updateBookingStatus(int bookingID, String newStatus) {
         .peek(b -> b.setBookingDetails(getBookingDetails(b.getBookingId())))
         .collect(Collectors.toList());
     }
-    
+   
     public List<BookingDTO> getAllBookingsAndBookingDetail(LocalDate startDate, LocalDate endDate){
          List<BookingDTO> bookings = getAllBookings(startDate, endDate);
+         BookingServiceDAO bookingServiceDAO = new BookingServiceDAO();
+         
          return bookings.stream()
-        .peek(b -> b.setBookingDetails(getBookingDetails(b.getBookingId())))
+        .peek(b -> {
+            b.setBookingDetails(getBookingDetails(b.getBookingId()));
+            b.setBookingServices(bookingServiceDAO.getBookingServices(b.getBookingId()));
+        })
         .collect(Collectors.toList());
     }
+
 
 }

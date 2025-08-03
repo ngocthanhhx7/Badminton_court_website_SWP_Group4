@@ -1,108 +1,142 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Access Denied - BadmintonHub</title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.png">
-
-    <!-- CSS here -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/owl.carousel.min.css">
-    <link rel="stylesheet" href="css/magnific-popup.css">
-    <link rel="stylesheet" href="css/font-awesome.min.css">
-    <link rel="stylesheet" href="css/themify-icons.css">
-    <link rel="stylesheet" href="css/nice-select.css">
-    <link rel="stylesheet" href="css/flaticon.css">
-    <link rel="stylesheet" href="css/animate.css">
-    <link rel="stylesheet" href="css/slicknav.css">
     <link rel="stylesheet" href="css/style.css">
-</head>
-
-<body>
-    <!-- header-start -->
-    <%
-        String accType = (String) session.getAttribute("accType");
-        if (accType == null) {
-    %>
-    <jsp:include page="header.jsp" />
-    <%
-        } else if ("admin".equals(accType)) {
-    %>
-    <jsp:include page="header-auth.jsp" />
-    <%
-        } else if ("user".equals(accType) || "google".equals(accType)) {
-    %>
-    <jsp:include page="header-user.jsp" />
-    <%
+    <style>
+        .access-denied-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
-    %>
-    <!-- header-end -->
-
-    <!-- bradcam_area_start -->
-    <div class="bradcam_area breadcam_bg">
-        <h3>Access Denied</h3>
-    </div>
-    <!-- bradcam_area_end -->
-
-    <!-- Start Sample Area -->
-    <section class="sample-text-area">
-        <div class="container box_1170">
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <div class="text-center">
-                        <div class="mb-4">
-                            <i class="fa fa-exclamation-triangle" style="font-size: 80px; color: #ff6b6b;"></i>
-                        </div>
-                        <h2 class="mb-4">Access Denied</h2>
-                        <p class="mb-4" style="font-size: 18px; color: #666;">
-                            Sorry, you don't have permission to access this page. 
-                            Only Administrators and Staff members can access management pages.
-                        </p>
-                        <div class="mt-4">
-                            <a href="./home" class="btn btn-primary mr-3">Go to Homepage</a>
-                            <a href="./Login" class="btn btn-outline-primary">Login with Different Account</a>
-                        </div>
-                    </div>
-                </div>
+        .access-denied-card {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+        }
+        .access-denied-icon {
+            font-size: 80px;
+            color: #dc3545;
+            margin-bottom: 20px;
+        }
+        .access-denied-title {
+            color: #dc3545;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .access-denied-message {
+            color: #6c757d;
+            font-size: 16px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        .btn-back {
+            background: #007bff;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        .btn-back:hover {
+            background: #0056b3;
+            color: white;
+            text-decoration: none;
+            transform: translateY(-2px);
+        }
+        .btn-home {
+            background: #28a745;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-block;
+            margin-left: 15px;
+            transition: all 0.3s ease;
+        }
+        .btn-home:hover {
+            background: #1e7e34;
+            color: white;
+            text-decoration: none;
+            transform: translateY(-2px);
+        }
+        .role-info {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #007bff;
+        }
+        .role-info h5 {
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+        .role-info p {
+            margin-bottom: 5px;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <div class="access-denied-container">
+        <div class="access-denied-card">
+            <div class="access-denied-icon">🚫</div>
+            <h1 class="access-denied-title">Access Denied</h1>
+            <p class="access-denied-message">
+                Bạn không có quyền truy cập vào trang này. 
+                Chỉ Admin mới có thể truy cập các trang quản lý hệ thống.
+            </p>
+            
+            <div class="role-info">
+                <h5>📋 Phân quyền hệ thống:</h5>
+                <p><strong>Admin:</strong> Có quyền truy cập tất cả trang quản lý</p>
+                <p><strong>Staff:</strong> Chỉ có quyền truy cập trang quản lý cơ bản</p>
+                <p><strong>Customer:</strong> Chỉ có quyền truy cập trang người dùng</p>
+            </div>
+            
+            <div>
+                <a href="javascript:history.back()" class="btn-back">← Quay lại</a>
+                <a href="home" class="btn-home">🏠 Về trang chủ</a>
             </div>
         </div>
-    </section>
-    <!-- End Sample Area -->
+    </div>
 
-    <!-- footer_start -->
-    <jsp:include page="footer.jsp" />
-    <!-- footer_end -->
-
-    <!-- JS here -->
-    <script src="js/vendor/modernizr-3.5.0.min.js"></script>
-    <script src="js/vendor/jquery-1.12.4.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/owl.carousel.min.js"></script>
-    <script src="js/isotope.pkgd.min.js"></script>
-    <script src="js/ajax-form.js"></script>
-    <script src="js/waypoints.min.js"></script>
-    <script src="js/jquery.counterup.min.js"></script>
-    <script src="js/imagesloaded.pkgd.min.js"></script>
-    <script src="js/scrollIt.js"></script>
-    <script src="js/jquery.scrollUp.min.js"></script>
-    <script src="js/wow.min.js"></script>
-    <script src="js/nice-select.min.js"></script>
-    <script src="js/jquery.slicknav.min.js"></script>
-    <script src="js/jquery.magnific-popup.min.js"></script>
-    <script src="js/plugins.js"></script>
-    <script src="js/contact.js"></script>
-    <script src="js/jquery.ajaxchimp.min.js"></script>
-    <script src="js/jquery.form.js"></script>
-    <script src="js/jquery.validate.min.js"></script>
-    <script src="js/mail-script.js"></script>
-    <script src="js/main.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Auto redirect sau 10 giây
+        setTimeout(function() {
+            window.location.href = 'home';
+        }, 10000);
+        
+        // Hiển thị countdown
+        let countdown = 10;
+        const countdownElement = document.createElement('div');
+        countdownElement.style.cssText = 'margin-top: 20px; color: #6c757d; font-size: 14px;';
+        document.querySelector('.access-denied-card').appendChild(countdownElement);
+        
+        const timer = setInterval(function() {
+            countdown--;
+            countdownElement.textContent = `Tự động chuyển về trang chủ sau ${countdown} giây...`;
+            if (countdown <= 0) {
+                clearInterval(timer);
+            }
+        }, 1000);
+    </script>
 </body>
 </html> 
