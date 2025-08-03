@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Chatbot Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .test-button {
+            background: #1E90FF;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 0;
+            width: 100%;
+        }
+        .test-button:hover {
+            background: #4169E1;
+        }
+        .result {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            white-space: pre-wrap;
+            font-family: monospace;
+            min-height: 50px;
+        }
+        .error {
+            background: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+        .success {
+            background: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+        .loading {
+            background: #fff3cd;
+            border-color: #ffeaa7;
+            color: #856404;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .status {
+            text-align: center;
+            font-size: 18px;
+            margin: 20px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .status.ready {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🤖 Chatbot API Test</h1>
+        
+        <div id="status" class="status">Checking API availability...</div>
+        
+        <button class="test-button" onclick="testConnection()">🔗 Test Database Connection</button>
+        <div id="connection-result" class="result">Click button to test</div>
+        
+        <button class="test-button" onclick="testCourts()">🏸 Test Get Courts</button>
+        <div id="courts-result" class="result">Click button to test</div>
+        
+        <button class="test-button" onclick="testServices()">🛍️ Test Get Services</button>
+        <div id="services-result" class="result">Click button to test</div>
+        
+        <button class="test-button" onclick="testAll()">🚀 Test All APIs</button>
+        <div id="all-result" class="result">Click button to test</div>
+    </div>
+
+    <script>
+        const API_BASE = '/SWP_Project/chatbot-api';
+        
+        function showResult(elementId, message, type = 'info') {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.className = `result ${type}`;
+        }
+        
+        function showLoading(elementId) {
+            showResult(elementId, '⏳ Loading...', 'loading');
+        }
+        
+        function updateStatus(message, type) {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = `status ${type}`;
+        }
+        
+        async function callAPI(action, params = {}) {
+            try {
+                console.log(`Calling API: ${API_BASE} with action: ${action}`);
+                const response = await fetch(API_BASE, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ action, ...params })
+                });
+                
+                console.log(`Response status: ${response.status}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                console.log('API response:', data);
+                return data;
+            } catch (error) {
+                console.error('API call failed:', error);
+                throw new Error(`API call failed: ${error.message}`);
+            }
+        }
+        
+        async function testConnection() {
+            showLoading('connection-result');
+            try {
+                const result = await callAPI('testConnection');
+                if (result.success) {
+                    showResult('connection-result', `✅ SUCCESS: ${result.message}`, 'success');
+                } else {
+                    showResult('connection-result', `❌ FAILED: ${result.message}`, 'error');
+                }
+            } catch (error) {
+                showResult('connection-result', `❌ ERROR: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testCourts() {
+            showLoading('courts-result');
+            try {
+                const result = await callAPI('getAllCourts');
+                if (result.success) {
+                    const data = result.data;
+                    const message = `✅ SUCCESS: Found ${data.totalCourts} courts\n\n${JSON.stringify(data, null, 2)}`;
+                    showResult('courts-result', message, 'success');
+                } else {
+                    showResult('courts-result', `❌ FAILED: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                showResult('courts-result', `❌ ERROR: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testServices() {
+            showLoading('services-result');
+            try {
+                const result = await callAPI('getAllServices');
+                if (result.success) {
+                    const data = result.data;
+                    const message = `✅ SUCCESS: Found ${data.totalServices} services\n\n${JSON.stringify(data, null, 2)}`;
+                    showResult('services-result', message, 'success');
+                } else {
+                    showResult('services-result', `❌ FAILED: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                showResult('services-result', `❌ ERROR: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testAll() {
+            showLoading('all-result');
+            let results = [];
+            
+            try {
+                // Test connection
+                results.push('🔄 Testing Database Connection...');
+                const connResult = await callAPI('testConnection');
+                if (connResult.success) {
+                    results.push('✅ Database Connection: PASSED');
+                } else {
+                    results.push('❌ Database Connection: FAILED');
+                }
+                
+                // Test courts
+                results.push('🔄 Testing Get Courts...');
+                const courtsResult = await callAPI('getAllCourts');
+                if (courtsResult.success) {
+                    results.push(`✅ Get Courts: PASSED (${courtsResult.data.totalCourts} courts found)`);
+                } else {
+                    results.push('❌ Get Courts: FAILED');
+                }
+                
+                // Test services
+                results.push('🔄 Testing Get Services...');
+                const servicesResult = await callAPI('getAllServices');
+                if (servicesResult.success) {
+                    results.push(`✅ Get Services: PASSED (${servicesResult.data.totalServices} services found)`);
+                } else {
+                    results.push('❌ Get Services: FAILED');
+                }
+                
+                results.push('\n🎉 All tests completed!');
+                showResult('all-result', results.join('\n'), 'success');
+                
+            } catch (error) {
+                results.push(`❌ Test failed: ${error.message}`);
+                showResult('all-result', results.join('\n'), 'error');
+            }
+        }
+        
+        // Check API availability on page load
+        window.onload = async function() {
+            try {
+                updateStatus('🔍 Checking API availability...', '');
+                await callAPI('testConnection');
+                updateStatus('✅ API is ready!', 'ready');
+            } catch (error) {
+                updateStatus(`❌ API not available: ${error.message}`, 'error');
+            }
+        };
+    </script>
+</body>
+</html> 

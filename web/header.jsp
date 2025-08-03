@@ -46,7 +46,7 @@
                         <div class="book_room d-flex align-items-center justify-content-end">
                             <div class="book_btn d-flex gap-2">
                                 <a href="./Login" class="btn btn-outline-primary">Đăng Nhập</a>
-                                <a href="./register" class="btn btn-primary">Đăng xuất</a>
+                                <a href="./register" class="btn btn-primary">Đăng ký</a>
                             </div>
                         </div>
                     </div>

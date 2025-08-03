@@ -11,7 +11,7 @@ const closeChatbot = document.querySelector("#close-chatbot");
 // Api setup
 const API_KEY = "AIzaSyD1ClTMuvLuwlugJpmAH1tzGe_pnzSd3Lw";
 const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`;
-const CHATBOT_API_URL = "/chatbot-api";
+const CHATBOT_API_URL = "/SWP_Project/chatbot-api";
 
 const userData = {
     message: null,

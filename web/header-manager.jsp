@@ -1,5 +1,6 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page import="models.UserDTO, models.AdminDTO" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -17,26 +18,16 @@
         <ul class="navbar-nav mr-lg-2">
             <li class="nav-item  d-none d-lg-flex">
                 <a class="nav-link" href="./scheduler-manager">
-                    Calendar
+                    Scheduler
                 </a>
             </li>
             <li class="nav-item  d-none d-lg-flex">
-                <a class="nav-link active" href="#">
-                    Statistic
-                </a>
-            </li>
-            <li class="nav-item  d-none d-lg-flex">
-                <a class="nav-link" href="#">
-                    Employee
+                <a class="nav-link active" href="/AdminStatisticsController">
+                    Báo cáo
                 </a>
             </li>
         </ul>
         <ul class="navbar-nav navbar-nav-right">
-            <li class="nav-item d-none d-lg-flex  mr-2">
-                <a class="nav-link" href="#">
-                    Help
-                </a>
-            </li>
             <%
     Object accObj = session.getAttribute("acc");
     String avatarUrl = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
@@ -61,16 +52,16 @@
                 <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
                     <a class="dropdown-item" href="./view-profile">
                         <i class="typcn typcn-user text-primary me-2"></i>
-                        View Profile
+                        Hồ sơ
                     </a>
                     <a class="dropdown-item" href="change-password.jsp">
                         <i class="typcn typcn-cog text-primary me-2"></i>
-                        Change Password
+                        Đổi mật khẩu
                     </a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item text-danger" href="./logout">
                         <i class="typcn typcn-power text-danger me-2"></i>
-                        Logout
+                        Đăng xuất
                     </a>
                 </div>
             </li>
@@ -139,12 +130,12 @@
                         </div>
                     </div>
                 </div>
-                <p class="sidebar-menu-title">Dash menu</p>
+                <p class="sidebar-menu-title">Dash List</p>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./page-manager">
+                <a class="nav-link" href="./AdminStatisticsController">
                     <i class="typcn typcn-device-desktop menu-icon"></i>
-                    <span class="menu-title">Dashboard <span class="badge badge-primary ml-3">New</span></span>
+                    <span class="menu-title">Dashboard<span class="badge badge-primary ml-3">New</span></span>
                 </a>
             </li>
             <li class="nav-item">
@@ -161,7 +152,7 @@
                         <li class="nav-item"> <a class="nav-link" href="./video-manager">Video</a></li>
                         <li class="nav-item"> <a class="nav-link" href="./contact-manager">Contact</a></li>
                         <li class="nav-item"> <a class="nav-link" href="./instagram-manager">Instagram</a></li>
-                        <li class="nav-item"> <a class="nav-link" href="./blog-manager">Blog</a></li>
+                        <li class="nav-item"> <a class="nav-link" href="dashboard.jsp">Blog</a></li>
 
                     </ul>
                 </div>
@@ -178,7 +169,6 @@
                         <li class="nav-item"><a class="nav-link" href="./admin-manager">Admin Account</a></li>
                         <li class="nav-item"><a class="nav-link" href="./court-manager">Court Manager</a></li>
                         <li class="nav-item"> <a class="nav-link" href="./service-manager">Service Manager</a></li>
-                        <li class="nav-item"> <a class="nav-link" href="./scheduler-manager">Schedulers Manager</a></li>
                         <li class="nav-item"> <a class="nav-link" href="./court-scheduler-manager">Scheduler Manager</a></li>
                         <li class="nav-item"> <a class="nav-link" href="./court-rates-manager">Court Rates Manager</a></li>
                         <li class="nav-item"> <a class="nav-link" href="./scheduler-manager?action=list">Booking Manager</a></li>
@@ -194,41 +184,15 @@
                 </a>
                 <div class="collapse" id="charts">
                     <ul class="nav flex-column sub-menu">
-                        <li class="nav-item"> <a class="nav-link" href="pages/charts/chartjs.html">ChartJs</a></li>
                         <li class="nav-item"> <a class="nav-link" href="view-revenue.jsp">Revenue</a></li>
-                        <li class="nav-item"> <a class="nav-link" href="view-invoice-details">Invoice</a></li>
                     </ul>
                 </div>
             </li>
             <li class="nav-item">
                 <a class="nav-link" data-toggle="collapse" href="#tables" aria-expanded="false" aria-controls="tables">
                     <i class="typcn typcn-th-small-outline menu-icon"></i>
-                    <span class="menu-title">Statitics</span>
+                    <span class="menu-title">Báo cáo</span>
                     <i class="menu-arrow"></i>
-                </a>
-                <div class="collapse" id="tables">
-                    <ul class="nav flex-column sub-menu">
-                        <li class="nav-item"> <a class="nav-link" href="booking-manager">Booking</a></li>
-                        <li class="nav-item"> <a class="nav-link" href="invoices-manager">Invoices</a></li>
-                    </ul>
-                </div>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" data-toggle="collapse" href="#icons" aria-expanded="false" aria-controls="icons">
-                    <i class="typcn typcn-compass menu-icon"></i>
-                    <span class="menu-title">Icons</span>
-                    <i class="menu-arrow"></i>
-                </a>
-                <div class="collapse" id="icons">
-                    <ul class="nav flex-column sub-menu">
-                        <li class="nav-item"> <a class="nav-link" href="pages/icons/mdi.html">Mdi icons</a></li>
-                    </ul>
-                </div>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="dashboard.jsp">
-                    <i class="typcn typcn-document-text menu-icon"></i>
-                    <span class="menu-title">Post by staff</span>
                 </a>
             </li>
         </ul>

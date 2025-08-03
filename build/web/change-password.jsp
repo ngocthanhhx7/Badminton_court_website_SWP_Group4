@@ -190,7 +190,7 @@
                 </div>
             <% } %>
 
-            <form action="change-password" method="post" id="changePasswordForm">
+            <form action="change-password" method="post" id="changePasswordForm" onsubmit="return validateChangePasswordForm()">
                 <div class="form-group">
                     <label for="currentPassword">
                         <i class="fa fa-key"></i> Mật khẩu hiện tại <span class="required">*</span>
@@ -240,25 +240,157 @@
         </div>
 
         <script>
-            // Validation cho form
-            document.getElementById('changePasswordForm').addEventListener('submit', function(e) {
-                const newPassword = document.getElementById('newPassword').value;
-                const confirmPassword = document.getElementById('confirmPassword').value;
+            // Function to remove whitespace from input
+            function removeWhitespace(input) {
+                input.value = input.value.replace(/\s/g, '');
+            }
+
+            // Function to validate form before submission
+            function validateChangePasswordForm() {
+                const currentPassword = document.getElementById('currentPassword');
+                const newPassword = document.getElementById('newPassword');
+                const confirmPassword = document.getElementById('confirmPassword');
                 
-                if (newPassword !== confirmPassword) {
-                    e.preventDefault();
+                // Check for whitespace in the middle of the input
+                if (currentPassword.value.includes(' ')) {
+                    alert("Mật khẩu hiện tại không được chứa khoảng trắng!");
+                    currentPassword.focus();
+                    return false;
+                }
+                
+                if (newPassword.value.includes(' ')) {
+                    alert("Mật khẩu mới không được chứa khoảng trắng!");
+                    newPassword.focus();
+                    return false;
+                }
+                
+                if (confirmPassword.value.includes(' ')) {
+                    alert("Xác nhận mật khẩu không được chứa khoảng trắng!");
+                    confirmPassword.focus();
+                    return false;
+                }
+                
+                // Remove any existing whitespace
+                removeWhitespace(currentPassword);
+                removeWhitespace(newPassword);
+                removeWhitespace(confirmPassword);
+                
+                // Check if fields are empty after removing whitespace
+                if (!currentPassword.value.trim()) {
+                    alert("Mật khẩu hiện tại không được để trống!");
+                    currentPassword.focus();
+                    return false;
+                }
+                
+                if (!newPassword.value.trim()) {
+                    alert("Mật khẩu mới không được để trống!");
+                    newPassword.focus();
+                    return false;
+                }
+                
+                if (!confirmPassword.value.trim()) {
+                    alert("Xác nhận mật khẩu không được để trống!");
+                    confirmPassword.focus();
+                    return false;
+                }
+                
+                // Check password match
+                if (newPassword.value !== confirmPassword.value) {
                     alert('Mật khẩu mới và xác nhận mật khẩu không khớp!');
+                    confirmPassword.focus();
                     return false;
                 }
                 
-                if (newPassword.length < 6) {
-                    e.preventDefault();
+                // Check password length
+                if (newPassword.value.length < 6) {
                     alert('Mật khẩu mới phải có ít nhất 6 ký tự!');
+                    newPassword.focus();
                     return false;
                 }
+                
+                return true;
+            }
+
+            // Add event listeners to prevent whitespace input
+            document.addEventListener('DOMContentLoaded', function() {
+                const currentPassword = document.getElementById('currentPassword');
+                const newPassword = document.getElementById('newPassword');
+                const confirmPassword = document.getElementById('confirmPassword');
+                
+                // Prevent whitespace on input with immediate feedback
+                currentPassword.addEventListener('input', function() {
+                    if (this.value.includes(' ')) {
+                        alert("Mật khẩu hiện tại không được chứa khoảng trắng!");
+                        this.value = this.value.replace(/\s/g, '');
+                    }
+                });
+                
+                newPassword.addEventListener('input', function() {
+                    if (this.value.includes(' ')) {
+                        alert("Mật khẩu mới không được chứa khoảng trắng!");
+                        this.value = this.value.replace(/\s/g, '');
+                    }
+                });
+                
+                confirmPassword.addEventListener('input', function() {
+                    if (this.value.includes(' ')) {
+                        alert("Xác nhận mật khẩu không được chứa khoảng trắng!");
+                        this.value = this.value.replace(/\s/g, '');
+                    }
+                });
+                
+                // Prevent paste with whitespace
+                currentPassword.addEventListener('paste', function(e) {
+                    setTimeout(() => {
+                        if (this.value.includes(' ')) {
+                            alert("Mật khẩu hiện tại không được chứa khoảng trắng!");
+                            this.value = this.value.replace(/\s/g, '');
+                        }
+                    }, 0);
+                });
+                
+                newPassword.addEventListener('paste', function(e) {
+                    setTimeout(() => {
+                        if (this.value.includes(' ')) {
+                            alert("Mật khẩu mới không được chứa khoảng trắng!");
+                            this.value = this.value.replace(/\s/g, '');
+                        }
+                    }, 0);
+                });
+                
+                confirmPassword.addEventListener('paste', function(e) {
+                    setTimeout(() => {
+                        if (this.value.includes(' ')) {
+                            alert("Xác nhận mật khẩu không được chứa khoảng trắng!");
+                            this.value = this.value.replace(/\s/g, '');
+                        }
+                    }, 0);
+                });
+                
+                // Prevent space key from being typed
+                currentPassword.addEventListener('keydown', function(e) {
+                    if (e.key === ' ') {
+                        e.preventDefault();
+                        alert("Mật khẩu hiện tại không được chứa khoảng trắng!");
+                    }
+                });
+                
+                newPassword.addEventListener('keydown', function(e) {
+                    if (e.key === ' ') {
+                        e.preventDefault();
+                        alert("Mật khẩu mới không được chứa khoảng trắng!");
+                    }
+                });
+                
+                confirmPassword.addEventListener('keydown', function(e) {
+                    if (e.key === ' ') {
+                        e.preventDefault();
+                        alert("Xác nhận mật khẩu không được chứa khoảng trắng!");
+                    }
+                });
             });
 
-            // Real-time validation
+            // Real-time validation for password match
             document.getElementById('confirmPassword').addEventListener('input', function() {
                 const newPassword = document.getElementById('newPassword').value;
                 const confirmPassword = this.value;

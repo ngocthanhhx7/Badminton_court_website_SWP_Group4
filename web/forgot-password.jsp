@@ -250,7 +250,7 @@
             <div class="form-box">
                 <div class="form-container">
                     <header>Quên Mật Khẩu</header>
-                    <form action="${pageContext.request.contextPath}/ForgotPasswordServlet" method="post">
+                    <form action="${pageContext.request.contextPath}/ForgotPasswordServlet" method="post" onsubmit="return validateForgotPasswordForm()">
                         <div class="input-box">
                             <input type="email" class="input-field" name="email" placeholder="Nhập email của bạn" value="${email}" required>
                             <i class="fas fa-envelope"></i>
@@ -437,19 +437,79 @@
 
         <script src="js/main.js"></script>
         <script>
-                                    $('#datepicker').datepicker({
-                                        iconsLibrary: 'fontawesome',
-                                        icons: {
-                                            rightIcon: '<span class="fa fa-caret-down"></span>'
-                                        }
-                                    });
-                                    $('#datepicker2').datepicker({
-                                        iconsLibrary: 'fontawesome',
-                                        icons: {
-                                            rightIcon: '<span class="fa fa-caret-down"></span>'
-                                        }
+            // Function to remove whitespace from input
+            function removeWhitespace(input) {
+                input.value = input.value.replace(/\s/g, '');
+            }
 
-                                    });
+            // Function to validate form before submission
+            function validateForgotPasswordForm() {
+                const email = document.querySelector('input[name="email"]');
+                
+                // Check for whitespace in the middle of the input
+                if (email.value.includes(' ')) {
+                    alert("Email không được chứa khoảng trắng!");
+                    email.focus();
+                    return false;
+                }
+                
+                // Remove any existing whitespace
+                removeWhitespace(email);
+                
+                // Check if field is empty after removing whitespace
+                if (!email.value.trim()) {
+                    alert("Email không được để trống!");
+                    email.focus();
+                    return false;
+                }
+                
+                return true;
+            }
+
+            // Add event listeners to prevent whitespace input
+            document.addEventListener('DOMContentLoaded', function() {
+                const email = document.querySelector('input[name="email"]');
+                
+                // Prevent whitespace on input with immediate feedback
+                email.addEventListener('input', function() {
+                    if (this.value.includes(' ')) {
+                        alert("Email không được chứa khoảng trắng!");
+                        this.value = this.value.replace(/\s/g, '');
+                    }
+                });
+                
+                // Prevent paste with whitespace
+                email.addEventListener('paste', function(e) {
+                    setTimeout(() => {
+                        if (this.value.includes(' ')) {
+                            alert("Email không được chứa khoảng trắng!");
+                            this.value = this.value.replace(/\s/g, '');
+                        }
+                    }, 0);
+                });
+                
+                // Prevent space key from being typed
+                email.addEventListener('keydown', function(e) {
+                    if (e.key === ' ') {
+                        e.preventDefault();
+                        alert("Email không được chứa khoảng trắng!");
+                    }
+                });
+            });
+
+            $('#datepicker').datepicker({
+                iconsLibrary: 'fontawesome',
+                icons: {
+                    rightIcon: '<span class="fa fa-caret-down"></span>'
+                }
+            });
+            $('#datepicker2').datepicker({
+                iconsLibrary: 'fontawesome',
+                icons: {
+                    rightIcon: '<span class="fa fa-caret-down"></span>'
+                }
+
+            });
         </script>
 
 

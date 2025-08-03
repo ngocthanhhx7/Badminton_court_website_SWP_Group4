@@ -9,14 +9,20 @@
 <head>
     <meta charset="UTF-8">
     <title>Thống kê hệ thống</title>
-    <!-- Bootstrap CSS -->
+
+    <!-- Bootstrap & Chart CSS/JS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
 
+    <!-- base:css -->
     <link rel="stylesheet" href="vendors/typicons.font/font/typicons.css">
     <link rel="stylesheet" href="vendors/css/vendor.bundle.base.css">
+    <!-- endinject -->
+
+    <!-- inject:css -->
     <link rel="stylesheet" href="css/vertical-layout-light/style.css">
+    <!-- endinject -->
+
     <link rel="shortcut icon" href="img/favicon.png" />
 
     <style>
@@ -33,14 +39,17 @@
 </head>
 <body>
     <div class="container-scroller">
+        <%-- Sidebar / Header Navigation --%>
         <jsp:include page="header-manager.jsp" />
+
+        <!-- Main Panel -->
         <div class="main-panel">
             <div class="content-wrapper">
-                <div class="container my-5">
-                    <h1 class="mb-4">Thống kê hệ thống</h1>
+                <div class="container-fluid px-4 py-3">
+                    <h2 class="mb-4">Thống kê hệ thống</h2>
 
                     <!-- Form lọc ngày -->
-                    <form class="row g-3 align-items-end" method="get" action="AdminStatisticsController">
+                    <form class="row g-3 align-items-end mb-4" method="get" action="AdminStatisticsController">
                         <div class="col-auto">
                             <label for="fromDate" class="form-label">Từ ngày</label>
                             <input type="date"
@@ -61,73 +70,87 @@
                     </form>
 
                     <!-- Cards thống kê -->
-                    <div class="row text-center mt-5 gy-4">
+                    <div class="row text-center gy-4 mb-4">
                         <c:set var="s" value="${stats}" />
                         <div class="col-md-3">
                             <div class="card shadow-sm"><div class="card-body">
-                                    <h5 class="card-title">Tổng số sân</h5>
+                                    <h6 class="card-title">Tổng số sân</h6>
                                     <p class="display-6">${s.totalCourts}</p>
                                 </div></div>
                         </div>
                         <div class="col-md-3">
                             <div class="card shadow-sm"><div class="card-body">
-                                    <h5 class="card-title">Sân Single</h5>
+                                    <h6 class="card-title">Sân Single</h6>
                                     <p class="display-6">${s.singleCourtCount}</p>
                                 </div></div>
                         </div>
                         <div class="col-md-3">
                             <div class="card shadow-sm"><div class="card-body">
-                                    <h5 class="card-title">Sân Double</h5>
+                                    <h6 class="card-title">Sân Double</h6>
                                     <p class="display-6">${s.doubleCourtCount}</p>
                                 </div></div>
                         </div>
                         <div class="col-md-3">
                             <div class="card shadow-sm"><div class="card-body">
-                                    <h5 class="card-title">Sân VIP</h5>
+                                    <h6 class="card-title">Sân VIP</h6>
                                     <p class="display-6">${s.vipCourtCount}</p>
                                 </div></div>
                         </div>
                         <div class="col-md-4">
                             <div class="card shadow-sm"><div class="card-body">
-                                    <h5 class="card-title">Tổng bài viết</h5>
+                                    <h6 class="card-title">Tổng bài viết</h6>
                                     <p class="display-6">${s.totalPosts}</p>
                                 </div></div>
                         </div>
                         <div class="col-md-4">
                             <div class="card shadow-sm"><div class="card-body">
-                                    <h5 class="card-title">Tổng bình luận</h5>
+                                    <h6 class="card-title">Tổng bình luận</h6>
                                     <p class="display-6">${s.totalComments}</p>
                                 </div></div>
                         </div>
                     </div>
 
-                    <!-- Tổng doanh thu -->
-                    <div class="alert alert-info mt-5">
+                    <!-- Doanh thu -->
+                    <div class="alert alert-info">
                         <strong>Tổng doanh thu:</strong>
                         <fmt:formatNumber value="${s.totalRevenue}" type="number" groupingUsed="true"/> VNĐ
                     </div>
 
                     <!-- Biểu đồ doanh thu -->
                     <div class="mt-4">
-                        <h3>
+                        <h5>
                             Doanh thu từ 
                             ${fn:substringBefore(stats.fromDateTime,'T')} 
                             đến 
                             ${fn:substringBefore(stats.toDateTime,'T')}
-                        </h3>
+                        </h5>
                         <canvas id="revenueChart"></canvas>
                         <div id="hoverInfo"></div>
                     </div>
                 </div>
             </div>
         </div>
+        <!-- main-panel ends -->
     </div>
+    <!-- container-scroller ends -->
 
-    <!-- Chart.js Rendering -->
+    <!-- base:js -->
+    <script src="vendors/js/vendor.bundle.base.js"></script>
+    <!-- endinject -->
+
+    <!-- inject:js -->
+    <script src="js/off-canvas.js"></script>
+    <script src="js/hoverable-collapse.js"></script>
+    <script src="js/template.js"></script>
+    <script src="js/settings.js"></script>
+    <script src="js/todolist.js"></script>
+    <!-- endinject -->
+
+    <!-- Chart rendering -->
     <script>
         const labels = [
             <c:forEach var="dr" items="${s.dailyRevenues}" varStatus="st">
-            '${dr.date}'<c:if test="${!st.last}">,</c:if>
+                '${dr.date}'<c:if test="${!st.last}">,</c:if>
             </c:forEach>
         ];
         const data = [
@@ -145,10 +168,10 @@
                     label: 'Doanh thu (VNĐ)',
                     data,
                     borderColor: '#007bff',
-                    backgroundColor: '#007bff',
+                    backgroundColor: '#007bff33',
                     borderWidth: 2,
                     tension: 0.1,
-                    fill: false,
+                    fill: true,
                     pointRadius: v => v.raw === 0 ? 0 : 4,
                     pointHoverRadius: v => v.raw === 0 ? 0 : 6
                 }]

@@ -54,7 +54,7 @@ public class PageManagerController extends HttpServlet {
         
         try {
             
-            request.getRequestDispatcher("page-manager.jsp").forward(request, response);
+            request.getRequestDispatcher("admin-statistics.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An error occurred: " + e.getMessage());

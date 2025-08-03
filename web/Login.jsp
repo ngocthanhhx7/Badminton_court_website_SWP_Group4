@@ -38,6 +38,104 @@
                     passField.type = "password";
                 }
             }
+
+            // Function to remove whitespace from input
+            function removeWhitespace(input) {
+                input.value = input.value.replace(/\s/g, '');
+            }
+
+            // Function to validate form before submission
+            function validateForm() {
+                const emailOrUsername = document.getElementById("emailOrUsername");
+                const password = document.getElementById("password");
+                
+                // Check for whitespace in the middle of the input
+                if (emailOrUsername.value.includes(' ')) {
+                    alert("Tên đăng nhập hoặc email không được chứa khoảng trắng!");
+                    emailOrUsername.focus();
+                    return false;
+                }
+                
+                if (password.value.includes(' ')) {
+                    alert("Mật khẩu không được chứa khoảng trắng!");
+                    password.focus();
+                    return false;
+                }
+                
+                // Remove any existing whitespace
+                removeWhitespace(emailOrUsername);
+                removeWhitespace(password);
+                
+                // Check if fields are empty after removing whitespace
+                if (!emailOrUsername.value.trim()) {
+                    alert("Tên đăng nhập hoặc email không được để trống!");
+                    emailOrUsername.focus();
+                    return false;
+                }
+                
+                if (!password.value.trim()) {
+                    alert("Mật khẩu không được để trống!");
+                    password.focus();
+                    return false;
+                }
+                
+                return true;
+            }
+
+            // Add event listeners to prevent whitespace input
+            document.addEventListener('DOMContentLoaded', function() {
+                const emailOrUsername = document.getElementById("emailOrUsername");
+                const password = document.getElementById("password");
+                
+                // Prevent whitespace on input with immediate feedback
+                emailOrUsername.addEventListener('input', function() {
+                    if (this.value.includes(' ')) {
+                        alert("Tên đăng nhập hoặc email không được chứa khoảng trắng!");
+                        this.value = this.value.replace(/\s/g, '');
+                    }
+                });
+                
+                password.addEventListener('input', function() {
+                    if (this.value.includes(' ')) {
+                        alert("Mật khẩu không được chứa khoảng trắng!");
+                        this.value = this.value.replace(/\s/g, '');
+                    }
+                });
+                
+                // Prevent paste with whitespace
+                emailOrUsername.addEventListener('paste', function(e) {
+                    setTimeout(() => {
+                        if (this.value.includes(' ')) {
+                            alert("Tên đăng nhập hoặc email không được chứa khoảng trắng!");
+                            this.value = this.value.replace(/\s/g, '');
+                        }
+                    }, 0);
+                });
+                
+                password.addEventListener('paste', function(e) {
+                    setTimeout(() => {
+                        if (this.value.includes(' ')) {
+                            alert("Mật khẩu không được chứa khoảng trắng!");
+                            this.value = this.value.replace(/\s/g, '');
+                        }
+                    }, 0);
+                });
+                
+                // Prevent space key from being typed
+                emailOrUsername.addEventListener('keydown', function(e) {
+                    if (e.key === ' ') {
+                        e.preventDefault();
+                        alert("Tên đăng nhập hoặc email không được chứa khoảng trắng!");
+                    }
+                });
+                
+                password.addEventListener('keydown', function(e) {
+                    if (e.key === ' ') {
+                        e.preventDefault();
+                        alert("Mật khẩu không được chứa khoảng trắng!");
+                    }
+                });
+            });
         </script>
 
         <link rel="stylesheet" href="css/owl.carousel.min.css">
@@ -66,7 +164,7 @@
                         <div class="row gy-5 justify-content-center">
                             <div class="col-12 col-lg-5">
 
-                                <form action="Login" method="post">
+                                <form action="Login" method="post" onsubmit="return validateForm()">
                                     <div class="row gy-3 overflow-hidden">
                                         <div class="col-12">
 

@@ -112,9 +112,9 @@
                             <div class="col-12">
                                 <h2 class="page-title">
                                     <i class="fas fa-calendar-check me-2"></i>
-                                    Booking Management
+                                    Quản lý đặt sân
                                 </h2>
-                                <p class="text-muted">Manage and view all court bookings</p>
+                                <p class="text-muted">Admin có thể xem toàn bộ lịch sử đặt sân</p>
                             </div>
                         </div>
 
@@ -124,21 +124,21 @@
                                 <input type="hidden" name="action" value="list">
                                 <div class="col-md-4">
                                     <label for="startDate" class="form-label">
-                                        <i class="fas fa-calendar-alt me-1"></i>Start Date
+                                        <i class="fas fa-calendar-alt me-1"></i>Ngày bắt đầu
                                     </label>
                                     <input type="date" class="form-control" id="startDate" name="startDate" 
                                            value="${param.startDate}">
                                 </div>
                                 <div class="col-md-4">
                                     <label for="endDate" class="form-label">
-                                        <i class="fas fa-calendar-alt me-1"></i>End Date
+                                        <i class="fas fa-calendar-alt me-1"></i>Ngày kết thúc
                                     </label>
                                     <input type="date" class="form-control" id="endDate" name="endDate" 
                                            value="${param.endDate}">
                                 </div>
                                 <div class="col-md-4">
                                     <button type="submit" class="btn btn-light me-2">
-                                        <i class="fas fa-search me-1"></i>Filter
+                                        <i class="fas fa-search me-1"></i>Lọc
                                     </button>
                                     <a href="scheduler-manager?action=list" class="btn btn-outline-light">
                                         <i class="fas fa-refresh me-1"></i>Reset
@@ -154,13 +154,13 @@
                                     <div class="stats-number text-primary">
                                         ${sum} ₫
                                     </div>
-                                    <div class="text-muted">Total Revenue</div>
+                                    <div class="text-muted">Tổng thu nhập</div>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="stats-card">
                                     <div class="stats-number">${totalBooking}</div>
-                                    <div class="text-muted">Total Bookings</div>
+                                    <div class="text-muted">Số lượt booking</div>
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -174,7 +174,7 @@
                                         </c:forEach>
                                         ${confirmedCount}
                                     </div>
-                                    <div class="text-muted">Completed</div>
+                                    <div class="text-muted">Hoàn Thành</div>
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -188,7 +188,7 @@
                                         </c:forEach>
                                         ${pendingCount}
                                     </div>
-                                    <div class="text-muted">Pending</div>
+                                    <div class="text-muted">Chờ thanh toán</div>
                                 </div>
                             </div>
 <!--                                        <div class="col-md-3">
@@ -238,9 +238,11 @@
                                                                     <input type="hidden" name="bookingId" value="${booking.bookingId}" />
                                                                     <input type="hidden" name="action" value="update" />
                                                                     <select class="form-select form-select-sm status-select status-${booking.status.toLowerCase()}" name="status" onchange="this.form.submit()">
-                                                                        <option value="Pending" ${booking.status == 'Pending' ? 'selected' : ''}>Pending</option>
-                                                                        <option value="Completed"  ${booking.status == 'Completed' ? 'selected' : ''}>Completed</option>
-                                                                        <option value="Cancelled"  ${booking.status == 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+                                                                        <c:if test="${booking.status == 'Pending'}">
+                                                                            <option value="Pending" selected>Pending</option>
+                                                                        </c:if>
+                                                                        <option value="Completed" ${booking.status == 'Completed' ? 'selected' : ''}>Completed</option>
+                                                                        <option value="Cancelled" ${booking.status == 'Cancelled' ? 'selected' : ''}>Cancelled</option>
                                                                     </select>
                                                                 </form>
 
@@ -325,11 +327,11 @@
                                                                         <div class="col-md-4 text-end">
                                                                             <div class="mb-1">
                                                                                 <small class="text-muted">Rate: </small>
-                                                                                <fmt:formatNumber value="${detail.hourlyRate}" type="currency" currencySymbol="$"/>
+                                                                                <fmt:formatNumber value="${detail.hourlyRate}" type="currency" currencySymbol="đ"/>
                                                                                 <small class="text-muted">/hour</small>
                                                                             </div>
                                                                             <strong class="text-primary">
-                                                                                Subtotal: <fmt:formatNumber value="${detail.subtotal}" type="currency" currencySymbol="$"/>
+                                                                                Subtotal: <fmt:formatNumber value="${detail.subtotal}" type="currency" currencySymbol="đ"/>
                                                                             </strong>
                                                                             <c:set var="totalAmount" value="${totalAmount + detail.subtotal}"/>
                                                                         </div>
@@ -342,7 +344,7 @@
                                                                 <div class="col-12 text-end">
                                                                     <h5 class="text-success">
                                                                         <i class="fas fa-dollar-sign me-1"></i>
-                                                                        Total Amount: <fmt:formatNumber value="${totalAmount}" type="currency" currencySymbol="$"/>
+                                                                        Tổng: <fmt:formatNumber value="${totalAmount}" type="currency" currencySymbol="đ"/>
                                                                     </h5>
                                                                 </div>
                                                             </div>

@@ -123,7 +123,7 @@
                 </div>
             <% } %>
             
-            <form action="register" method="post" class="needs-validation" novalidate>
+            <form action="register" method="post" class="needs-validation" novalidate onsubmit="return validateRegistrationForm()">
                 <div class="mb-3">
                     <label for="username" class="form-label">
                         <i class="fa fa-user me-1 text-primary"></i>
@@ -261,6 +261,63 @@
         
         <!-- Custom JavaScript for registration form -->
         <script>
+            // Function to remove whitespace from input
+            function removeWhitespace(input) {
+                input.value = input.value.replace(/\s/g, '');
+            }
+
+            // Function to validate form before submission
+            function validateRegistrationForm() {
+                const username = document.getElementById('username');
+                const email = document.getElementById('email');
+                const password = document.getElementById('password');
+                
+                // Check for whitespace in the middle of the input
+                if (username.value.includes(' ')) {
+                    alert("Username không được chứa khoảng trắng!");
+                    username.focus();
+                    return false;
+                }
+                
+                if (email.value.includes(' ')) {
+                    alert("Email không được chứa khoảng trắng!");
+                    email.focus();
+                    return false;
+                }
+                
+                if (password.value.includes(' ')) {
+                    alert("Mật khẩu không được chứa khoảng trắng!");
+                    password.focus();
+                    return false;
+                }
+                
+                // Remove any existing whitespace
+                removeWhitespace(username);
+                removeWhitespace(email);
+                removeWhitespace(password);
+                
+                // Check if fields are empty after removing whitespace
+                if (!username.value.trim()) {
+                    alert("Username không được để trống!");
+                    username.focus();
+                    return false;
+                }
+                
+                if (!email.value.trim()) {
+                    alert("Email không được để trống!");
+                    email.focus();
+                    return false;
+                }
+                
+                if (!password.value.trim()) {
+                    alert("Mật khẩu không được để trống!");
+                    password.focus();
+                    return false;
+                }
+                
+                return true;
+            }
+
             // Form validation
             (function() {
                 'use strict';
@@ -318,6 +375,85 @@
                 } else {
                     this.setCustomValidity('');
                 }
+            });
+
+            // Add event listeners to prevent whitespace input
+            document.addEventListener('DOMContentLoaded', function() {
+                const username = document.getElementById('username');
+                const email = document.getElementById('email');
+                const password = document.getElementById('password');
+                
+                // Prevent whitespace on input with immediate feedback
+                username.addEventListener('input', function() {
+                    if (this.value.includes(' ')) {
+                        alert("Username không được chứa khoảng trắng!");
+                        this.value = this.value.replace(/\s/g, '');
+                    }
+                });
+                
+                email.addEventListener('input', function() {
+                    if (this.value.includes(' ')) {
+                        alert("Email không được chứa khoảng trắng!");
+                        this.value = this.value.replace(/\s/g, '');
+                    }
+                });
+                
+                password.addEventListener('input', function() {
+                    if (this.value.includes(' ')) {
+                        alert("Mật khẩu không được chứa khoảng trắng!");
+                        this.value = this.value.replace(/\s/g, '');
+                    }
+                });
+                
+                // Prevent paste with whitespace
+                username.addEventListener('paste', function(e) {
+                    setTimeout(() => {
+                        if (this.value.includes(' ')) {
+                            alert("Username không được chứa khoảng trắng!");
+                            this.value = this.value.replace(/\s/g, '');
+                        }
+                    }, 0);
+                });
+                
+                email.addEventListener('paste', function(e) {
+                    setTimeout(() => {
+                        if (this.value.includes(' ')) {
+                            alert("Email không được chứa khoảng trắng!");
+                            this.value = this.value.replace(/\s/g, '');
+                        }
+                    }, 0);
+                });
+                
+                password.addEventListener('paste', function(e) {
+                    setTimeout(() => {
+                        if (this.value.includes(' ')) {
+                            alert("Mật khẩu không được chứa khoảng trắng!");
+                            this.value = this.value.replace(/\s/g, '');
+                        }
+                    }, 0);
+                });
+                
+                // Prevent space key from being typed
+                username.addEventListener('keydown', function(e) {
+                    if (e.key === ' ') {
+                        e.preventDefault();
+                        alert("Username không được chứa khoảng trắng!");
+                    }
+                });
+                
+                email.addEventListener('keydown', function(e) {
+                    if (e.key === ' ') {
+                        e.preventDefault();
+                        alert("Email không được chứa khoảng trắng!");
+                    }
+                });
+                
+                password.addEventListener('keydown', function(e) {
+                    if (e.key === ' ') {
+                        e.preventDefault();
+                        alert("Mật khẩu không được chứa khoảng trắng!");
+                    }
+                });
             });
         </script>
 

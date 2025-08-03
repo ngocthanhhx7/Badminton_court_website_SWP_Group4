@@ -10,23 +10,18 @@ import models.ServiceDTO;
 import org.mindrot.jbcrypt.BCrypt;
 public class ServiceDAO {
 
-    private Connection conn;
-
-    public ServiceDAO() {
-        this.conn = DBUtils.getConnection();
-    }
-
-
-
-
     public ServiceDTO getServiceByID(int serviceID) throws SQLException {
         String sql = "SELECT * FROM services WHERE ServiceID = ?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = DBUtils.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, serviceID);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 return mapResultSetToService(rs);
             }
+        } catch (Exception e) {
+            System.err.println("Error in getServiceByID: " + e.getMessage());
+            e.printStackTrace();
         }
         return null;
     }
@@ -39,14 +34,18 @@ public class ServiceDAO {
         return getServiceByID(serviceId.intValue());
     }
 
-    public List<ServiceDTO> getAllActiveServices() throws SQLException {
+    public List<ServiceDTO> getAllActiveServices() {
         List<ServiceDTO> list = new ArrayList<>();
         String sql = "SELECT * FROM services WHERE Status = 'Active' ORDER BY ServiceName ASC";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = DBUtils.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 list.add(mapResultSetToService(rs));
             }
+        } catch (Exception e) {
+            System.err.println("Error in getAllActiveServices: " + e.getMessage());
+            e.printStackTrace();
         }
         return list;
     }
@@ -65,26 +64,30 @@ public class ServiceDAO {
         service.setUpdatedAt(rs.getTimestamp("UpdatedAt"));
         return service;
     }
-//
 
     // Lấy tất cả 
-    public List<ServiceDTO> getAllServices() throws SQLException {
+    public List<ServiceDTO> getAllServices() {
         List<ServiceDTO> list = new ArrayList<>();
         String sql = "SELECT * FROM services ORDER BY ServiceID ASC";
-        try (PreparedStatement ps = DBUtils.getConnection().prepareStatement(sql)) {
+        try (Connection conn = DBUtils.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 list.add(mapResultSetToService(rs));
             }
+        } catch (Exception e) {
+            System.err.println("Error in getAllServices: " + e.getMessage());
+            e.printStackTrace();
         }
         return list;
     }
 
     // Tìm kiếm name,
-    public List<ServiceDTO> searchServices(String keyword) throws SQLException {
+    public List<ServiceDTO> searchServices(String keyword) {
         List<ServiceDTO> list = new ArrayList<>();
         String sql = "SELECT * FROM services WHERE servicename LIKE ? OR servicetype LIKE ? ORDER BY ServiceID ASC";
-        try (PreparedStatement ps = DBUtils.getConnection().prepareStatement(sql)) {
+        try (Connection conn = DBUtils.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             String kw = "%" + keyword + "%";
             ps.setString(1, kw);
             ps.setString(2, kw);
@@ -93,6 +96,9 @@ public class ServiceDAO {
             while (rs.next()) {
                 list.add(mapResultSetToService(rs));
             }
+        } catch (Exception e) {
+            System.err.println("Error in searchServices: " + e.getMessage());
+            e.printStackTrace();
         }
         return list;
     }

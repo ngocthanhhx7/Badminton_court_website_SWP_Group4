@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Test Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-button {
+            background: #1E90FF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background: #4169E1;
+        }
+        .result {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px 0;
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+        .error {
+            background: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+        .success {
+            background: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+        .loading {
+            background: #fff3cd;
+            border-color: #ffeaa7;
+            color: #856404;
+        }
+    </style>
+</head>
+<body>
+    <h1>Chatbot API Test Page</h1>
+    <p>Trang này giúp kiểm tra các API của chatbot để đảm bảo chúng hoạt động đúng.</p>
+
+    <div class="test-section">
+        <h2>1. Test Database Connection</h2>
+        <button class="test-button" onclick="testConnection()">Test Connection</button>
+        <div id="connection-result" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>2. Test Get All Courts</h2>
+        <button class="test-button" onclick="testGetAllCourts()">Get All Courts</button>
+        <div id="courts-result" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>3. Test Get Courts By Type</h2>
+        <button class="test-button" onclick="testGetCourtsByType('Indoor')">Get Indoor Courts</button>
+        <button class="test-button" onclick="testGetCourtsByType('Outdoor')">Get Outdoor Courts</button>
+        <div id="courts-type-result" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>4. Test Get All Services</h2>
+        <button class="test-button" onclick="testGetAllServices()">Get All Services</button>
+        <div id="services-result" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>5. Test Get Available Schedules</h2>
+        <button class="test-button" onclick="testGetAvailableSchedules()">Get Today's Schedules</button>
+        <button class="test-button" onclick="testGetAvailableSchedulesTomorrow()">Get Tomorrow's Schedules</button>
+        <div id="schedules-result" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>6. Test Get Booking Info</h2>
+        <button class="test-button" onclick="testGetBookingInfo()">Get Booking Info</button>
+        <div id="booking-result" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>7. Test All APIs</h2>
+        <button class="test-button" onclick="testAllAPIs()">Run All Tests</button>
+        <div id="all-results" class="result"></div>
+    </div>
+
+    <script>
+        const API_BASE = '/SWP_Project/chatbot-api';
+
+        function showResult(elementId, message, type = 'info') {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.className = `result ${type}`;
+        }
+
+        function showLoading(elementId) {
+            showResult(elementId, 'Loading...', 'loading');
+        }
+
+        async function callAPI(action, params = {}) {
+            try {
+                const response = await fetch(API_BASE, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ action, ...params })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                throw new Error(`API call failed: ${error.message}`);
+            }
+        }
+
+        async function testConnection() {
+            showLoading('connection-result');
+            try {
+                const result = await callAPI('testConnection');
+                if (result.success) {
+                    showResult('connection-result', `✅ SUCCESS: ${result.message}`, 'success');
+                } else {
+                    showResult('connection-result', `❌ FAILED: ${result.message}`, 'error');
+                }
+            } catch (error) {
+                showResult('connection-result', `❌ ERROR: ${error.message}`, 'error');
+            }
+        }
+
+        async function testGetAllCourts() {
+            showLoading('courts-result');
+            try {
+                const result = await callAPI('getAllCourts');
+                if (result.success) {
+                    const data = result.data;
+                    const message = `✅ SUCCESS: Found ${data.totalCourts} courts\n\n${JSON.stringify(data, null, 2)}`;
+                    showResult('courts-result', message, 'success');
+                } else {
+                    showResult('courts-result', `❌ FAILED: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                showResult('courts-result', `❌ ERROR: ${error.message}`, 'error');
+            }
+        }
+
+        async function testGetCourtsByType(courtType) {
+            showLoading('courts-type-result');
+            try {
+                const result = await callAPI('getCourtsByType', { courtType });
+                if (result.success) {
+                    const data = result.data;
+                    const message = `✅ SUCCESS: Found ${data.totalCourts} ${courtType} courts\n\n${JSON.stringify(data, null, 2)}`;
+                    showResult('courts-type-result', message, 'success');
+                } else {
+                    showResult('courts-type-result', `❌ FAILED: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                showResult('courts-type-result', `❌ ERROR: ${error.message}`, 'error');
+            }
+        }
+
+        async function testGetAllServices() {
+            showLoading('services-result');
+            try {
+                const result = await callAPI('getAllServices');
+                if (result.success) {
+                    const data = result.data;
+                    const message = `✅ SUCCESS: Found ${data.totalServices} services\n\n${JSON.stringify(data, null, 2)}`;
+                    showResult('services-result', message, 'success');
+                } else {
+                    showResult('services-result', `❌ FAILED: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                showResult('services-result', `❌ ERROR: ${error.message}`, 'error');
+            }
+        }
+
+        async function testGetAvailableSchedules() {
+            showLoading('schedules-result');
+            try {
+                const today = new Date().toISOString().split('T')[0];
+                const result = await callAPI('getAvailableSchedules', { date: today });
+                if (result.success) {
+                    const data = result.data;
+                    const message = `✅ SUCCESS: Found ${data.totalAvailable} available schedules for ${data.date}\n\n${JSON.stringify(data, null, 2)}`;
+                    showResult('schedules-result', message, 'success');
+                } else {
+                    showResult('schedules-result', `❌ FAILED: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                showResult('schedules-result', `❌ ERROR: ${error.message}`, 'error');
+            }
+        }
+
+        async function testGetAvailableSchedulesTomorrow() {
+            showLoading('schedules-result');
+            try {
+                const tomorrow = new Date();
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                const tomorrowStr = tomorrow.toISOString().split('T')[0];
+                const result = await callAPI('getAvailableSchedules', { date: tomorrowStr });
+                if (result.success) {
+                    const data = result.data;
+                    const message = `✅ SUCCESS: Found ${data.totalAvailable} available schedules for ${data.date}\n\n${JSON.stringify(data, null, 2)}`;
+                    showResult('schedules-result', message, 'success');
+                } else {
+                    showResult('schedules-result', `❌ FAILED: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                showResult('schedules-result', `❌ ERROR: ${error.message}`, 'error');
+            }
+        }
+
+        async function testGetBookingInfo() {
+            showLoading('booking-result');
+            try {
+                const result = await callAPI('getBookingInfo');
+                if (result.success) {
+                    const data = result.data;
+                    const message = `✅ SUCCESS: Retrieved booking information\n\n${JSON.stringify(data, null, 2)}`;
+                    showResult('booking-result', message, 'success');
+                } else {
+                    showResult('booking-result', `❌ FAILED: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                showResult('booking-result', `❌ ERROR: ${error.message}`, 'error');
+            }
+        }
+
+        async function testAllAPIs() {
+            showLoading('all-results');
+            let results = [];
+            
+            // Test all APIs
+            const tests = [
+                { name: 'Database Connection', func: testConnection },
+                { name: 'Get All Courts', func: testGetAllCourts },
+                { name: 'Get Indoor Courts', func: () => testGetCourtsByType('Indoor') },
+                { name: 'Get Outdoor Courts', func: () => testGetCourtsByType('Outdoor') },
+                { name: 'Get All Services', func: testGetAllServices },
+                { name: 'Get Available Schedules (Today)', func: testGetAvailableSchedules },
+                { name: 'Get Available Schedules (Tomorrow)', func: testGetAvailableSchedulesTomorrow },
+                { name: 'Get Booking Info', func: testGetBookingInfo }
+            ];
+
+            for (const test of tests) {
+                try {
+                    results.push(`🔄 Testing: ${test.name}`);
+                    await test.func();
+                    results.push(`✅ ${test.name}: PASSED`);
+                } catch (error) {
+                    results.push(`❌ ${test.name}: FAILED - ${error.message}`);
+                }
+                results.push('---');
+            }
+
+            showResult('all-results', results.join('\n'), 'info');
+        }
+
+        // Auto-run connection test on page load
+        window.onload = function() {
+            testConnection();
+        };
+    </script>
+</body>
+</html> 
